@@ -1,33 +1,35 @@
-# Gradle files
-.gradle/
-build/
+.env
+.env.default
 
-# Local configuration file (sdk path, etc)
-local.properties
+**/*.exec
+**/*.ec
 
-# Log/OS Files
-*.log
-
-# Android Studio generated files and folders
-captures/
-.externalNativeBuild/
-.cxx/
-*.apk
-output.json
-
-# IntelliJ
 *.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
+.gradle
+.kotlin/
+.idea/*
+!.idea/fileTemplates/
+!.idea/codeStyles/
+!.idea/runConfigurations/
+.DS_Store
 
-# Keystore files
-*.jks
-*.keystore
+/local.properties
+/scripts
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
+/gradle/extended
+**/build
+tmp/
 
-# Android Profiling
-*.hprof
+# VS Code files, ignoring those as they could probably be in conflict with AS
+.project
+.classpath
+.settings
+
+# licenses
+**/assets/*.csv
+**/assets/*.json
+
+repository/
+
+lorcana-api/temp/
+lorcana-api/database.db

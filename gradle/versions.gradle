@@ -1,0 +1,31 @@
+/* * * * * * * * * * * * * * * * *
+ * Default project info
+ * * * * * * * * * * * * * * * * */
+
+def defaultVersion = "0.0.1"
+
+def propSuffix = { prefix, suffixKeyName ->
+    return rootProject.properties.containsKey(suffixKeyName)
+            ? "${prefix}-${rootProject.properties[suffixKeyName]}" : prefix
+}
+
+ext {
+    prop = { name, defValue ->
+        return rootProject.properties.containsKey(name)
+                ? rootProject.properties[name] : defValue
+    }
+
+    javaVersion = "21"
+
+    sonarUrl = prop("sonarUrl", null)
+    sonarToken = prop("sonarToken", null)
+
+    signingKeyId = prop("signing.keyId", null)
+
+    groupId = prop("GROUP_ID", "eu.codlab.lorcana.api")
+    originalVersion = defaultVersion
+    version = propSuffix(defaultVersion, "SUFFIX")
+
+    projectVersionCode = 1
+    sentry = "__"
+}

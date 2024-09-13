@@ -1,0 +1,33 @@
+buildscript {
+    apply from: "gradle/versions.gradle"
+    apply from: gradle.extended.files.modules
+
+    dependencies {
+        classpath additionals.nexus.gradlePlugin
+        classpath additionals.sonarqube.gradlePlugin
+        classpath additionals.license.gradlePlugin
+    }
+}
+
+plugins {
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.sentry) apply false
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        mavenLocal()
+    }
+}
+
+group = ext.groupId
+version = ext.version
+
+subprojects {
+    if (isSourcesModule(it)) {
+        apply from: gradle.extended.files.moduleSetup
+    }
+}
