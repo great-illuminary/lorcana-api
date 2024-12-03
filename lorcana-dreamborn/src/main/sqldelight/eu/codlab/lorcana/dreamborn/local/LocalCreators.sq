@@ -1,0 +1,43 @@
+CREATE TABLE IF NOT EXISTS local_creators (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    uuid TEXT NOT NULL,
+
+    tracking INTEGER NOT NULL,
+
+    creator_name TEXT NOT NULL,
+    youtube TEXT
+);
+
+checkIndexUuid:
+CREATE UNIQUE INDEX IF NOT EXISTS idx_local_creators__uuid ON local_creators(uuid);
+
+checkIndexTracking:
+CREATE INDEX IF NOT EXISTS idx_local_creators__tracking ON local_creators(tracking);
+
+selectAll:
+SELECT id,
+       uuid,
+       tracking,
+       creator_name,
+       youtube
+FROM local_creators;
+
+selectFromUUID:
+SELECT id,
+       uuid,
+       tracking,
+       creator_name,
+       youtube
+FROM local_creators
+WHERE uuid = ?;
+
+insert:
+INSERT INTO local_creators (
+    "uuid",
+    "tracking",
+    "creator_name",
+    "youtube"
+) VALUES (?,?,?,?);
+
+update:
+UPDATE local_creators SET tracking=?, creator_name=?, youtube=? WHERE id=?;

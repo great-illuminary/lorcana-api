@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS local_deck_versions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    deck_id INTEGER NOT NULL,
+    created_at INTEGER NOT NULL
+);
+
+checkIndexDeckId:
+CREATE INDEX IF NOT EXISTS idx_deck_id ON local_deck_versions(deck_id);
+
+checkIndexCreatedAt:
+CREATE INDEX IF NOT EXISTS idx_created_at ON local_deck_versions(created_at);
+
+selectAll:
+SELECT id,
+       deck_id,
+       created_at
+FROM local_deck_versions;
+
+selectFromDeckId:
+SELECT id,
+       deck_id,
+       created_at
+FROM local_deck_versions
+WHERE deck_id = ?;
+
+selectFromUpdatedAt:
+SELECT id,
+       deck_id,
+       created_at
+FROM local_deck_versions
+WHERE deck_id = ? AND created_at = ?;
+
+insert:
+INSERT INTO local_deck_versions (
+    "deck_id",
+    "created_at"
+) VALUES (?,?);
+
+-- delete:
+-- DELETE FROM local_deck_versions
+-- WHERE deck_id = ?;

@@ -1,0 +1,101 @@
+CREATE TABLE IF NOT EXISTS local_decks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    uuid TEXT NOT NULL,
+
+    updated_at TEXT NOT NULL,
+
+    creator TEXT NOT NULL,
+    creator_name TEXT NOT NULL,
+    youtube TEXT,
+    name TEXT NOT NULL,
+
+    cards INTEGER,
+    views INTEGER,
+    likes INTEGER,
+
+    last_trending_at_ms INTEGER,
+    last_checked_at_ms INTEGER
+);
+
+checkIndexUuid:
+CREATE UNIQUE INDEX IF NOT EXISTS idx_uuid ON local_decks(uuid);
+
+checkIndexCreator:
+CREATE INDEX IF NOT EXISTS idx_creator ON local_decks(creator);
+
+checkIndexViews:
+CREATE INDEX IF NOT EXISTS idx_views ON local_decks(views);
+
+checkIndexLikes:
+CREATE INDEX IF NOT EXISTS idx_likes ON local_decks(likes);
+
+selectAll:
+SELECT id,
+       uuid,
+       updated_at,
+       creator,
+       creator_name,
+       youtube,
+       name,
+       cards,
+       views,
+       likes,
+       last_trending_at_ms,
+       last_checked_at_ms
+FROM local_decks;
+
+selectFromUUID:
+SELECT id,
+       uuid,
+       updated_at,
+       creator,
+       creator_name,
+       youtube,
+       name,
+       cards,
+       views,
+       likes,
+       last_trending_at_ms,
+       last_checked_at_ms
+FROM local_decks
+WHERE uuid = ?;
+
+selectFromCreator:
+SELECT id,
+       uuid,
+       updated_at,
+       creator,
+       creator_name,
+       youtube,
+       name,
+       cards,
+       views,
+       likes,
+       last_trending_at_ms,
+       last_checked_at_ms
+FROM local_decks
+WHERE creator = ?;
+
+insert:
+INSERT INTO local_decks (
+    "uuid",
+    "updated_at",
+    "creator",
+    "creator_name",
+    "youtube",
+    "name",
+    "cards",
+    "views",
+    "likes",
+    "last_trending_at_ms",
+    "last_checked_at_ms"
+) VALUES (?,?,?,?,?,?,?,?,?,?,?);
+
+update:
+UPDATE local_decks SET updated_at=?, cards=?, views=?, likes=? WHERE id=?;
+
+updateLastTrendingAt:
+UPDATE local_decks SET last_trending_at_ms=? WHERE id=?;
+
+updateLastCheckedAt:
+UPDATE local_decks SET last_checked_at_ms=? WHERE id=?;

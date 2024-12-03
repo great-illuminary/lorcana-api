@@ -26,6 +26,8 @@ ext {
     originalVersion = defaultVersion
     version = propSuffix(defaultVersion, "SUFFIX")
 
+    apiZenrows = prop("LORCANA_ZENROWS", "invalid")
+
     projectVersionCode = 1
     sentry = "__"
 }

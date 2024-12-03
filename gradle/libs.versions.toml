@@ -9,9 +9,11 @@ ktor = "2.3.1"
 codlab-ui-libraries = "1.14.1"
 codlab-file-access = "1.15.0"
 
-lorcana-data = "0.12.0-alpha03"
+lorcana-data = "0.12.0-alpha04"
 
 sentry = "0.7.1"
+
+sqldelight = "2.0.0"
 
 [libraries]
 lorcana-data = { module = "eu.codlab:lorcana-data", version.ref = "lorcana-data" }
@@ -43,8 +45,13 @@ http-client = { module = "eu.codlab:kotlin-http-client", version.ref = "codlab-u
 
 sentry = { module = "io.sentry:sentry-kotlin-multiplatform", version.ref = "sentry" }
 
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
+sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 sentry = { id = "io.sentry.jvm.gradle", version = "4.7.1" }
+
+sqldelight  = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

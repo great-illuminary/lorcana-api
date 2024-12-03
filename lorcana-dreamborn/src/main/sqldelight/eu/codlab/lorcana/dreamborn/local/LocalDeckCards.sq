@@ -1,0 +1,83 @@
+CREATE TABLE IF NOT EXISTS local_deck_cards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    deck_id INTEGER,
+    deck_version_id INTEGER,
+
+    dreamborn_id TEXT NOT NULL,
+    default_dreamborn_id TEXT NOT NULL,
+    count INTEGER
+);
+
+checkIndexDeckId:
+CREATE UNIQUE INDEX IF NOT EXISTS idx_deck_id ON local_deck_cards(deck_id, deck_version_id, dreamborn_id);
+
+checkIndexDeckVersionId:
+CREATE INDEX IF NOT EXISTS idx_deck_version_id ON local_deck_cards(deck_version_id);
+
+checkIndexSetNumber:
+CREATE INDEX IF NOT EXISTS idx_dreamborn_id ON local_deck_cards(dreamborn_id);
+
+checkIndexDefaultSetNumber:
+CREATE INDEX IF NOT EXISTS idx_default_dreamborn_id ON local_deck_cards(default_dreamborn_id);
+
+selectAll:
+SELECT id,
+       deck_id,
+       deck_version_id,
+       dreamborn_id,
+       count,
+       default_dreamborn_id
+FROM local_deck_cards;
+
+selectFromDeckId:
+SELECT id,
+       deck_id,
+       deck_version_id,
+       dreamborn_id,
+       count,
+       default_dreamborn_id
+FROM local_deck_cards
+WHERE deck_id = ?;
+
+
+selectFromDeckIdAndVersion:
+SELECT id,
+       deck_id,
+       deck_version_id,
+       dreamborn_id,
+       count,
+       default_dreamborn_id
+FROM local_deck_cards
+WHERE deck_id = ? AND deck_version_id = ?;
+
+selectFromDeckIdLastVersion:
+SELECT id,
+       deck_id,
+       deck_version_id,
+       dreamborn_id,
+       count,
+       default_dreamborn_id
+FROM local_deck_cards
+LEFT JOIN (
+    SELECT MAX(deck_version_id) AS mdvi
+    FROM local_deck_cards AS ldc
+    WHERE deck_id = ?
+) j ON j.mdvi = deck_version_id
+WHERE deck_id = ?;
+
+insert:
+INSERT INTO local_deck_cards (
+    "deck_id",
+    "dreamborn_id",
+    "deck_version_id",
+    "count",
+    "default_dreamborn_id"
+) VALUES (?,?,?,?,?);
+
+-- delete:
+-- DELETE FROM local_deck_cards
+-- WHERE deck_id = ?;
+
+-- deleteVersion:
+-- DELETE FROM local_deck_cards
+-- WHERE deck_version_id = ?;

@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.api.backend
 
 import eu.codlab.lorcana.api.backend.routing.artists
+import eu.codlab.lorcana.api.backend.routing.decks
 import eu.codlab.lorcana.api.environment.Environment
 import eu.codlab.lorcana.raw.SetDescription
 import eu.codlab.lorcana.raw.VirtualCard
@@ -23,13 +24,7 @@ import java.io.File
 import java.net.URI
 
 fun Application.configureRouting(environment: Environment) {
-    val wellKnown = File(".well-known")
-
-    if (!wellKnown.exists()) {
-        wellKnown.mkdirs()
-    }
-
-    println("wellKnown path at ${wellKnown.absolutePath}")
+    val publics = listOf(".well-known", "public")
 
     routing {
         swagger(
@@ -37,8 +32,15 @@ fun Application.configureRouting(environment: Environment) {
             path = "/"
         )
 
-        staticFiles("/.well-known", File(".well-known")) {
-            enableAutoHeadResponse()
+        publics.forEach { folder ->
+            val file = File(folder)
+            if (!file.exists()) {
+                file.mkdirs()
+            }
+
+            staticFiles("/$folder", file) {
+                enableAutoHeadResponse()
+            }
         }
 
         route("/cards") {
@@ -130,5 +132,7 @@ fun Application.configureRouting(environment: Environment) {
         route("/artists") {
             artists(environment)
         }
+
+        decks(environment)
     }
 }
