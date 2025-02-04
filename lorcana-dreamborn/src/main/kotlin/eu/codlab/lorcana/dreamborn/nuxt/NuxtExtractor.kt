@@ -4,7 +4,6 @@ import eu.codlab.lorcana.dreamborn.decks.DeckDescriptor
 import eu.codlab.lorcana.dreamborn.decks.DeckLinks
 import eu.codlab.lorcana.dreamborn.decks.DeckTags
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 internal class NuxtExtractor(fromString: String) {
@@ -34,7 +33,12 @@ internal class NuxtExtractor(fromString: String) {
                 json.decodeFromString(mappedArguments[indexForDeckData])
             val cards: Map<String, Int> = json.decodeFromString(mappedArguments[data.cards])
             val links: ExpectedArgumentIndexesLinks =
-                json.decodeFromString(mappedArguments[data.links])
+                try {
+                    json.decodeFromString(mappedArguments[data.links])
+                } catch (err: Throwable) {
+                    // nothing
+                    ExpectedArgumentIndexesLinks()
+                }
             val youtube = links.youtube?.let { mappedArguments[it].replaceWrap() } ?: ""
 
             val mappedCards =

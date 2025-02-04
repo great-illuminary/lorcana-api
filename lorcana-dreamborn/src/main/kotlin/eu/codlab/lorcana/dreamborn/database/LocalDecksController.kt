@@ -134,7 +134,8 @@ internal class LocalDecksController internal constructor(
         cards: Map<String, Long>,
         createdAt: DateTime,
         lastTrendingAt: DateTime? = null,
-        lastCheckedAt: DateTime
+        lastCheckedAt: DateTime,
+        isPrivate: Boolean
     ) {
         database.localDecksQueries.insert(
             uuid = deck.id,
@@ -147,7 +148,8 @@ internal class LocalDecksController internal constructor(
             views = deck.views.toLong(),
             likes = deck.likeCount.toLong(),
             last_trending_at_ms = lastTrendingAt?.unixMillisLong,
-            last_checked_at_ms = lastCheckedAt.unixMillisLong
+            last_checked_at_ms = lastCheckedAt.unixMillisLong,
+            is_private = if (isPrivate) 1 else 0
         )
 
         val inserted = database.localDecksQueries.selectFromUUID(deck.id)
@@ -184,6 +186,9 @@ internal class LocalDecksController internal constructor(
 
     fun updateLastTrendingAt(deck: Deck, lastTrending: DateTime) =
         database.localDecksQueries.updateLastTrendingAt(lastTrending.unixMillisLong, deck.id)
+
+    fun updateIsPrivate(deck: Deck, isPrivate: Boolean) =
+        database.localDecksQueries.updatePrivate(if (isPrivate) 1 else 0, deck.id)
 
     private fun cacheLastVersion(deck: Deck): List<DeckCards>? {
         return mutableCardLists[deck.id]?.keys?.maxOrNull()

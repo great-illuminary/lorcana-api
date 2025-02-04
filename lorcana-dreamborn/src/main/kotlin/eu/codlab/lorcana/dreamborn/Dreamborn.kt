@@ -1,11 +1,8 @@
 package eu.codlab.lorcana.dreamborn
 
 import eu.codlab.lorcana.dreamborn.database.Deck
-import eu.codlab.lorcana.dreamborn.database.DeckCards
 import eu.codlab.lorcana.dreamborn.database.LocalDatabase
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptor
-import io.ktor.client.plugins.HttpRequestTimeoutException
-import io.ktor.utils.io.CancellationException
 import korlibs.time.DateTime
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -22,7 +19,16 @@ class Dreamborn {
 
     fun deck(deck: String) = database.localDecksController.selectedFromUuidWithCards(deck)
 
-    fun deckFromCreator(creator: String) = database.localDecksController.selectedFromCreator(creator)
+    suspend fun fetchDeck(deck: String): Deck? {
+        val deckFromRemote = deckFromRemote(deck) ?: return null
+
+        checkRemoteDeck(deckFromRemote, fromTrending = false, isPrivate = true)
+
+        return database.localDecksController.selectedFromUuidWithCards(deck)
+    }
+
+    fun deckFromCreator(creator: String) =
+        database.localDecksController.selectedFromCreator(creator)
 
     suspend fun track(creator: String) {
         val profile = api.creator(creator)
@@ -77,7 +83,11 @@ class Dreamborn {
         return decks()
     }
 
-    private suspend fun checkRemoteDeck(deckFromRemote: DeckDescriptor, fromTrending: Boolean) {
+    private suspend fun checkRemoteDeck(
+        deckFromRemote: DeckDescriptor,
+        fromTrending: Boolean,
+        isPrivate: Boolean = false
+    ) {
         println("checkRemoteDeck ${deckFromRemote.name}")
         val fromDatabase = database.localDecksController.selectedFromUuid(deckFromRemote.id)
 
@@ -100,7 +110,8 @@ class Dreamborn {
                 actualDeck.cards,
                 DateTime.now(),
                 lastCheckedAt = lastChecked,
-                lastTrendingAt = if (fromTrending) lastChecked else null
+                lastTrendingAt = if (fromTrending) lastChecked else null,
+                isPrivate = isPrivate
             )
             return
         }

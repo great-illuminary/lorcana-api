@@ -58,7 +58,7 @@ fun Route.decks(environment: Environment) {
         "Retrieve all the decks",
         "Will return a list of decks"
     ) {
-        val decks = environment.dreamborn.decks()
+        val decks = environment.dreamborn.decks().filter { !it.isPrivate }
         call.respond(decks)
     }
 
@@ -68,8 +68,21 @@ fun Route.decks(environment: Environment) {
         "Will return a list of decks"
     ) {
         val creator = call.parameters["creator"]!!
-        val decks = environment.dreamborn.deckFromCreator(creator)
+        val decks = environment.dreamborn.deckFromCreator(creator).filter { !it.isPrivate }
         call.respond(decks)
+    }
+
+    route("/deck/fetch/{deck}") {
+        get {
+            val deckId = call.parameters["deck"]!!
+            environment.dreamborn.fetchDeck(deckId).let {
+                if (null != it) {
+                    call.respond(it)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            }
+        }
     }
 
     route("/deck/{deck}") {

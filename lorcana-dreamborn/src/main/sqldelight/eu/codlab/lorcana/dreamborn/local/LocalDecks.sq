@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS local_decks (
     likes INTEGER,
 
     last_trending_at_ms INTEGER,
-    last_checked_at_ms INTEGER
+    last_checked_at_ms INTEGER,
+    is_private INTEGER
 );
 
 checkIndexUuid:
@@ -41,7 +42,8 @@ SELECT id,
        views,
        likes,
        last_trending_at_ms,
-       last_checked_at_ms
+       last_checked_at_ms,
+       is_private
 FROM local_decks;
 
 selectFromUUID:
@@ -56,7 +58,8 @@ SELECT id,
        views,
        likes,
        last_trending_at_ms,
-       last_checked_at_ms
+       last_checked_at_ms,
+       is_private
 FROM local_decks
 WHERE uuid = ?;
 
@@ -72,7 +75,8 @@ SELECT id,
        views,
        likes,
        last_trending_at_ms,
-       last_checked_at_ms
+       last_checked_at_ms,
+       is_private
 FROM local_decks
 WHERE creator = ?;
 
@@ -88,8 +92,9 @@ INSERT INTO local_decks (
     "views",
     "likes",
     "last_trending_at_ms",
-    "last_checked_at_ms"
-) VALUES (?,?,?,?,?,?,?,?,?,?,?);
+    "last_checked_at_ms",
+    "is_private"
+) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);
 
 update:
 UPDATE local_decks SET updated_at=?, cards=?, views=?, likes=? WHERE id=?;
@@ -99,3 +104,6 @@ UPDATE local_decks SET last_trending_at_ms=? WHERE id=?;
 
 updateLastCheckedAt:
 UPDATE local_decks SET last_checked_at_ms=? WHERE id=?;
+
+updatePrivate:
+UPDATE local_decks SET is_private=? WHERE id=?;

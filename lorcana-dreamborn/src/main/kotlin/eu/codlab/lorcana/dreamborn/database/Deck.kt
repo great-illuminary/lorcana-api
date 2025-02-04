@@ -27,6 +27,8 @@ data class Deck(
     val lastTrendingAtMs: Long? = null,
     @SerialName("last_checked_at_ms")
     val lastCheckedAtMs: Long? = null,
+    @SerialName("is_private")
+    val isPrivate: Boolean
 ) {
     internal fun copyUpdateFromRemote(deck: DeckDescriptor) = copy(
         uuid = deck.id,
@@ -54,6 +56,7 @@ data class Deck(
             likes = localDeck.likes,
             lastTrendingAtMs = localDeck.last_trending_at_ms ?: 0,
             lastCheckedAtMs = localDeck.last_checked_at_ms ?: 0,
+            isPrivate = localDeck.is_private == 1L
         )
     }
 }
