@@ -85,6 +85,19 @@ fun Route.decks(environment: Environment) {
         }
     }
 
+    route("/deck/fetch/light/{deck}") {
+        get {
+            val deckId = call.parameters["deck"]!!
+            environment.dreamborn.fetchDeckLight(deckId).let {
+                if (null != it) {
+                    call.respond(it)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            }
+        }
+    }
+
     route("/deck/{deck}") {
         install(NotarizedRoute()) {
             get = GetInfo.builder {

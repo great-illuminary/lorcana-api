@@ -19,6 +19,8 @@ class Dreamborn {
 
     fun deck(deck: String) = database.localDecksController.selectedFromUuidWithCards(deck)
 
+    suspend fun fetchDeckLight(deck: String) = api.deckLight(deck)
+
     suspend fun fetchDeck(deck: String): Deck? {
         val deckFromRemote = deckFromRemote(deck) ?: return null
 

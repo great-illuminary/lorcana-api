@@ -4,6 +4,7 @@ import eu.codlab.http.Configuration
 import eu.codlab.http.createClient
 import eu.codlab.lorcana.dreamborn.decks.CreatorDescriptor
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptor
+import eu.codlab.lorcana.dreamborn.decks.DeckDescriptorLight
 import eu.codlab.lorcana.dreamborn.decks.Sort
 import eu.codlab.lorcana.dreamborn.nuxt.NuxtExtractor
 import io.ktor.client.call.body
@@ -64,6 +65,17 @@ internal class DreambornApi {
             // nothing
         }
         return null
+    }
+
+    suspend fun deckLight(deck: String): DeckDescriptorLight? {
+        return try {
+            client.get("$url/_tts/decks/$deck")
+                .let { if (it.status.isSuccess()) it else throw IllegalStateException("Couldn't load")}
+                .body()
+        } catch(err: Throwable) {
+            // nothing
+            null
+        }
     }
 
     suspend fun deck(deck: String, currency: String): DeckDescriptor? {
