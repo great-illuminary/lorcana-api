@@ -3,10 +3,11 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
 
-ext.GRADLE_EXTENDED_VERSION_USED = "afa05ba2b764b3c042598ed8168145d9ab2acae2"
+ext.GRADLE_EXTENDED_VERSION_USED = "01403596471938dbeb1dd653f612407104b7393c"
 
 apply from: "https://raw.githubusercontent.com/the-inkwell/gradle-tools/${ext.GRADLE_EXTENDED_VERSION_USED}/extended.gradle"
 
@@ -14,6 +15,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
     versionCatalogs {
         additionals {
