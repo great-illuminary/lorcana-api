@@ -25,6 +25,10 @@ dependencies {
     api(libs.kotlinx.coroutines)
     api(libs.kotlinx.coroutines.core.jvm)
     api(libs.kotlinx.coroutines.jvm)
+
+    api(libs.apache.httpclient)
+    api(libs.apache.httpclient.fluent)
+
     api(additionals.kotlinx.serialization.json)
 
     api(libs.file.access)

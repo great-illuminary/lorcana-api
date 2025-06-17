@@ -16,7 +16,7 @@ fun main() {
         async {
             while (true) {
                 environment.dreamborn.checkDecks()
-                delay(5.minutes)
+                delay(30.minutes)
             }
         }
 

@@ -13,9 +13,19 @@ internal class NuxtExtractor(fromString: String) {
         .replace("\n", "")
         .replace("[[", "[")
 
+    private fun findIndexForData(mappedArguments: List<String>): Int? {
+        return (0..mappedArguments.size).firstOrNull { index ->
+            try {
+                json.decodeFromString<ExpectedArgumentIndexesInfo>(mappedArguments[index])
+                true
+            } catch (err: Throwable) {
+                false
+            }
+        }
+    }
+
     fun extractDeck(): DeckDescriptor {
         try {
-            val indexForDeckData = 7
 
             val sMatchString = "\"[^,]*\""
             val sMatchArray = "\\[[^\\]]*\\]"
@@ -28,6 +38,10 @@ internal class NuxtExtractor(fromString: String) {
             val mappedArguments = found.map { matchResult -> matchResult.groupValues[2] }.toList()
 
             mappedArguments.forEachIndexed { index, value -> println("$index -> $value") }
+
+            val indexForDeckData = findIndexForData(mappedArguments) ?: throw IllegalStateException(
+                "Couldn't find valid index for data corresponding to $from"
+            )
 
             val data: ExpectedArgumentIndexesInfo =
                 json.decodeFromString(mappedArguments[indexForDeckData])

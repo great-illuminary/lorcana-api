@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.api.backend
 
+import eu.codlab.lorcana.api.backend.routing.MappingVirtualCard
 import eu.codlab.lorcana.api.backend.routing.artists
 import eu.codlab.lorcana.api.backend.routing.decks
 import eu.codlab.lorcana.api.environment.Environment
@@ -56,7 +57,7 @@ fun Application.configureRouting(environment: Environment) {
                     )
                     response {
                         responseCode(HttpStatusCode.OK)
-                        responseType<List<VirtualCard>>()
+                        responseType<List<MappingVirtualCard>>()
                         description("Will return the list")
                     }
                 }
@@ -82,8 +83,8 @@ fun Application.configureRouting(environment: Environment) {
                     )
                     response {
                         responseCode(HttpStatusCode.OK)
-                        responseType<Map<Int, VirtualCard>>()
-                        description("The Map of id in the set to the corresponding card")
+                        responseType<Map<String, MappingVirtualCard>>()
+                        description("The Map of id (int not strings*) in the set to the corresponding card")
                     }
                     canRespond {
                         responseCode(HttpStatusCode.NotFound)

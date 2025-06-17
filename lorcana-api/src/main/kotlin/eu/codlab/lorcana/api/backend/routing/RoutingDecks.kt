@@ -1,19 +1,17 @@
 package eu.codlab.lorcana.api.backend.routing
 
 import eu.codlab.lorcana.api.environment.Environment
-import eu.codlab.lorcana.dreamborn.database.Deck
+import eu.codlab.lorcana.dreamborn.database.MappingDeck
+import eu.codlab.lorcana.dreamborn.decks.DeckDescriptorLight
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.oas.common.ExternalDocumentation
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.ApplicationCall
-import io.ktor.server.application.call
-import io.ktor.server.application.install
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.RoutingHandler
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
-import io.ktor.util.pipeline.PipelineInterceptor
 import java.net.URI
 
 fun Route.decks(environment: Environment) {
@@ -21,7 +19,7 @@ fun Route.decks(environment: Environment) {
         path: String,
         summary: String,
         description: String,
-        body: PipelineInterceptor<Unit, ApplicationCall>
+        body: RoutingHandler
     ) = route(path) {
         install(NotarizedRoute()) {
             get = GetInfo.builder {
@@ -35,7 +33,7 @@ fun Route.decks(environment: Environment) {
                 )
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<List<Deck>>()
+                    responseType<List<MappingDeck>>()
                     description("The list of corresponding decks")
                 }
             }
@@ -88,12 +86,20 @@ fun Route.decks(environment: Environment) {
     route("/deck/fetch/light/{deck}") {
         get {
             val deckId = call.parameters["deck"]!!
-            environment.dreamborn.fetchDeckLight(deckId).let {
-                if (null != it) {
-                    call.respond(it)
-                } else {
-                    call.respond(HttpStatusCode.NotFound)
-                }
+
+            try {
+                //environment.dreamborn.fetchDeckLight(deckId)
+                val regular = environment.dreamborn.fetchDeck(deckId)!!
+
+                call.respond(
+                    DeckDescriptorLight(
+                        id = regular.uuid,
+                        cards = regular.cards.associate { it.dreamborn to it.count },
+                        url = ""
+                    )
+                )
+            } catch (err: Throwable) {
+                call.respond(HttpStatusCode.NotFound)
             }
         }
     }
@@ -111,7 +117,7 @@ fun Route.decks(environment: Environment) {
                 )
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<Deck>()
+                    responseType<MappingDeck>()
                     description("Deck content")
                 }
                 canRespond {

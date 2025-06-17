@@ -4,12 +4,15 @@ kotlin = "2.0.0"
 kotlinx-coroutines = "1.8.0"
 
 kotlinx = "1.3.2"
-ktor = "2.3.1"
+ktor = "3.0.1"
 
 codlab-ui-libraries = "1.14.1"
 codlab-file-access = "1.15.0"
+codlab-http-client = "1.20.0-alpha1"
 
-lorcana-data = "0.14.4"
+lorcana-data = "0.20.6"
+
+apache-httpclient = "5.0"
 
 sentry = "0.7.1"
 
@@ -26,6 +29,9 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 
+apache-httpclient = { module = "org.apache.httpcomponents.client5:httpclient5", version.ref = "apache-httpclient"}
+apache-httpclient-fluent = { module = "org.apache.httpcomponents.client5:httpclient5-fluent", version.ref = "apache-httpclient"}
+
 ktor-server-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
@@ -41,7 +47,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor" }
 
 file-access = { module = "eu.codlab:kotlin-file-access", version.ref = "codlab-file-access" }
-http-client = { module = "eu.codlab:kotlin-http-client", version.ref = "codlab-ui-libraries" }
+http-client = { module = "eu.codlab:kotlin-http-client", version.ref = "codlab-http-client" }
 
 sentry = { module = "io.sentry:sentry-kotlin-multiplatform", version.ref = "sentry" }
 

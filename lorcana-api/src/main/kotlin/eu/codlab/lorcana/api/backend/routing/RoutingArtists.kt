@@ -31,7 +31,7 @@ fun Route.artists(environment: Environment) {
                 )
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<Map<Int, VirtualCard>>()
+                    responseType<Map<String, MappingVirtualCard>>()
                     description("The Map of artist in the set mapped to their cards")
                 }
             }
@@ -55,7 +55,7 @@ fun Route.artists(environment: Environment) {
                 )
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<Map<Int, VirtualCard>>()
+                    responseType<Map<String, Int>>()
                     description("The Map of artist in the set to the corresponding stat")
                 }
             }

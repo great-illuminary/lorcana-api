@@ -12,12 +12,6 @@ val mainClassInManifest = "eu.codlab.lorcana.api.ApplicationKt"
 group = rootProject.ext["groupId"] as String
 version = rootProject.ext["version"] as String
 
-repositories {
-    google()
-    mavenCentral()
-    mavenLocal()
-}
-
 application {
     mainClass.set(mainClassInManifest)
 }
@@ -38,7 +32,7 @@ dependencies {
     api(libs.ktor.server.websockets)
     api(libs.ktor.server.openapi)
 
-    api("io.bkbn:kompendium-core:4.0.0-SNAPSHOT")
+    api("io.bkbn:kompendium-core:4.0.1")
 
     api(additionals.kotlinx.serialization.json)
 

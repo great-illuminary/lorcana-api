@@ -3,6 +3,9 @@ package eu.codlab.lorcana.dreamborn
 import eu.codlab.lorcana.dreamborn.database.Deck
 import eu.codlab.lorcana.dreamborn.database.LocalDatabase
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptor
+import eu.codlab.lorcana.dreamborn.decks.DeckDescriptorLight
+import eu.codlab.lorcana.dreamborn.utils.code
+import korlibs.time.DateFormat
 import korlibs.time.DateTime
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -125,11 +128,8 @@ class Dreamborn {
         fromDatabase: Deck,
         lastChecked: DateTime = DateTime.now()
     ) {
-        println("TODO: Update disabled for now due to possible issues with data")
-        return
-
         println("checkUpdateFromDeck ${fromDatabase.name}")
-        val actualDeck = deckFromRemote(fromDatabase.uuid) ?: return
+        val actualDeck = fetchDeckLight(fromDatabase.uuid) ?: return
 
         checkUpdateFromDeck(fromDatabase, actualDeck, lastChecked)
     }
@@ -155,5 +155,34 @@ class Dreamborn {
                 updatedAt = DateTime.now()
             )
         }
+    }
+
+    private fun checkUpdateFromDeck(
+        fromDatabase: Deck,
+        actualDeck: DeckDescriptorLight,
+        lastChecked: DateTime = DateTime.now(),
+        inTrending: Boolean = false
+    ) {
+        println("  -> check any update using deck light")
+        val knownCode = fromDatabase.cards.code()
+        val remoteCode = actualDeck.cards.code()
+
+        if (remoteCode == knownCode) {
+            println("no update required")
+            return
+        }
+
+        database.localDecksController.updateLastCheckedAt(fromDatabase, lastChecked)
+
+        if (inTrending) {
+            database.localDecksController.updateLastTrendingAt(fromDatabase, lastChecked)
+        }
+
+        println("The deck needs an update -> ${lastChecked.format(DateFormat.DEFAULT_FORMAT)} != ${fromDatabase.updatedAt}")
+        database.localDecksController.update(
+            fromDatabase.copyUpdateFromRemote(actualDeck),
+            actualDeck.cards,
+            updatedAt = DateTime.now()
+        )
     }
 }

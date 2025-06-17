@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.dreamborn.database
 
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptor
+import eu.codlab.lorcana.dreamborn.decks.DeckDescriptorLight
 import eu.codlab.lorcana.dreamborn.local.Local_decks
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -42,6 +43,11 @@ data class Deck(
         likes = deck.likeCount.toLong()
     )
 
+    internal fun copyUpdateFromRemote(deck: DeckDescriptorLight) = copy(
+        uuid = deck.id,
+        cardsCount = deck.cards.values.sum().toLong(),
+    )
+
     companion object {
         internal fun from(localDeck: Local_decks) = Deck(
             id = localDeck.id,
@@ -60,3 +66,27 @@ data class Deck(
         )
     }
 }
+
+
+data class MappingDeck(
+    val id: Long = 0,
+    val uuid: String,
+    @SerialName("updated_at")
+    val updatedAt: String,
+    val creator: String,
+    @SerialName("creator_name")
+    val creatorName: String,
+    val youtube: String?,
+    val name: String,
+    val cardsCount: Long?,
+    val views: Long?,
+    val likes: Long?,
+    var cards: List<DeckCards> = emptyList(),
+    var versions: Map<String, List<DeckCards>> = emptyMap(),
+    @SerialName("last_trending_at_ms")
+    val lastTrendingAtMs: Long? = null,
+    @SerialName("last_checked_at_ms")
+    val lastCheckedAtMs: Long? = null,
+    @SerialName("is_private")
+    val isPrivate: Boolean
+)
