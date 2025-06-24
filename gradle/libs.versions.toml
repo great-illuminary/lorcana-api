@@ -8,7 +8,7 @@ ktor = "3.0.1"
 
 codlab-ui-libraries = "1.14.1"
 codlab-file-access = "1.15.0"
-codlab-http-client = "1.20.0-alpha1"
+codlab-http-client = "1.20.0-alpha2"
 
 lorcana-data = "0.20.6"
 

@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.dreamborn
 
 import eu.codlab.http.Configuration
+import eu.codlab.http.ProxyConfiguration
 import eu.codlab.http.createClient
 import eu.codlab.lorcana.dreamborn.decks.APIDeckDescriptorLight
 import eu.codlab.lorcana.dreamborn.decks.CreatorDescriptor
@@ -39,11 +40,13 @@ internal class DreambornApi {
             socketTimeoutMillis = 30000,
             connectTimeoutMillis = 30000,
             requestTimeoutMillis = 30000,
-            proxyConfig = ProxyBuilder.http(Url("http://api.zenrows.com:8001")),
-            proxyAuthentication = {
-                Config.zenrows to "js_render=true&premium_proxy=true&proxy_country=fr"
-            },
-            trustCertificatsOnAndroidJvm = true
+            proxyConfiguration = ProxyConfiguration(
+                proxyConfig = ProxyBuilder.http(Url("http://api.zenrows.com:8001")),
+                proxyAuthentication = {
+                    Config.zenrows to "js_render=true&premium_proxy=true&proxy_country=fr"
+                },
+                trustCertificatesOnAndroidJvm = true
+            ),
         )
     ) { }
     private val url = "https://dreamborn.ink/api"
