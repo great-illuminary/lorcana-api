@@ -27,4 +27,5 @@ dependencyResolutionManagement {
 includeBuild "gradle/extended/${ext.GRADLE_EXTENDED_VERSION_USED}/kt-plugins"
 include(':lorcana-dreamborn-config')
 include(':lorcana-dreamborn')
+include(':lorcana-rph')
 include(':lorcana-api')
