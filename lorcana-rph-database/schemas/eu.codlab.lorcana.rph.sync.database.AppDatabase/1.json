@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fb77e543db21bb36d6a39ac1a5b54d92",
+    "identityHash": "31d015065dfa0c4fd27c8612f15b6488",
     "entities": [
       {
         "tableName": "Store",
@@ -752,11 +752,143 @@
             "id"
           ]
         }
+      },
+      {
+        "tableName": "EventStanding",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rank` INTEGER NOT NULL, `record` TEXT NOT NULL, `matchRecord` TEXT NOT NULL, `matchPoints` INTEGER NOT NULL, `opponentMatchWinPercentage` REAL NOT NULL, `opponentGameWinPercentage` REAL NOT NULL, `roundId` INTEGER NOT NULL, `playerId` INTEGER NOT NULL, PRIMARY KEY(`roundId`, `playerId`))",
+        "fields": [
+          {
+            "fieldPath": "rank",
+            "columnName": "rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record",
+            "columnName": "record",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchRecord",
+            "columnName": "matchRecord",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchPoints",
+            "columnName": "matchPoints",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opponentMatchWinPercentage",
+            "columnName": "opponentMatchWinPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opponentGameWinPercentage",
+            "columnName": "opponentGameWinPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roundId",
+            "columnName": "roundId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playerId",
+            "columnName": "playerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "roundId",
+            "playerId"
+          ]
+        }
+      },
+      {
+        "tableName": "UserEventStatus",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `matchesWon` INTEGER NOT NULL, `matchesDrawn` INTEGER NOT NULL, `matchesLost` INTEGER NOT NULL, `totalMatchPoints` INTEGER NOT NULL, `registrationStatus` TEXT NOT NULL, `fullProfilePictureUrl` TEXT, `bestIdentifier` TEXT NOT NULL, `eventId` INTEGER NOT NULL, `userId` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchesWon",
+            "columnName": "matchesWon",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchesDrawn",
+            "columnName": "matchesDrawn",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchesLost",
+            "columnName": "matchesLost",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalMatchPoints",
+            "columnName": "totalMatchPoints",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registrationStatus",
+            "columnName": "registrationStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullProfilePictureUrl",
+            "columnName": "fullProfilePictureUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bestIdentifier",
+            "columnName": "bestIdentifier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventId",
+            "columnName": "eventId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb77e543db21bb36d6a39ac1a5b54d92')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '31d015065dfa0c4fd27c8612f15b6488')"
     ]
   }
 }

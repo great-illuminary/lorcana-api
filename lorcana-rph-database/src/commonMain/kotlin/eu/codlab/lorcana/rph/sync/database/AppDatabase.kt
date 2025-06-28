@@ -17,7 +17,9 @@ import eu.codlab.lorcana.rph.sync.round.Round
 import eu.codlab.lorcana.rph.sync.round.RoundDao
 import eu.codlab.lorcana.rph.sync.settings.Setting
 import eu.codlab.lorcana.rph.sync.settings.SettingDao
+import eu.codlab.lorcana.rph.sync.standings.EventStanding
 import eu.codlab.lorcana.rph.sync.standings.EventStandingDao
+import eu.codlab.lorcana.rph.sync.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.standings.UserEventStatusDao
 import eu.codlab.lorcana.rph.sync.store.Store
 import eu.codlab.lorcana.rph.sync.store.StoreDao
@@ -34,7 +36,9 @@ import kotlinx.coroutines.Dispatchers
         GameplayFormat::class,
         TournamentPhase::class,
         Round::class,
-        Setting::class
+        Setting::class,
+        EventStanding::class,
+        UserEventStatus::class
     ], version = 1
 )
 @ConstructedBy(AppDatabaseConstructor::class)

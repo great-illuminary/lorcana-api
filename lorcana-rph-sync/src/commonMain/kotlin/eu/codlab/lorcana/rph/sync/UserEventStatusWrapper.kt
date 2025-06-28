@@ -4,6 +4,7 @@ import eu.codlab.lorcana.rph.sync.database.SyncDatabase
 import eu.codlab.lorcana.rph.sync.event.Event
 import eu.codlab.lorcana.rph.sync.extensions.isEquals
 import eu.codlab.lorcana.rph.sync.extensions.toSync
+import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
 import eu.codlab.lorcana.rph.sync.round.Round
 import eu.codlab.lorcana.rph.sync.standings.EventStanding
@@ -12,17 +13,17 @@ import eu.codlab.lorcana.rph.sync.standings.UserEventStatus
 internal class UserEventStatusWrapper : AbstractWrapper<UserEventStatus,
         Long,
         eu.codlab.lorcana.rph.rounds.standings.UserEventStatus,
-        EventStanding,
-        String>() {
+        UserEventStatusParent,
+        Long>() {
     private val stores = SyncDatabase.userEventStatus
 
-    override fun getParentKey(model: UserEventStatus) = "${model.roundId}_${model.userId}"
+    override fun getParentKey(model: UserEventStatus) = model.eventId
 
     override suspend fun list() = stores.getAll()
 
     override fun id(
         fromApi: eu.codlab.lorcana.rph.rounds.standings.UserEventStatus,
-        parent: EventStanding?
+        parent: UserEventStatusParent?
     ) = fromApi.id
 
     override suspend fun insert(copy: UserEventStatus) = stores.insert(copy)
@@ -32,7 +33,7 @@ internal class UserEventStatusWrapper : AbstractWrapper<UserEventStatus,
     override suspend fun toSync(
         fromApi: eu.codlab.lorcana.rph.rounds.standings.UserEventStatus,
         cached: UserEventStatus?,
-        foreignParent: EventStanding?
+        foreignParent: UserEventStatusParent?
     ) = fromApi.toSync(foreignParent!!)
 
     override suspend fun isEquals(

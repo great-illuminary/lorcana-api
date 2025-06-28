@@ -13,7 +13,19 @@ class RavenburgerController {
             EventHolder(
                 event = it,
                 settings = synchronizer.settingsAccess.getFromId(it.settingsId)!!,
-                tournamentPhases = synchronizer.tournamentPhaseAccess.getFromParent(it.id),
+                userEventStatus = synchronizer.userEventStatusAccess.getFromParent(it.id),
+                tournamentPhases = synchronizer.tournamentPhaseAccess.getFromParent(it.id)
+                    .map { phase ->
+                        TournamentPhaseHolder(
+                            phase = phase,
+                            rounds = synchronizer.roundAccess.getFromParent(phase.id).map { round ->
+                                RoundHolder(
+                                    round = round,
+                                    standings = synchronizer.eventStandingAccess.getFromParent(round.id)
+                                )
+                            }
+                        )
+                    },
                 gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(it.gameplayFormatId)
             )
         }

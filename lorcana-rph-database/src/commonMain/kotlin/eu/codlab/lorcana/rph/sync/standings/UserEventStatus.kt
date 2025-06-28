@@ -3,7 +3,9 @@ package eu.codlab.lorcana.rph.sync.standings
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import eu.codlab.lorcana.rph.sync.ModelId
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity
 data class UserEventStatus(
     @PrimaryKey(autoGenerate = true)
@@ -17,8 +19,8 @@ data class UserEventStatus(
     val bestIdentifier: String,
 
     // foreign keys
-    val roundId: Long? = null,
-    val userId: Long? = null,
+    val eventId: Long,
+    val userId: Long,
     // val eventStandingId: Long? = null
 ) : ModelId<Long> {
     override fun modelId() = id

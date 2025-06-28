@@ -18,7 +18,7 @@ interface EventStandingDao {
     suspend fun getAllFromRound(roundId: Long, playerId: Long): List<EventStanding>
 
     @Query("SELECT * FROM eventstanding where roundId = :roundId AND playerId = :playerId LIMIT 1")
-    suspend fun get(id: Long, playerId: Long): EventStanding
+    suspend fun get(roundId: Long, playerId: Long): EventStanding
 
     @Insert
     suspend fun insert(eventStanding: EventStanding)

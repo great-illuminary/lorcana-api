@@ -2,7 +2,9 @@ package eu.codlab.lorcana.rph.sync.standings
 
 import androidx.room.Entity
 import eu.codlab.lorcana.rph.sync.ModelId
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(primaryKeys = ["roundId", "playerId"])
 data class EventStanding(
     val rank: Int,

@@ -1,10 +1,10 @@
 package eu.codlab.lorcana.rph.sync.extensions
 
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
-import eu.codlab.lorcana.rph.sync.round.Round
+import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 
 fun UserEventStatus.toSync(
-    standing: eu.codlab.lorcana.rph.sync.standings.EventStanding
+    standing: UserEventStatusParent
 ) = eu.codlab.lorcana.rph.sync.standings.UserEventStatus(
     id = id,
     matchesWon = matchesWon,
@@ -14,7 +14,7 @@ fun UserEventStatus.toSync(
     registrationStatus = registrationStatus,
     fullProfilePictureUrl = fullProfilePictureUrl,
     bestIdentifier = bestIdentifier,
-    roundId = standing.roundId,
+    eventId = standing.eventId,
     userId = this.user?.id ?: standing.playerId,
 )
 

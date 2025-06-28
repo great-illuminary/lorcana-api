@@ -4,8 +4,8 @@ import eu.codlab.lorcana.rph.LoadRPHCall
 import eu.codlab.lorcana.rph.event.EventQueryParameters
 import eu.codlab.lorcana.rph.registrations.EventRegistrationsQueryParameters
 import eu.codlab.lorcana.rph.rounds.standings.EventStanding
-import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.event.Event
+import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
 
 class Sync {
@@ -110,15 +110,22 @@ class Sync {
                                 ).results
 
                                 standings.forEach { eventStanding ->
-                                    val eventStandingChecked = eventStandingWrapper.check(eventStanding, next)
-                                    val checked = when(eventStandingChecked) {
+                                    val eventStandingChecked =
+                                        eventStandingWrapper.check(eventStanding, next)
+                                    val checked = when (eventStandingChecked) {
                                         is GeneratedModel -> eventStandingChecked.new
                                         is PreviousModel -> eventStandingChecked.previous
                                     }
 
                                     // TODO manage the UserEventStatus
                                     eventStanding.userEventStatus?.let { userEventStatus ->
-                                        val userEventStatusChecked = userEventStatusWrapper.check(userEventStatus, checked)
+                                        val userEventStatusChecked = userEventStatusWrapper.check(
+                                            userEventStatus,
+                                            UserEventStatusParent(
+                                                eventId = eventFromDatabase.id,
+                                                playerId = checked.playerId
+                                            )
+                                        )
                                         // TODO check the user information now
                                     }
                                 }

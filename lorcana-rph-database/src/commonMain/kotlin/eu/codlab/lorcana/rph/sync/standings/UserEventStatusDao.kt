@@ -14,11 +14,11 @@ interface UserEventStatusDao {
     @Query("SELECT * FROM usereventstatus")
     suspend fun getAll(): List<UserEventStatus>
 
-    @Query("SELECT * FROM usereventstatus where roundId = :roundId AND userId = :userId")
-    suspend fun getAllFromEventStanding(roundId: Long, userId: Long): List<UserEventStatus>
+    @Query("SELECT * FROM usereventstatus where eventId = :eventId AND userId = :userId")
+    suspend fun getAllFromEventStanding(eventId: Long, userId: Long): List<UserEventStatus>
 
-    @Query("SELECT * FROM usereventstatus where roundId = :roundId AND userId = :userId LIMIT 1")
-    suspend fun get(roundId: Long, userId: Long): UserEventStatus
+    @Query("SELECT * FROM usereventstatus where eventId = :eventId AND userId = :userId LIMIT 1")
+    suspend fun get(eventId: Long, userId: Long): UserEventStatus
 
     @Insert
     suspend fun insert(userEventStatus: UserEventStatus)
