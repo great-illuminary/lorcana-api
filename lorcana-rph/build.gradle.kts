@@ -1,6 +1,8 @@
 plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.kotlin.serialization)
+    alias(libs.plugins.room)
+    alias(libs.plugins.ksp)
     id("jvmCompat")
 }
 

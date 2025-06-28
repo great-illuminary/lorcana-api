@@ -49,7 +49,7 @@ dependencies {
 
     api(libs.lorcana.data)
     api(project(":lorcana-dreamborn"))
-    api(project(":lorcana-rph"))
+    api(project(":lorcana-rph-backend"))
 }
 
 tasks {

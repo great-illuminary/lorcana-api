@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventSettings(
-    val id: Int,
+    val id: Long,
     @SerialName("decklist_status")
     val decklistStatus: String,
     @SerialName("event_lifecycle_status")

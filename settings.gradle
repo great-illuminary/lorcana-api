@@ -28,4 +28,7 @@ includeBuild "gradle/extended/${ext.GRADLE_EXTENDED_VERSION_USED}/kt-plugins"
 include(':lorcana-dreamborn-config')
 include(':lorcana-dreamborn')
 include(':lorcana-rph')
+include(':lorcana-rph-database')
+include(':lorcana-rph-sync')
+include(':lorcana-rph-backend')
 include(':lorcana-api')

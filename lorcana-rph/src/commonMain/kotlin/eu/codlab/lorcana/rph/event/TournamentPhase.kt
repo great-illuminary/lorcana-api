@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TournamentPhase(
-    val id: Int,
+    val id: Long,
     @SerialName("first_round_type")
     val firstRoundType: String? = null,
     val status: String,

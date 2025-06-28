@@ -21,16 +21,21 @@ data class Event<S : AbstractStore>(
     @SerialName("end_datetime")
     val endDatetime: String? = null,
     @SerialName("day_2_start_datetime")
-    val day2StartDatetime: String? = null,
+    val day2StartDatetimeISO: String? = null,
     @SerialName("timer_end_datetime")
     val timerEndDatetime: String? = null,
-    val timer_paused_at_datetime: String? = null,
-    val timer_is_running: Boolean,
+    @SerialName("timer_paused_at_datetime")
+    val timerPausedAtDatetime: String? = null,
+    @SerialName("timer_is_running")
+    val timerIsRunning: Boolean,
     val description: String,
     val settings: EventSettings,
-    val tournament_phases: List<TournamentPhase>,
-    val registered_user_count: Int,
-    val full_address: String,
+    @SerialName("tournament_phases")
+    val tournamentPhases: List<TournamentPhase>,
+    @SerialName("registered_user_count")
+    val registeredUserCount: Int,
+    @SerialName("full_address")
+    val fullAddress: String,
     val store: S,
     val convention: String? = null,
     @SerialName("gameplay_format")
@@ -121,4 +126,7 @@ data class Event<S : AbstractStore>(
 ) {
     val startDateTime: DateTime?
         get() = startDatetimeISO?.let { DateTime.fromString(it).utc }
+
+    val day2StartDateTime: DateTime?
+        get() = day2StartDatetimeISO?.let { DateTime.fromString(it).utc }
 }

@@ -3,21 +3,25 @@ package eu.codlab.lorcana.rph.store
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed class AbstractStore
+sealed class AbstractStore {
+    abstract fun id(): Long
+}
 
 @Serializable
 data class Store(
-    val id: Int,
+    val id: Long,
     val name: String,
     @SerialName("full_address")
     val fullAddress: String,
     val country: String? = null,
     val website: String? = null
-) : AbstractStore()
+) : AbstractStore() {
+    override fun id() = id
+}
 
 @Serializable
 data class StoreFull(
-    val id: Int,
+    val id: Long,
     val name: String,
     @SerialName("full_address")
     val fullAddress: String,
@@ -27,4 +31,6 @@ data class StoreFull(
     val website: String? = null,
     val latitude: Double? = null,
     val longitude: Double? = null
-) : AbstractStore()
+) : AbstractStore() {
+    override fun id() = id
+}

@@ -28,7 +28,6 @@ import javax.net.ssl.X509TrustManager
 internal class DreambornApi {
     private val client = createClient(
         Configuration(
-            enableLogs = true,
             socketTimeoutMillis = 30000,
             connectTimeoutMillis = 30000,
             requestTimeoutMillis = 30000
@@ -36,7 +35,6 @@ internal class DreambornApi {
     ) { }
     private val clientWithProxy = createClient(
         Configuration(
-            enableLogs = true,
             socketTimeoutMillis = 30000,
             connectTimeoutMillis = 30000,
             requestTimeoutMillis = 30000,

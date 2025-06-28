@@ -3,9 +3,9 @@ package eu.codlab.lorcana.api.backend
 import eu.codlab.lorcana.api.backend.routing.MappingVirtualCard
 import eu.codlab.lorcana.api.backend.routing.artists
 import eu.codlab.lorcana.api.backend.routing.decks
+import eu.codlab.lorcana.api.backend.routing.routeRPH
 import eu.codlab.lorcana.api.environment.Environment
 import eu.codlab.lorcana.raw.SetDescription
-import eu.codlab.lorcana.raw.VirtualCard
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.core.routes.swagger
@@ -14,8 +14,6 @@ import io.bkbn.kompendium.oas.common.ExternalDocumentation
 import io.bkbn.kompendium.oas.payload.Parameter
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.application.install
 import io.ktor.server.http.content.staticFiles
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
@@ -135,5 +133,9 @@ fun Application.configureRouting(environment: Environment) {
         }
 
         decks(environment)
+
+        route("/rph") {
+            routeRPH(environment)
+        }
     }
 }

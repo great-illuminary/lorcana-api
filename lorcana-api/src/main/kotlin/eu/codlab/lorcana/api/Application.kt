@@ -20,6 +20,10 @@ fun main() {
             }
         }
 
+        async {
+            environment.ravenburgerController.startSync()
+        }
+
         try {
             backend.start()
         } catch (err: Throwable) {

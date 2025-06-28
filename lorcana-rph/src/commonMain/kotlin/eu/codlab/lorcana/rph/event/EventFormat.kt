@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class EventFormat {
-    @SerialName("OTHER")
-    Other
+    OTHER
 }
