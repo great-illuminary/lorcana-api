@@ -19,7 +19,7 @@ internal class GameplayFormatWrapper : AbstractWrapper<GameplayFormat,
 
     override suspend fun list() = gameplayFormats.getAll()
 
-    override fun id(fromApi: eu.codlab.lorcana.rph.gameplay.GameplayFormat) = fromApi.id
+    override fun id(fromApi: eu.codlab.lorcana.rph.gameplay.GameplayFormat, parent: Unit?) = fromApi.id
 
     override suspend fun insert(copy: GameplayFormat) = gameplayFormats.insert(copy)
 

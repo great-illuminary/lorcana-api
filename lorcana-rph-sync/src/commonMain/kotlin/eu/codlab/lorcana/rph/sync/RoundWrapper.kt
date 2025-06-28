@@ -19,7 +19,8 @@ internal class RoundWrapper : AbstractWrapper<Round,
 
     override suspend fun list() = rounds.getAll()
 
-    override fun id(fromApi: eu.codlab.lorcana.rph.event.Round) = fromApi.id
+    override fun id(fromApi: eu.codlab.lorcana.rph.event.Round, parent: TournamentPhase?) =
+        fromApi.id
 
     override suspend fun insert(copy: Round) = rounds.insert(copy)
 

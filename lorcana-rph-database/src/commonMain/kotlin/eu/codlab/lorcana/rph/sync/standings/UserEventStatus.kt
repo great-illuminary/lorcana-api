@@ -1,9 +1,12 @@
 package eu.codlab.lorcana.rph.sync.standings
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
+import eu.codlab.lorcana.rph.sync.ModelId
 
 @Entity
 data class UserEventStatus(
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
     val matchesWon: Int,
     val matchesDrawn: Int,
@@ -12,5 +15,11 @@ data class UserEventStatus(
     val registrationStatus: String,
     val fullProfilePictureUrl: String? = null,
     val bestIdentifier: String,
-    val userId: Long? = null
-)
+
+    // foreign keys
+    val roundId: Long? = null,
+    val userId: Long? = null,
+    // val eventStandingId: Long? = null
+) : ModelId<Long> {
+    override fun modelId() = id
+}

@@ -16,8 +16,8 @@ internal class TournamentPhaseWrapper : AbstractWrapper<TournamentPhase,
     override fun getParentKey(model: TournamentPhase) = model.eventId
 
     override suspend fun list() = stores.getAll()
-
-    override fun id(fromApi: eu.codlab.lorcana.rph.event.TournamentPhase) = fromApi.id
+    override fun id(fromApi: eu.codlab.lorcana.rph.event.TournamentPhase, parent: Event?) =
+        fromApi.id
 
     override suspend fun insert(copy: TournamentPhase) = stores.insert(copy)
 

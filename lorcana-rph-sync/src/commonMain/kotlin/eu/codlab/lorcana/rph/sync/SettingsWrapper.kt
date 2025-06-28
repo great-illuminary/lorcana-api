@@ -15,7 +15,7 @@ internal class SettingsWrapper :
 
     override suspend fun list() = settings.getAll()
 
-    override fun id(fromApi: eu.codlab.lorcana.rph.event.EventSettings) = fromApi.id
+    override fun id(fromApi: eu.codlab.lorcana.rph.event.EventSettings, parent: Unit?) = fromApi.id
 
     override suspend fun insert(copy: EventSettings) = settings.insert(copy)
 

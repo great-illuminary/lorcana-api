@@ -12,6 +12,10 @@ import eu.codlab.lorcana.rph.sync.round.RoundController
 import eu.codlab.lorcana.rph.sync.round.RoundControllerImpl
 import eu.codlab.lorcana.rph.sync.settings.SettingController
 import eu.codlab.lorcana.rph.sync.settings.SettingControllerImpl
+import eu.codlab.lorcana.rph.sync.standings.EventStandingController
+import eu.codlab.lorcana.rph.sync.standings.EventStandingControllerImpl
+import eu.codlab.lorcana.rph.sync.standings.UserEventStatusController
+import eu.codlab.lorcana.rph.sync.standings.UserEventStatusControllerImpl
 import eu.codlab.lorcana.rph.sync.store.StoreController
 import eu.codlab.lorcana.rph.sync.store.StoreControllerImpl
 import eu.codlab.lorcana.rph.sync.user.UserController
@@ -26,5 +30,7 @@ object SyncDatabase {
     val events: EventController = EventControllerImpl(database)
     val rounds: RoundController = RoundControllerImpl(database)
     val tournamentPhases: TournamentPhaseController = TournamentPhaseControllerImpl(database)
+    val eventStandings: EventStandingController = EventStandingControllerImpl(database)
+    val userEventStatus: UserEventStatusController = UserEventStatusControllerImpl(database)
     val settings: SettingController = SettingControllerImpl(database)
 }

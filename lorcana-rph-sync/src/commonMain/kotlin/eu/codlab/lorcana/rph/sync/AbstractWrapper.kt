@@ -50,13 +50,13 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
 
     override fun getCachedList(): List<MODEL> = cache
 
-    abstract fun id(fromApi: FROM_API): TYPE
+    abstract fun id(fromApi: FROM_API, parent: FOREIGN_PARENT?): TYPE
 
     suspend fun check(
         fromApi: FROM_API,
         foreignParent: FOREIGN_PARENT? = null
     ): GenerationModel<MODEL> {
-        val id = id(fromApi)
+        val id = id(fromApi, foreignParent)
         println("checking adding $id to the database...")
         // doesn't check the tournament phase
         // nor the rounds just yet

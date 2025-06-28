@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventMatchPlayer(
-    val id: Int,
+    val id: Long,
     val pronouns: String? = null,
     @SerialName("best_identifier")
     val bestIdentifier: String,

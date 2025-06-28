@@ -17,6 +17,8 @@ import eu.codlab.lorcana.rph.sync.round.Round
 import eu.codlab.lorcana.rph.sync.round.RoundDao
 import eu.codlab.lorcana.rph.sync.settings.Setting
 import eu.codlab.lorcana.rph.sync.settings.SettingDao
+import eu.codlab.lorcana.rph.sync.standings.EventStandingDao
+import eu.codlab.lorcana.rph.sync.standings.UserEventStatusDao
 import eu.codlab.lorcana.rph.sync.store.Store
 import eu.codlab.lorcana.rph.sync.store.StoreDao
 import eu.codlab.lorcana.rph.sync.user.User
@@ -50,6 +52,10 @@ internal abstract class AppDatabase : RoomDatabase() {
     abstract fun getRoundDao(): RoundDao
 
     abstract fun getTournamentPhaseDao(): TournamentPhaseDao
+
+    abstract fun getEventStandings(): EventStandingDao
+
+    abstract fun getUserEventStatus(): UserEventStatusDao
 
     abstract fun getSettingDao(): SettingDao
 }

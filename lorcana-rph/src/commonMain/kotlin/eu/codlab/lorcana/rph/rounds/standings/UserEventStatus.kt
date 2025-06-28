@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserEventStatus(
-    val id: Int,
+    val id: Long,
     @SerialName("matches_won")
     val matchesWon: Int,
     @SerialName("matches_drawn")

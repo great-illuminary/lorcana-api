@@ -14,8 +14,7 @@ internal class StoreWrapper :
     }
 
     override suspend fun list() = stores.getAll()
-
-    override fun id(fromApi: eu.codlab.lorcana.rph.store.Store) = fromApi.id
+    override fun id(fromApi: eu.codlab.lorcana.rph.store.Store, parent: Unit?) = fromApi.id
 
     override suspend fun insert(copy: Store) = stores.insert(copy)
 

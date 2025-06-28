@@ -123,7 +123,6 @@ internal class DreambornApi {
                 val clientInfo =
                     "${Config.zenrows}:js_render=true&premium_proxy=true&proxy_country=fr"
                 val basicAuth = Base64.getEncoder().encodeToString(clientInfo.toByteArray())
-                println("basicAuth -> $basicAuth")
                 header(HttpHeaders.ProxyAuthorization, "Basic $basicAuth")
             }
             if (!request.status.isSuccess()) return null

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserCondensed(
-    val id: Int,
+    val id: Long,
     @SerialName("best_identifier")
     val bestIdentifier: String
 )

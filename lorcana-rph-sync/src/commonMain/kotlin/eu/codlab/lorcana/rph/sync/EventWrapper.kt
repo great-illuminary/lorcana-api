@@ -15,7 +15,7 @@ internal class EventWrapper :
 
     override suspend fun list() = events.getAll()
 
-    override fun id(fromApi: eu.codlab.lorcana.rph.event.Event<*>) = fromApi.id
+    override fun id(fromApi: eu.codlab.lorcana.rph.event.Event<*>, parent: Unit?) = fromApi.id
 
     override suspend fun insert(copy: Event) = events.insert(copy)
 

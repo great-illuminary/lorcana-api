@@ -7,8 +7,6 @@ import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.event.Event
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
-import eu.codlab.lorcana.rph.user.UserCondensed
-import kotlinx.serialization.SerialName
 
 class Sync {
     private val loader = LoadRPHCall()
@@ -21,6 +19,8 @@ class Sync {
     private val tournamentPhaseWrapper = TournamentPhaseWrapper()
     private val roundWrapper = RoundWrapper()
     private val settingsWrapper = SettingsWrapper()
+    private val eventStandingWrapper = EventStandingWrapper()
+    private val userEventStatusWrapper = UserEventStatusWrapper()
 
     val eventAccess = eventWrapper.asCacheAccess()
     val storeAccess = eventWrapper.asCacheAccess()
@@ -28,6 +28,8 @@ class Sync {
     val tournamentPhaseAccess = tournamentPhaseWrapper.asCacheAccess()
     val roundAccess = roundWrapper.asCacheAccess()
     val settingsAccess = settingsWrapper.asCacheAccess()
+    val eventStandingAccess = eventStandingWrapper.asCacheAccess()
+    val userEventStatusAccess = userEventStatusWrapper.asCacheAccess()
 
     private val wrappers = listOf(
         eventWrapper,
@@ -35,7 +37,9 @@ class Sync {
         gameplayFormatWrapper,
         tournamentPhaseWrapper,
         roundWrapper,
-        settingsWrapper
+        settingsWrapper,
+        eventStandingWrapper,
+        userEventStatusWrapper
     )
 
     private suspend fun initialize() {
@@ -96,14 +100,28 @@ class Sync {
                             //TODO manage standings_status has changed from NOT_GENERATED to GENERATED
                             val nextIsGenerated = next?.pairingsStatus == "GENERATED"
                             val previousWasntGenerated = previous?.pairingsStatus != "GENERATED"
+
                             if (null != next && nextIsGenerated && previousWasntGenerated) {
+                                println("managing the event standing for the round ${next.id}")
                                 val standings: List<EventStanding> = loader.eventRoundsStandings(
                                     next.id, EventRegistrationsQueryParameters(
                                         pageSize = 4000
                                     )
                                 ).results
 
-                                standings.firstOrNull()?.userEventStatus
+                                standings.forEach { eventStanding ->
+                                    val eventStandingChecked = eventStandingWrapper.check(eventStanding, next)
+                                    val checked = when(eventStandingChecked) {
+                                        is GeneratedModel -> eventStandingChecked.new
+                                        is PreviousModel -> eventStandingChecked.previous
+                                    }
+
+                                    // TODO manage the UserEventStatus
+                                    eventStanding.userEventStatus?.let { userEventStatus ->
+                                        val userEventStatusChecked = userEventStatusWrapper.check(userEventStatus, checked)
+                                        // TODO check the user information now
+                                    }
+                                }
                             }
                         }
                     }

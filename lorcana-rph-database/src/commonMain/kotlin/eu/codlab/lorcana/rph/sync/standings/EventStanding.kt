@@ -1,8 +1,9 @@
 package eu.codlab.lorcana.rph.sync.standings
 
 import androidx.room.Entity
+import eu.codlab.lorcana.rph.sync.ModelId
 
-@Entity
+@Entity(primaryKeys = ["roundId", "playerId"])
 data class EventStanding(
     val rank: Int,
     val record: String,
@@ -12,6 +13,9 @@ data class EventStanding(
     val opponentGameWinPercentage: Double,
 
     // foreign keys
+    val roundId: Long,
     val playerId: Long,
-    val userEventStatusId: Long? = null,
-)
+    //val userEventStatusId: Long? = null, -> not a foreign key
+): ModelId<String> {
+    override fun modelId() = "${roundId}_${playerId}"
+}
