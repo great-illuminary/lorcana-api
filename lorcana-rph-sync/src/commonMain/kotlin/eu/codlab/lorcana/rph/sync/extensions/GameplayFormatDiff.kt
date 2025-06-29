@@ -16,4 +16,3 @@ fun eu.codlab.lorcana.rph.sync.gameplay.GameplayFormat.isEquals(other: GameplayF
 
     return true
 }
-

@@ -51,7 +51,7 @@ internal object Clients {
     ) { }
 
     suspend inline fun <reified T> get(url: String): T {
-        //TODO manage issues which are striclty related to the data mapping
+        // TODO manage issues which are striclty related to the data mapping
         val answer = client.get(url)
 
         if (answer.status.isSuccess()) {

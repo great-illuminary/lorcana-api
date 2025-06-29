@@ -113,11 +113,11 @@ class Sync {
             is PreviousModel -> afterCheck.previous to null
         }
 
-        val eventFromDatabase = new ?: previous ?: return //throw ?
+        val eventFromDatabase = new ?: previous ?: return // throw ?
 
         val known = userEventStatusAccess.getFromParent(eventFromDatabase.id)
 
-        //note : this would be problematic for cases which are :
+        // note : this would be problematic for cases which are :
         // user A joins, user B joins, user A leave
         // resulting in not seeing that it changed but for now, we'll skip this completely
         if (null != new) {
@@ -128,9 +128,8 @@ class Sync {
 
             if (hasNewUsers) {
                 val registrations: List<UserEventStatus> = loader.eventRegistrations(
-                    new.id, EventRegistrationsQueryParameters(
-                        pageSize = 40000
-                    )
+                    new.id,
+                    EventRegistrationsQueryParameters(pageSize = 40000)
                 ).results
 
                 println("  -> differences in the users and registrations is #${registrations.size}")
@@ -154,8 +153,8 @@ class Sync {
 
         settingsWrapper.check(event.settings)
 
-        //TODO check the settings.event_lifecycle_status
-        //TODO check the settings.show_registration_button
+        // TODO check the settings.event_lifecycle_status
+        // TODO check the settings.show_registration_button
 
         gameplayFormatWrapper.check(event.gameplayFormat)
         storeWrapper.check(event.store)
@@ -178,14 +177,13 @@ class Sync {
                     val previousPWasnt = previous?.pairingsStatus != "GENERATED"
                     if (null != next && nextPIsGenerated && previousPWasnt) {
                         val pairings: List<EventMatch> = loader.eventRoundsMatches(
-                            next.id, EventRegistrationsQueryParameters(
-                                pageSize = 4000
-                            )
+                            next.id,
+                            EventRegistrationsQueryParameters(pageSize = 4000)
                         ).results
 
                         pairings.forEach { match ->
                             eventMatchWrapper.check(match)
-                            //TODO force recheck the user event status ?
+                            // TODO force recheck the user event status ?
                         }
                     }
 
@@ -195,9 +193,8 @@ class Sync {
                     if (null != next && nextSIsGenerated && previousSWasnt) {
                         println("managing the event standing for the round ${next.id}")
                         val standings: List<EventStanding> = loader.eventRoundsStandings(
-                            next.id, EventRegistrationsQueryParameters(
-                                pageSize = 4000
-                            )
+                            next.id,
+                            EventRegistrationsQueryParameters(pageSize = 4000)
                         ).results
 
                         standings.forEach { eventStanding ->

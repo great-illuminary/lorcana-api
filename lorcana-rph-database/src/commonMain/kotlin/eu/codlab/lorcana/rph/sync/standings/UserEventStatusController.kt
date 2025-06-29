@@ -2,7 +2,6 @@ package eu.codlab.lorcana.rph.sync.standings
 
 import eu.codlab.lorcana.rph.sync.database.AppDatabase
 import eu.codlab.lorcana.rph.sync.event.Event
-import eu.codlab.lorcana.rph.sync.round.Round
 
 interface UserEventStatusController {
     suspend fun getAll(): List<UserEventStatus>
@@ -23,7 +22,8 @@ internal class UserEventStatusControllerImpl(database: AppDatabase) : UserEventS
 
     override suspend fun getAll() = dao.getAll()
 
-    override suspend fun getAll(event: Event, player: Long) = dao.getAllFromEventStanding(event.id, player)
+    override suspend fun getAll(event: Event, player: Long) =
+        dao.getAllFromEventStanding(event.id, player)
 
     override suspend fun get(event: Event, player: Long) = dao.get(event.id, player)
 

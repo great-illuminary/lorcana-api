@@ -63,12 +63,10 @@ fun Event.toSyncEvent(
     eventConfigurationTemplate = eventConfigurationTemplate,
     bannerImage = bannerImage,
     phaseTemplateGroupId = phaseTemplateGroupId,
-
     // foreign keys
     settingsId = settings.id,
     storeId = store.id(),
     gameplayFormatId = gameplayFormat.id,
-
     updatedPostEvent = cached?.updatedPostEvent ?: false
 )
 
@@ -103,8 +101,8 @@ fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
     if (settingsId != other.settings.id) return false
     if (storeId != other.store.id()) return false
     if (gameplayFormatId != other.gameplayFormat.id) return false
-    //TODO update the images one day ?
-    // if (fullHeaderImageUrl != other.fullHeaderImageUrl) return false
+    // TODO update the images one day ?
+    //  if (fullHeaderImageUrl != other.fullHeaderImageUrl) return false
     if (startDatetimeISO != other.startDatetimeISO) return false
     if (startDatetime != other.startDateTime?.unixMillisLong) return false
     if (endDatetimeISO != other.endDatetime) return false
@@ -137,4 +135,3 @@ fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
 
     return true
 }
-

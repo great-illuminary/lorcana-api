@@ -17,7 +17,6 @@ internal class NuxtExtractor(fromString: String) {
         return (0..mappedArguments.size).firstOrNull { index ->
             try {
                 json.decodeFromString<ExpectedArgumentIndexesInfo>(mappedArguments[index])
-                println("findIndexForData(${index}) is ok")
                 true
             } catch (err: Throwable) {
                 false
@@ -27,7 +26,6 @@ internal class NuxtExtractor(fromString: String) {
 
     fun extractDeck(): DeckDescriptor {
         try {
-
             val sMatchString = "\"[^,]*\""
             val sMatchArray = "\\[[^\\]]*\\]"
             val sMatchJson = "\\{[^\\}]*\\}"
@@ -97,7 +95,7 @@ internal class NuxtExtractor(fromString: String) {
                 likeCount = mappedArguments[data.likeCount].toInt(),
                 views = mappedArguments[data.views].toInt(),
                 totalPrice = mappedArguments[data.totalPrice].toDouble(),
-                tags = DeckTags(), //mappedArguments[data.tags]
+                tags = DeckTags(), // mappedArguments[data.tags]
                 links = DeckLinks(youtube = youtube)
             )
 

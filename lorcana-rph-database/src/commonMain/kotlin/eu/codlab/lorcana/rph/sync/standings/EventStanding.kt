@@ -13,11 +13,10 @@ data class EventStanding(
     val matchPoints: Int,
     val opponentMatchWinPercentage: Double,
     val opponentGameWinPercentage: Double,
-
     // foreign keys
     val roundId: Long,
     val playerId: Long,
-    //val userEventStatusId: Long? = null, -> not a foreign key
-): ModelId<String> {
-    override fun modelId() = "${roundId}_${playerId}"
+    // val userEventStatusId: Long? = null, -> not a foreign key
+) : ModelId<String> {
+    override fun modelId() = "${roundId}_$playerId"
 }

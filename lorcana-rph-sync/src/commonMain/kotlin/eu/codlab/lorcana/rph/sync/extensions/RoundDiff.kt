@@ -27,4 +27,3 @@ fun eu.codlab.lorcana.rph.sync.round.Round.isEquals(other: Round): Boolean {
 
     return true
 }
-

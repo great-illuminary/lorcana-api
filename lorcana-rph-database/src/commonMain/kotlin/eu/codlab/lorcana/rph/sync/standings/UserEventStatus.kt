@@ -17,12 +17,10 @@ data class UserEventStatus(
     val registrationStatus: String? = null,
     val fullProfilePictureUrl: String? = null,
     val bestIdentifier: String,
-
     // we also set few information which were "registration specific"
     val specialUserIdentifier: String? = null,
     val finalPlaceInStandings: Int? = null,
     val registrationCompletedDatetime: String? = null,
-
     // foreign keys
     val eventId: Long,
     val userId: Long,

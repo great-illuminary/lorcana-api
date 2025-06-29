@@ -67,4 +67,3 @@ fun eu.codlab.lorcana.rph.sync.match.EventMatch.isEquals(other: EventMatch): Boo
 
     return true
 }
-

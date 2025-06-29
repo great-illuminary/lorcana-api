@@ -6,18 +6,23 @@ import eu.codlab.lorcana.rph.sync.extensions.isEquals
 import eu.codlab.lorcana.rph.sync.extensions.toSync
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
 
-internal class TournamentPhaseWrapper : AbstractWrapper<TournamentPhase,
+internal class TournamentPhaseWrapper : AbstractWrapper<
+        TournamentPhase,
         Long,
         eu.codlab.lorcana.rph.event.TournamentPhase,
         Event,
-        Long>() {
+        Long
+        >() {
     private val stores = SyncDatabase.tournamentPhases
 
     override fun getParentKey(model: TournamentPhase) = model.eventId
 
     override suspend fun list() = stores.getAll()
-    override fun id(fromApi: eu.codlab.lorcana.rph.event.TournamentPhase, parent: Event?) =
-        fromApi.id
+
+    override fun id(
+        fromApi: eu.codlab.lorcana.rph.event.TournamentPhase,
+        parent: Event?
+    ) = fromApi.id
 
     override suspend fun insert(copy: TournamentPhase) = stores.insert(copy)
 

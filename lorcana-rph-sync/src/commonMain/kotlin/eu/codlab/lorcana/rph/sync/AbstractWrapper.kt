@@ -3,11 +3,13 @@ package eu.codlab.lorcana.rph.sync
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
+internal sealed class AbstractWrapper<
+        MODEL : ModelId<TYPE>,
         TYPE,
         FROM_API,
         FOREIGN_PARENT,
-        FOREIGN_PARENT_TYPE> : CacheAccess<MODEL, TYPE, FOREIGN_PARENT_TYPE> {
+        FOREIGN_PARENT_TYPE
+        > : CacheAccess<MODEL, TYPE, FOREIGN_PARENT_TYPE> {
     protected val scope = CoroutineScope(Dispatchers.IO)
 
     protected val cache = mutableListOf<MODEL>()
@@ -49,6 +51,7 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
     ) = isEquals(cached, fromApi)
 
     protected abstract suspend fun isEquals(cached: MODEL, fromApi: FROM_API): Boolean
+
     protected abstract suspend fun toSync(
         fromApi: FROM_API,
         cached: MODEL?,
@@ -56,6 +59,7 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
     ): MODEL
 
     protected abstract suspend fun update(copy: MODEL)
+
     protected abstract suspend fun insert(copy: MODEL)
 
     override fun getFromId(id: TYPE) = cacheMap[id]
@@ -76,10 +80,6 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
         val cached = cacheMap[id]
 
         if (null == cached || !isEquals(cached, fromApi, foreignParent)) {
-            //println("  -> the event is different... creating a copy and setting it")
-
-            //println("original is $fromApi")
-            //println("copy     is $cached")
             val copy = toSync(fromApi, cached, foreignParent)
 
             cache.indexOfFirst { it.modelId() == copy.modelId() }.let { existingId ->
@@ -93,17 +93,14 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
             cacheMap[copy.modelId()] = copy
 
             if (null == cached) {
-                //println("    -> insert")
                 insert(copy)
 
                 attemptToPutInCacheForParent(copy)
             } else {
-                //println("    -> update")
                 update(copy)
             }
             return GeneratedModel(previous = cached, new = copy)
         } else {
-            //println("  -> skipping")
             return PreviousModel(previous = cached)
         }
     }

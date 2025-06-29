@@ -18,4 +18,3 @@ fun Map<String, Long>.code() =
  */
 fun List<DeckCards>.code() = this.map { "${it.dreamborn}_${it.count}" }
     .sortedBy { it }.joinToString("_").hashCode()
-

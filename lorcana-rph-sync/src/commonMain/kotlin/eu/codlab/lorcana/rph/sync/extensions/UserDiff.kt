@@ -27,10 +27,9 @@ fun eu.codlab.lorcana.rph.sync.user.User.isEquals(
     parent?.let { nonNullParent ->
         if (bestIdentifierInGame != nonNullParent.bestIdentifier) return false
     }
-    //if (fullProfilePictureUrl != other.fullProfilePictureUrl) return false
+    // if (fullProfilePictureUrl != other.fullProfilePictureUrl) return false
 
     // not checking the in game one as it's not in this context
 
     return true
 }
-

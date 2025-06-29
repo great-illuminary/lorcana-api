@@ -27,4 +27,3 @@ fun eu.codlab.lorcana.rph.sync.phases.TournamentPhase.isEquals(other: Tournament
 
     return true
 }
-

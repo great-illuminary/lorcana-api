@@ -42,7 +42,8 @@ import kotlinx.coroutines.Dispatchers
         EventStanding::class,
         UserEventStatus::class,
         EventMatch::class,
-    ], version = 1
+    ],
+    version = 1
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 internal abstract class AppDatabase : RoomDatabase() {

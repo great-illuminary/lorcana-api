@@ -7,11 +7,13 @@ import eu.codlab.lorcana.rph.sync.extensions.toSync
 import eu.codlab.lorcana.rph.sync.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.user.User
 
-internal class UserWrapper : AbstractWrapper<User,
+internal class UserWrapper : AbstractWrapper<
+        User,
         Long,
         EventMatchPlayer,
         UserEventStatus,
-        Unit>() {
+        Unit
+        >() {
     private val stores = SyncDatabase.users
 
     override fun getParentKey(model: User) {
@@ -33,7 +35,9 @@ internal class UserWrapper : AbstractWrapper<User,
     ) = fromApi.toSync(foreignParent, cached?.toEventMatchPlayer())
 
     override suspend fun isEquals(
-        cached: User, fromApi: EventMatchPlayer, parent: UserEventStatus?
+        cached: User,
+        fromApi: EventMatchPlayer,
+        parent: UserEventStatus?
     ) = cached.isEquals(fromApi, parent)
 
     override suspend fun isEquals(cached: User, fromApi: EventMatchPlayer) =

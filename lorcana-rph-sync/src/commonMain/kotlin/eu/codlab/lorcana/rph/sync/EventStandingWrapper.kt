@@ -1,23 +1,24 @@
 package eu.codlab.lorcana.rph.sync
 
 import eu.codlab.lorcana.rph.sync.database.SyncDatabase
-import eu.codlab.lorcana.rph.sync.event.Event
 import eu.codlab.lorcana.rph.sync.extensions.isEquals
 import eu.codlab.lorcana.rph.sync.extensions.toSync
-import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
 import eu.codlab.lorcana.rph.sync.round.Round
 import eu.codlab.lorcana.rph.sync.standings.EventStanding
 
-internal class EventStandingWrapper : AbstractWrapper<EventStanding,
+internal class EventStandingWrapper : AbstractWrapper<
+        EventStanding,
         String,
         eu.codlab.lorcana.rph.rounds.standings.EventStanding,
         Round,
-        Long>() {
+        Long
+        >() {
     private val stores = SyncDatabase.eventStandings
 
     override fun getParentKey(model: EventStanding) = model.roundId
 
     override suspend fun list() = stores.getAll()
+
     override fun id(
         fromApi: eu.codlab.lorcana.rph.rounds.standings.EventStanding,
         parent: Round?

@@ -57,7 +57,9 @@ data class EventMatch(
     val players: List<Long>
 ) {
     fun player1() = players.first()
+
     fun player2() = players.getOrNull(1)
+
     fun player1Order() =
         this.playerMatchRelationships.first { it.player.id == player1() }.playerOrder
 

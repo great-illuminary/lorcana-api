@@ -28,4 +28,3 @@ fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(other: StoreFull): Boolean {
 
     return true
 }
-

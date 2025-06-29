@@ -88,13 +88,16 @@ internal class LocalDecksController internal constructor(
             )
         }
         mutableCardLists.putIfAbsent(deck.id, mutableMapOf())
-        mutableCardLists[deck.id]?.set(createdAt, cards.map {
-            DeckCards(
-                version.id,
-                dreamborn = it.key,
-                count = it.value
-            )
-        })
+        mutableCardLists[deck.id]?.set(
+            createdAt,
+            cards.map {
+                DeckCards(
+                    version.id,
+                    dreamborn = it.key,
+                    count = it.value
+                )
+            }
+        )
     }
 
     fun cardsAllVersions(deck: Deck): MutableMap<Long, List<DeckCards>> {
@@ -156,7 +159,6 @@ internal class LocalDecksController internal constructor(
             .executeAsList().firstOrNull()
             ?: throw IllegalStateException("The deck was not inserted")
 
-
         val createdMs = createdAt.unixMillisLong
         database.localDeckVersionsQueries.insert(inserted.id, createdMs)
         val version = database.localDeckVersionsQueries.selectFromUpdatedAt(inserted.id, createdMs)
@@ -172,13 +174,16 @@ internal class LocalDecksController internal constructor(
             )
         }
         mutableCardLists.putIfAbsent(inserted.id, mutableMapOf())
-        mutableCardLists[inserted.id]?.set(createdMs, cards.map {
-            DeckCards(
-                version.id,
-                dreamborn = it.key,
-                count = it.value
-            )
-        })
+        mutableCardLists[inserted.id]?.set(
+            createdMs,
+            cards.map {
+                DeckCards(
+                    version.id,
+                    dreamborn = it.key,
+                    count = it.value
+                )
+            }
+        )
     }
 
     fun updateLastCheckedAt(deck: Deck, lastChecked: DateTime) =

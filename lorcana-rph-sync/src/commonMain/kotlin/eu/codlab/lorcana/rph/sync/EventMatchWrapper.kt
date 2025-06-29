@@ -6,16 +6,19 @@ import eu.codlab.lorcana.rph.sync.extensions.toSync
 import eu.codlab.lorcana.rph.sync.match.EventMatch
 import eu.codlab.lorcana.rph.sync.round.Round
 
-internal class EventMatchWrapper : AbstractWrapper<EventMatch,
+internal class EventMatchWrapper : AbstractWrapper<
+        EventMatch,
         Long,
         eu.codlab.lorcana.rph.rounds.matches.EventMatch,
         Round,
-        Long>() {
+        Long
+        >() {
     private val stores = SyncDatabase.eventMatches
 
     override fun getParentKey(model: EventMatch) = model.tournamentRound
 
     override suspend fun list() = stores.getAll()
+
     override fun id(
         fromApi: eu.codlab.lorcana.rph.rounds.matches.EventMatch,
         parent: Round?

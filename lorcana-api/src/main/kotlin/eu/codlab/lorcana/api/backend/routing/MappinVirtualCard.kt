@@ -7,14 +7,11 @@ import eu.codlab.lorcana.cards.CardType
 import eu.codlab.lorcana.cards.ClassificationHolder
 import eu.codlab.lorcana.cards.ErratasClassification
 import eu.codlab.lorcana.cards.InkColor
-import eu.codlab.lorcana.cards.Language
 import eu.codlab.lorcana.cards.VariantRarity
 import eu.codlab.lorcana.franchises.Franchise
 import eu.codlab.lorcana.raw.Ravensburger
 import eu.codlab.lorcana.raw.SetDescription
-import eu.codlab.lorcana.raw.VariantClassification
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
 data class MappingVariantClassification(
     val set: SetDescription,

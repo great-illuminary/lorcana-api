@@ -24,7 +24,6 @@ import java.util.Base64
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
-
 internal class DreambornApi {
     private val client = createClient(
         Configuration(
@@ -191,11 +190,12 @@ internal class DreambornApi {
         if (null != referer) {
             header("Referer", referer)
         }
-        //header("Connection", "keep-alive")
+
         header("Sec-Fetch-Dest", "empty")
     }
 
     private var installed = false
+
     private fun ignoreCertWarning() {
         if (installed) return
         installed = true
@@ -222,7 +222,8 @@ internal class DreambornApi {
             ctx = SSLContext.getInstance("SSL")
             ctx.init(null, trustAllCerts, null)
             SSLContext.setDefault(ctx)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
+            // nothing
         }
     }
 }

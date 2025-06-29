@@ -6,11 +6,13 @@ import eu.codlab.lorcana.rph.sync.extensions.toSync
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
 import eu.codlab.lorcana.rph.sync.round.Round
 
-internal class RoundWrapper : AbstractWrapper<Round,
+internal class RoundWrapper : AbstractWrapper<
+        Round,
         Long,
         eu.codlab.lorcana.rph.event.Round,
         TournamentPhase,
-        Long>() {
+        Long
+        >() {
     private val rounds = SyncDatabase.rounds
 
     override fun getParentKey(model: Round): Long {

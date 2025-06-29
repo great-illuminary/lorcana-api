@@ -67,7 +67,6 @@ data class Deck(
     }
 }
 
-
 data class MappingDeck(
     val id: Long = 0,
     val uuid: String,

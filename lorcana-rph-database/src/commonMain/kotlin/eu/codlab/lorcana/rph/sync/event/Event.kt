@@ -77,12 +77,10 @@ data class Event(
     val eventConfigurationTemplate: String,
     val bannerImage: Int,
     val phaseTemplateGroupId: String,
-
     // foreign keys
     val settingsId: Long,
     val storeId: Long? = null,
     val gameplayFormatId: String,
-
     // once the event is finished, we can rescan it
     val updatedPostEvent: Boolean,
 ) : ModelId<Long> {

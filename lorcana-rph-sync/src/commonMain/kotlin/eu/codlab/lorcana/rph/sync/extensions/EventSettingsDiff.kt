@@ -32,4 +32,3 @@ fun eu.codlab.lorcana.rph.sync.event.EventSettings.isEquals(other: EventSettings
 
     return true
 }
-

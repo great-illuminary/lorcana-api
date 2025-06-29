@@ -1,20 +1,18 @@
 package eu.codlab.lorcana.rph.sync
 
 import eu.codlab.lorcana.rph.sync.database.SyncDatabase
-import eu.codlab.lorcana.rph.sync.event.Event
 import eu.codlab.lorcana.rph.sync.extensions.isEquals
 import eu.codlab.lorcana.rph.sync.extensions.toSync
 import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
-import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
-import eu.codlab.lorcana.rph.sync.round.Round
-import eu.codlab.lorcana.rph.sync.standings.EventStanding
 import eu.codlab.lorcana.rph.sync.standings.UserEventStatus
 
-internal class UserEventStatusWrapper : AbstractWrapper<UserEventStatus,
+internal class UserEventStatusWrapper : AbstractWrapper<
+        UserEventStatus,
         Long,
         eu.codlab.lorcana.rph.rounds.standings.UserEventStatus,
         UserEventStatusParent,
-        Long>() {
+        Long
+        >() {
     private val stores = SyncDatabase.userEventStatus
 
     override fun getParentKey(model: UserEventStatus) = model.eventId
@@ -39,5 +37,5 @@ internal class UserEventStatusWrapper : AbstractWrapper<UserEventStatus,
     override suspend fun isEquals(
         cached: UserEventStatus,
         fromApi: eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
-    )= cached.isEquals(fromApi)
+    ) = cached.isEquals(fromApi)
 }

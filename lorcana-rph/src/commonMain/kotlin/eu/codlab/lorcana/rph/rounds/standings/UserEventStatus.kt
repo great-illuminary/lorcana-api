@@ -1,7 +1,6 @@
 package eu.codlab.lorcana.rph.rounds.standings
 
 import eu.codlab.lorcana.rph.rounds.matches.EventMatchPlayer
-import eu.codlab.lorcana.rph.user.UserCondensed
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,7 +23,6 @@ data class UserEventStatus(
     @SerialName("best_identifier")
     val bestIdentifier: String,
     val user: EventMatchPlayer? = null,
-
     @SerialName("registration_status")
     val registrationStatus: String? = null,
     @SerialName("special_user_identifier")

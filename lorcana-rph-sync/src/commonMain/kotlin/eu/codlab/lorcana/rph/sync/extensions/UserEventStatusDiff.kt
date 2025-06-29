@@ -17,7 +17,6 @@ fun UserEventStatus.toSync(
     bestIdentifier = cached?.bestIdentifier ?: bestIdentifier,
     eventId = standing.eventId,
     userId = this.user?.id ?: standing.playerId,
-
     specialUserIdentifier = cached?.specialUserIdentifier ?: specialUserIdentifier,
     finalPlaceInStandings = cached?.finalPlaceInStandings ?: finalPlaceInStandings,
     registrationCompletedDatetime = cached?.registrationCompletedDatetime
@@ -31,7 +30,7 @@ fun eu.codlab.lorcana.rph.sync.standings.UserEventStatus.isEquals(other: UserEve
     if (matchesLost != other.matchesLost) return false
     if (totalMatchPoints != other.totalMatchPoints) return false
     if (registrationStatus != other.registrationStatus) return false
-    //if (fullProfilePictureUrl != other.fullProfilePictureUrl) return false
+    // if (fullProfilePictureUrl != other.fullProfilePictureUrl) return false
     if (bestIdentifier != other.bestIdentifier) return false
     // if (roundId != other.player.id) return false
     // if (userId != other.player.id) return false
@@ -48,4 +47,3 @@ fun eu.codlab.lorcana.rph.sync.standings.UserEventStatus.isEquals(other: UserEve
 
     return true
 }
-

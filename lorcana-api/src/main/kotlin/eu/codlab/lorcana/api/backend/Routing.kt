@@ -95,8 +95,8 @@ fun Application.configureRouting(environment: Environment) {
                             required = true,
                             `in` = Parameter.Location.path,
                             schema = TypeDefinition.STRING,
-                            description = "A valid set name following the given list : "
-                                    + SetDescription.entries.joinToString("<br />") { " - $it" }
+                            description = "A valid set name following the given list : " +
+                                    SetDescription.entries.joinToString("<br />") { " - $it" }
                         )
                     )
                 }

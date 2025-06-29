@@ -88,7 +88,6 @@ fun Route.decks(environment: Environment) {
             val deckId = call.parameters["deck"]!!
 
             try {
-                //environment.dreamborn.fetchDeckLight(deckId)
                 val regular = environment.dreamborn.fetchDeck(deckId)!!
 
                 call.respond(
