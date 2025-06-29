@@ -9,6 +9,8 @@ import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.minutes
 
 class Sync {
     private val loader = LoadRPHCall()
@@ -57,6 +59,15 @@ class Sync {
     }
 
     suspend fun start() {
+        while (true) {
+            println("looping the events...")
+            loop()
+
+            delay(10.minutes)
+        }
+    }
+
+    private suspend fun loop() {
         initialize()
 
         var synchronizationNeedsToContinue = true
@@ -234,7 +245,7 @@ class Sync {
             }
         }
 
-        if(!commit) return
+        if (!commit) return
 
         // now commit the event
         eventWrapper.setUpdatedPostEvent(eventFromDatabase, true)
