@@ -1,18 +1,15 @@
 package eu.codlab.lorcana.api.backend.routing
 
 import eu.codlab.lorcana.api.environment.Environment
-import eu.codlab.lorcana.rph.LoadRPHCall
-import eu.codlab.lorcana.rph.RavenburgerController
+import eu.codlab.lorcana.rph.EventHolderFull
 import eu.codlab.lorcana.rph.event.Event
 import eu.codlab.lorcana.rph.event.EventQueryParameters
 import eu.codlab.lorcana.rph.event.Round
 import eu.codlab.lorcana.rph.event.TournamentPhase
-import eu.codlab.lorcana.rph.registrations.EventRegistration
 import eu.codlab.lorcana.rph.registrations.EventRegistrationsQueryParameters
 import eu.codlab.lorcana.rph.rounds.matches.EventMatch
 import eu.codlab.lorcana.rph.rounds.standings.EventStanding
-import eu.codlab.lorcana.rph.store.Store
-import eu.codlab.lorcana.rph.store.StoreFull
+import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.oas.common.ExternalDocumentation
@@ -41,7 +38,7 @@ fun Route.routeRPH(environment: Environment) {
                 )
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<List<Event<Store>>>()
+                    responseType<List<Event>>()
                     description("List of events")
                 }
             }
@@ -50,6 +47,38 @@ fun Route.routeRPH(environment: Environment) {
         get {
             val events = ravensburger.events()
             call.respond(events)
+        }
+    }
+
+    route("/event/{eventId}") {
+        install(NotarizedRoute()) {
+            get = GetInfo.builder {
+                summary("Retrieve the information about an event")
+                description("Will give you all the info about an event whatever its status")
+                externalDocumentation(
+                    ExternalDocumentation(
+                        URI(environment.urlDocumentation),
+                        "Get help on Discord"
+                    )
+                )
+                response {
+                    responseCode(HttpStatusCode.OK)
+                    responseType<EventHolderFull>()
+                    description("Get all information about an event")
+                }
+            }
+        }
+
+        get {
+            try {
+                val eventId = call.parameters["eventId"]!!.toLong()
+                val actualEvent = ravensburger.event(eventId)
+
+                call.respond(actualEvent)
+            } catch (err: Throwable) {
+                err.printStackTrace()
+                call.respond(HttpStatusCode.NotFound)
+            }
         }
     }
 
@@ -66,14 +95,15 @@ fun Route.routeRPH(environment: Environment) {
                 )
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<List<Event<Store>>>()
+                    responseType<List<Event>>()
                     description("List of events")
                 }
             }
         }
 
         get {
-            val events = ravensburger.directApiAccess().events(EventQueryParameters(pageSize = 30000))
+            val events =
+                ravensburger.directApiAccess().events(EventQueryParameters(pageSize = 30000))
             call.respond(events)
         }
     }
@@ -151,8 +181,8 @@ fun Route.routeRPH(environment: Environment) {
 
 @Serializable
 data class EventExtended(
-    val event: Event<StoreFull>,
-    val registrations: List<EventRegistration>,
+    val event: Event,
+    val registrations: List<UserEventStatus>,
     @SerialName("tournament_phases")
     val tournamentPhases: List<ExtendedTournamentPhase>
 )
