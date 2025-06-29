@@ -5,6 +5,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import eu.codlab.lorcana.rph.sync.ModelId
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Entity(
     indices = [
@@ -20,7 +21,8 @@ import kotlinx.serialization.Serializable
 data class Event(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val fullHeaderImageUrl: String,
+    @Transient
+    val fullHeaderImageUrl: String = "",
     val startDatetimeISO: String? = null,
     val startDatetime: Long? = null,
     val endDatetimeISO: String? = null,
@@ -78,11 +80,15 @@ data class Event(
     val bannerImage: Int,
     val phaseTemplateGroupId: String,
     // foreign keys
-    val settingsId: Long,
+    @Transient
+    val settingsId: Long = 0,
+    @Transient
     val storeId: Long? = null,
-    val gameplayFormatId: String,
+    @Transient
+    val gameplayFormatId: String = "",
     // once the event is finished, we can rescan it
-    val updatedPostEvent: Boolean,
+    @Transient
+    val updatedPostEvent: Boolean = false,
 ) : ModelId<Long> {
     override fun modelId() = id
 }

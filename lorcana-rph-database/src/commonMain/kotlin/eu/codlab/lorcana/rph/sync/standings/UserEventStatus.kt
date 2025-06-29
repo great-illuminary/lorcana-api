@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import eu.codlab.lorcana.rph.sync.ModelId
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 @Entity
@@ -15,6 +16,7 @@ data class UserEventStatus(
     val matchesLost: Int,
     val totalMatchPoints: Int,
     val registrationStatus: String? = null,
+    @Transient
     val fullProfilePictureUrl: String? = null,
     val bestIdentifier: String,
     // we also set few information which were "registration specific"
@@ -22,8 +24,10 @@ data class UserEventStatus(
     val finalPlaceInStandings: Int? = null,
     val registrationCompletedDatetime: String? = null,
     // foreign keys
-    val eventId: Long,
-    val userId: Long,
+    @Transient
+    val eventId: Long = 0,
+    @Transient
+    val userId: Long = 0,
     // val eventStandingId: Long? = null
 ) : ModelId<Long> {
     override fun modelId() = id
