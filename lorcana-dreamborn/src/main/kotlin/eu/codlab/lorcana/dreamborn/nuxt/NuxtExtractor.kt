@@ -17,6 +17,7 @@ internal class NuxtExtractor(fromString: String) {
         return (0..mappedArguments.size).firstOrNull { index ->
             try {
                 json.decodeFromString<ExpectedArgumentIndexesInfo>(mappedArguments[index])
+                println("findIndexForData(${index}) is ok")
                 true
             } catch (err: Throwable) {
                 false
@@ -35,16 +36,34 @@ internal class NuxtExtractor(fromString: String) {
             val regexp = "(($sMatchArray|$sMatchJson|$sMatchString|$sMatchBool),)".toRegex()
             val found = regexp.findAll(from)
 
-            val mappedArguments = found.map { matchResult -> matchResult.groupValues[2] }.toList()
+            val originalMappedArguments =
+                found.map { matchResult -> matchResult.groupValues[2] }.toList()
 
-            mappedArguments.forEachIndexed { index, value -> println("$index -> $value") }
+            originalMappedArguments.forEachIndexed { index, value -> println("$index -> $value") }
 
-            val indexForDeckData = findIndexForData(mappedArguments) ?: throw IllegalStateException(
-                "Couldn't find valid index for data corresponding to $from"
-            )
+            val indexForDeckData =
+                findIndexForData(originalMappedArguments) ?: throw IllegalStateException(
+                    "Couldn't find valid index for data corresponding to $from"
+                )
 
             val data: ExpectedArgumentIndexesInfo =
-                json.decodeFromString(mappedArguments[indexForDeckData])
+                json.decodeFromString(originalMappedArguments[indexForDeckData])
+            println("having arguments -> and cards are normally at ${data.cards}")
+            println(originalMappedArguments)
+
+            // manage an edge case where the index were shift by 1 -> since it would introduce more issues
+            //   just bypass this
+            val mappedArguments = try {
+                // first attempt to decode the cards
+                json.decodeFromString<Map<String, Int>>(originalMappedArguments[data.cards])
+                originalMappedArguments
+            } catch (err: Throwable) {
+                // and if we have an issue, we know it will because of the element in between
+                originalMappedArguments.subList(0, 4) +
+                        "" +
+                        originalMappedArguments.subList(4, originalMappedArguments.size)
+            }
+
             val cards: Map<String, Int> = json.decodeFromString(mappedArguments[data.cards])
             val links: ExpectedArgumentIndexesLinks =
                 try {
