@@ -4,18 +4,24 @@ import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 
 fun UserEventStatus.toSync(
-    standing: UserEventStatusParent
+    standing: UserEventStatusParent,
+    cached: UserEventStatus? = null
 ) = eu.codlab.lorcana.rph.sync.standings.UserEventStatus(
     id = id,
-    matchesWon = matchesWon,
-    matchesDrawn = matchesDrawn,
-    matchesLost = matchesLost,
-    totalMatchPoints = totalMatchPoints,
-    registrationStatus = registrationStatus,
-    fullProfilePictureUrl = fullProfilePictureUrl,
-    bestIdentifier = bestIdentifier,
+    matchesWon = cached?.matchesWon ?: matchesWon,
+    matchesDrawn = cached?.matchesDrawn ?: matchesDrawn,
+    matchesLost = cached?.matchesLost ?: matchesLost,
+    totalMatchPoints = cached?.totalMatchPoints ?: totalMatchPoints,
+    registrationStatus = cached?.registrationStatus ?: registrationStatus,
+    fullProfilePictureUrl = cached?.fullProfilePictureUrl ?: fullProfilePictureUrl,
+    bestIdentifier = cached?.bestIdentifier ?: bestIdentifier,
     eventId = standing.eventId,
     userId = this.user?.id ?: standing.playerId,
+
+    specialUserIdentifier = cached?.specialUserIdentifier ?: specialUserIdentifier,
+    finalPlaceInStandings = cached?.finalPlaceInStandings ?: finalPlaceInStandings,
+    registrationCompletedDatetime = cached?.registrationCompletedDatetime
+        ?: registrationCompletedDatetime,
 )
 
 fun eu.codlab.lorcana.rph.sync.standings.UserEventStatus.isEquals(other: UserEventStatus): Boolean {
@@ -25,10 +31,20 @@ fun eu.codlab.lorcana.rph.sync.standings.UserEventStatus.isEquals(other: UserEve
     if (matchesLost != other.matchesLost) return false
     if (totalMatchPoints != other.totalMatchPoints) return false
     if (registrationStatus != other.registrationStatus) return false
-    if (fullProfilePictureUrl != other.fullProfilePictureUrl) return false
+    //if (fullProfilePictureUrl != other.fullProfilePictureUrl) return false
     if (bestIdentifier != other.bestIdentifier) return false
     // if (roundId != other.player.id) return false
     // if (userId != other.player.id) return false
+
+    other.specialUserIdentifier?.let {
+        if (specialUserIdentifier != it) return false
+    }
+    other.finalPlaceInStandings?.let {
+        if (finalPlaceInStandings != it) return false
+    }
+    other.registrationCompletedDatetime?.let {
+        if (registrationCompletedDatetime != it) return false
+    }
 
     return true
 }

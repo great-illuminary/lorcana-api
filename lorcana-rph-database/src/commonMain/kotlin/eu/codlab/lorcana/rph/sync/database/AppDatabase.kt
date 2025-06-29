@@ -11,6 +11,8 @@ import eu.codlab.lorcana.rph.sync.event.EventSettings
 import eu.codlab.lorcana.rph.sync.event.EventSettingsDao
 import eu.codlab.lorcana.rph.sync.gameplay.GameplayFormat
 import eu.codlab.lorcana.rph.sync.gameplay.GameplayFormatDao
+import eu.codlab.lorcana.rph.sync.match.EventMatch
+import eu.codlab.lorcana.rph.sync.match.EventMatchDao
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhaseDao
 import eu.codlab.lorcana.rph.sync.round.Round
@@ -38,7 +40,8 @@ import kotlinx.coroutines.Dispatchers
         Round::class,
         Setting::class,
         EventStanding::class,
-        UserEventStatus::class
+        UserEventStatus::class,
+        EventMatch::class,
     ], version = 1
 )
 @ConstructedBy(AppDatabaseConstructor::class)
@@ -58,6 +61,8 @@ internal abstract class AppDatabase : RoomDatabase() {
     abstract fun getTournamentPhaseDao(): TournamentPhaseDao
 
     abstract fun getEventStandings(): EventStandingDao
+
+    abstract fun getEventMatches(): EventMatchDao
 
     abstract fun getUserEventStatus(): UserEventStatusDao
 

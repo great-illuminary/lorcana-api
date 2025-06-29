@@ -1,7 +1,7 @@
 package eu.codlab.lorcana.rph.event
 
 import eu.codlab.lorcana.rph.gameplay.GameplayFormat
-import eu.codlab.lorcana.rph.store.AbstractStore
+import eu.codlab.lorcana.rph.store.StoreFull
 import eu.codlab.lorcana.rph.utils.Coordinates
 import korlibs.time.DateTime
 import kotlinx.serialization.SerialName
@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
  * https://cf-worker-middleware-hydra-prod.devion-villegas-76b.workers.dev/hydraproxy/api/v2/events/
  */
 @Serializable
-data class Event<S : AbstractStore>(
+data class Event(
     val id: Long,
     @SerialName("full_header_image_url")
     val fullHeaderImageUrl: String,
@@ -36,7 +36,7 @@ data class Event<S : AbstractStore>(
     val registeredUserCount: Int,
     @SerialName("full_address")
     val fullAddress: String,
-    val store: S,
+    val store: StoreFull,
     val convention: String? = null,
     @SerialName("gameplay_format")
     val gameplayFormat: GameplayFormat,

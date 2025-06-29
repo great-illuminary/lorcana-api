@@ -6,6 +6,8 @@ import eu.codlab.lorcana.rph.sync.event.EventSettingsController
 import eu.codlab.lorcana.rph.sync.event.EventSettingsControllerImpl
 import eu.codlab.lorcana.rph.sync.gameplay.GameplayFormatController
 import eu.codlab.lorcana.rph.sync.gameplay.GameplayFormatControllerImpl
+import eu.codlab.lorcana.rph.sync.match.EventMatchController
+import eu.codlab.lorcana.rph.sync.match.EventMatchControllerImpl
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhaseController
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhaseControllerImpl
 import eu.codlab.lorcana.rph.sync.round.RoundController
@@ -32,5 +34,6 @@ object SyncDatabase {
     val tournamentPhases: TournamentPhaseController = TournamentPhaseControllerImpl(database)
     val eventStandings: EventStandingController = EventStandingControllerImpl(database)
     val userEventStatus: UserEventStatusController = UserEventStatusControllerImpl(database)
+    val eventMatches: EventMatchController = EventMatchControllerImpl(database)
     val settings: SettingController = SettingControllerImpl(database)
 }

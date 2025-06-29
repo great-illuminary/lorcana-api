@@ -6,6 +6,36 @@ class RavenburgerController {
     private val loader = LoadRPHCall()
     private val synchronizer = Sync()
 
+    fun event(id: Long): EventHolderFull {
+        val event = synchronizer.eventAccess.getFromId(id)!!
+
+        return EventHolderFull(
+            event = event,
+            settings = synchronizer.settingsAccess.getFromId(event.settingsId)!!,
+            registrations = synchronizer.userEventStatusAccess.getFromParent(event.id)
+                .map { status ->
+                    UserEventStatusHolder(
+                        player = synchronizer.userAccess.getFromId(status.userId)!!,
+                        status = status
+                    )
+                },
+            tournamentPhases = synchronizer.tournamentPhaseAccess.getFromParent(event.id)
+                .map { phase ->
+                    TournamentPhaseHolder(
+                        phase = phase,
+                        rounds = synchronizer.roundAccess.getFromParent(phase.id).map { round ->
+                            RoundHolder(
+                                round = round,
+                                standings = synchronizer.eventStandingAccess.getFromParent(round.id),
+                                matches = synchronizer.eventMatchAccess.getFromParent(round.id)
+                            )
+                        }
+                    )
+                },
+            gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(event.gameplayFormatId)
+        )
+    }
+
     fun events(): List<EventHolder> {
         val events = synchronizer.eventAccess.getCachedList()
 
@@ -13,19 +43,14 @@ class RavenburgerController {
             EventHolder(
                 event = it,
                 settings = synchronizer.settingsAccess.getFromId(it.settingsId)!!,
-                userEventStatus = synchronizer.userEventStatusAccess.getFromParent(it.id),
-                tournamentPhases = synchronizer.tournamentPhaseAccess.getFromParent(it.id)
-                    .map { phase ->
-                        TournamentPhaseHolder(
-                            phase = phase,
-                            rounds = synchronizer.roundAccess.getFromParent(phase.id).map { round ->
-                                RoundHolder(
-                                    round = round,
-                                    standings = synchronizer.eventStandingAccess.getFromParent(round.id)
-                                )
-                            }
+                registrations = synchronizer.userEventStatusAccess.getFromParent(it.id)
+                    .map { status ->
+                        UserEventStatusHolder(
+                            player = synchronizer.userAccess.getFromId(status.userId),
+                            status = status
                         )
                     },
+                tournamentPhases = synchronizer.tournamentPhaseAccess.getFromParent(it.id),
                 gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(it.gameplayFormatId)
             )
         }

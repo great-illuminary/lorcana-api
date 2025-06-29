@@ -14,9 +14,14 @@ data class UserEventStatus(
     val matchesDrawn: Int,
     val matchesLost: Int,
     val totalMatchPoints: Int,
-    val registrationStatus: String,
+    val registrationStatus: String? = null,
     val fullProfilePictureUrl: String? = null,
     val bestIdentifier: String,
+
+    // we also set few information which were "registration specific"
+    val specialUserIdentifier: String? = null,
+    val finalPlaceInStandings: Int? = null,
+    val registrationCompletedDatetime: String? = null,
 
     // foreign keys
     val eventId: Long,

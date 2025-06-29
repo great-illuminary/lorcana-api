@@ -21,14 +21,19 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
             cache.addAll(list)
             list.forEach {
                 cacheMap[it.modelId()] = it
-                val parentId = getParentKey(it)
 
-                if (parentId is Unit) return@forEach
-
-                parentMap.computeIfAbsent(parentId) { mutableListOf() }
-                parentMap[parentId]!!.add(it)
+                attemptToPutInCacheForParent(it)
             }
         }
+    }
+
+    private fun attemptToPutInCacheForParent(model: MODEL) {
+        val parentId = getParentKey(model)
+
+        if (parentId is Unit) return
+
+        parentMap.computeIfAbsent(parentId) { mutableListOf() }
+        parentMap[parentId]!!.add(model)
     }
 
     fun asCacheAccess(): CacheAccess<MODEL, TYPE, FOREIGN_PARENT_TYPE> = this
@@ -36,6 +41,13 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
     protected abstract fun getParentKey(model: MODEL): FOREIGN_PARENT_TYPE
 
     protected abstract suspend fun list(): List<MODEL>
+
+    protected open suspend fun isEquals(
+        cached: MODEL,
+        fromApi: FROM_API,
+        parent: FOREIGN_PARENT? = null
+    ) = isEquals(cached, fromApi)
+
     protected abstract suspend fun isEquals(cached: MODEL, fromApi: FROM_API): Boolean
     protected abstract suspend fun toSync(
         fromApi: FROM_API,
@@ -63,7 +75,7 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
 
         val cached = cacheMap[id]
 
-        if (null == cached || !isEquals(cached, fromApi)) {
+        if (null == cached || !isEquals(cached, fromApi, foreignParent)) {
             //println("  -> the event is different... creating a copy and setting it")
 
             //println("original is $fromApi")
@@ -83,6 +95,8 @@ internal sealed class AbstractWrapper<MODEL : ModelId<TYPE>,
             if (null == cached) {
                 //println("    -> insert")
                 insert(copy)
+
+                attemptToPutInCacheForParent(copy)
             } else {
                 //println("    -> update")
                 update(copy)

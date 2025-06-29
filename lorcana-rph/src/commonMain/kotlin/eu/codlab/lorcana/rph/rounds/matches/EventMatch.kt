@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventMatch(
-    val id: Int,
+    val id: Long,
     @SerialName("player_match_relationships")
     val playerMatchRelationships: List<EventPlayerMatchRelationship>,
     @SerialName("created_at")
@@ -47,12 +47,20 @@ data class EventMatch(
     @SerialName("team_event_match")
     val teamEventMatch: String? = null,
     @SerialName("tournament_round")
-    val tournamentRound: Int,
+    val tournamentRound: Long,
     @SerialName("reporting_player")
-    val reportingPlayer: Int? = null,
+    val reportingPlayer: Long? = null,
     @SerialName("winning_player")
-    val winningPlayer: Int? = null,
+    val winningPlayer: Long? = null,
     @SerialName("assigned_judge")
-    val assignedJudge: Int? = null,
-    val players: List<Int>
-)
+    val assignedJudge: Long? = null,
+    val players: List<Long>
+) {
+    fun player1() = players.first()
+    fun player2() = players.getOrNull(1)
+    fun player1Order() =
+        this.playerMatchRelationships.first { it.player.id == player1() }.playerOrder
+
+    fun player2Order() =
+        this.playerMatchRelationships.firstOrNull { it.player.id == player2() }?.playerOrder
+}

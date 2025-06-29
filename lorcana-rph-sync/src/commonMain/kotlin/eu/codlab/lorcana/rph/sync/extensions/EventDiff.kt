@@ -2,7 +2,9 @@ package eu.codlab.lorcana.rph.sync.extensions
 
 import eu.codlab.lorcana.rph.event.Event
 
-fun Event<*>.toSyncEvent() = eu.codlab.lorcana.rph.sync.event.Event(
+fun Event.toSyncEvent(
+    cached: eu.codlab.lorcana.rph.sync.event.Event?
+) = eu.codlab.lorcana.rph.sync.event.Event(
     id = id,
     fullHeaderImageUrl = fullHeaderImageUrl,
     startDatetimeISO = startDatetimeISO,
@@ -67,10 +69,10 @@ fun Event<*>.toSyncEvent() = eu.codlab.lorcana.rph.sync.event.Event(
     storeId = store.id(),
     gameplayFormatId = gameplayFormat.id,
 
-    updatedPostEvent = false
+    updatedPostEvent = cached?.updatedPostEvent ?: false
 )
 
-fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event<*>): Boolean {
+fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
     if (id != other.id) return false
     if (timerIsRunning != other.timerIsRunning) return false
     if (registeredUserCount != other.registeredUserCount) return false

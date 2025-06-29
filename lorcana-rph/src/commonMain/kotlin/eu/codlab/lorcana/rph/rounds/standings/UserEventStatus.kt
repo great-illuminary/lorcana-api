@@ -1,9 +1,13 @@
 package eu.codlab.lorcana.rph.rounds.standings
 
 import eu.codlab.lorcana.rph.rounds.matches.EventMatchPlayer
+import eu.codlab.lorcana.rph.user.UserCondensed
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * This class is also the UserRegistration
+ */
 @Serializable
 data class UserEventStatus(
     val id: Long,
@@ -15,11 +19,18 @@ data class UserEventStatus(
     val matchesLost: Int,
     @SerialName("total_match_points")
     val totalMatchPoints: Int,
-    @SerialName("registration_status")
-    val registrationStatus: String,
     @SerialName("full_profile_picture_url")
     val fullProfilePictureUrl: String? = null,
     @SerialName("best_identifier")
     val bestIdentifier: String,
-    val user: EventMatchPlayer? = null
+    val user: EventMatchPlayer? = null,
+
+    @SerialName("registration_status")
+    val registrationStatus: String? = null,
+    @SerialName("special_user_identifier")
+    val specialUserIdentifier: String? = null,
+    @SerialName("final_place_in_standings")
+    val finalPlaceInStandings: Int? = null,
+    @SerialName("registration_completed_datetime")
+    val registrationCompletedDatetime: String? = null,
 )
