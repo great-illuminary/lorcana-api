@@ -1,9 +1,12 @@
 package eu.codlab.lorcana.rph.sync.event
 
 import eu.codlab.lorcana.rph.sync.database.AppDatabase
+import eu.codlab.lorcana.rph.sync.user.User
 
 interface EventController {
     suspend fun getAll(): List<Event>
+
+    suspend fun getAll(user: User): List<Long>
 
     suspend fun get(id: Long): Event
 
@@ -18,6 +21,8 @@ internal class EventControllerImpl(database: AppDatabase) : EventController {
     private val dao = database.getEventDao()
 
     override suspend fun getAll() = dao.getAll()
+
+    override suspend fun getAll(user: User) = dao.getAll(user.id)
 
     override suspend fun get(id: Long) = dao.get(id)
 

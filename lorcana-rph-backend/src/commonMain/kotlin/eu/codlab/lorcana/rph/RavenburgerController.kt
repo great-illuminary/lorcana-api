@@ -56,9 +56,18 @@ class RavenburgerController {
         }
     }
 
+    suspend fun events(userId: Long): List<EventHolderFull> {
+        val user = user(userId) ?: throw IllegalStateException("Not found")
+        val events = synchronizer.eventAccess.forUserIdsOnly(user)
+
+        return events.map { event(it) }
+    }
+
     fun directApiAccess() = loader
 
     suspend fun startSync() {
         synchronizer.start()
     }
+
+    private suspend fun user(id: Long) = synchronizer.userAccess.getFromId(id)
 }
