@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.rph.sync.database
 
+import androidx.room.AutoMigration
 import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -43,7 +44,10 @@ import kotlinx.coroutines.Dispatchers
         UserEventStatus::class,
         EventMatch::class,
     ],
-    version = 1
+    version = 2,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ]
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 internal abstract class AppDatabase : RoomDatabase() {

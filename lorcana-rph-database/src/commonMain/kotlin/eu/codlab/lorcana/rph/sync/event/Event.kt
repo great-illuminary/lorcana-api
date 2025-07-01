@@ -4,8 +4,10 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import eu.codlab.lorcana.rph.sync.ModelId
+import korlibs.time.DateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlin.math.abs
 
 @Entity(
     indices = [
@@ -89,6 +91,75 @@ data class Event(
     // once the event is finished, we can rescan it
     @Transient
     val updatedPostEvent: Boolean = false,
+    val refreshedAtMilliseconds: Long? = null,
 ) : ModelId<Long> {
     override fun modelId() = id
+
+    companion object {
+        private val day1 = 1000L * 60 * 60 * 24
+
+        // event in the past
+        // 2 weeks = 1000ms * 60sec * 60min * 64hour * 15day
+        private val week2 = day1 * 15
+
+        private val week1 = day1 * 7
+    }
+
+    fun isIn2DaysOrWas2DaysAgo(): Boolean {
+        val deltaStart = DateTime.nowUnixMillisLong() - (startDatetime ?: 0L)
+        // the event is in the future or 2 days ago/in 2 days
+        return abs(deltaStart) < day1 * 2
+    }
+
+    fun isInTheFutureAfter2Days(): Boolean {
+        val deltaStart = DateTime.nowUnixMillisLong() - (startDatetime ?: 0L)
+        // the event is in the future or 2 days ago/in 2 days
+        return deltaStart < 0 && !isIn2DaysOrWas2DaysAgo()
+    }
+
+    fun fromNthLastWeeks(numberWeeks: Int): Boolean {
+        if (isIn2DaysOrWas2DaysAgo() || isInTheFutureAfter2Days()) return false
+        val diffLastCheck = DateTime.nowUnixMillisLong() - (startDatetime ?: 0)
+
+        return diffLastCheck < day1 * 7 * numberWeeks && diffLastCheck > day1 * 7 * (numberWeeks - 1)
+    }
+
+    @Suppress("ReturnCount")
+    fun requiresRefresh(settings: EventSettings): Boolean {
+        val shouldCommit = shouldCommitFinalUpdate(settings)
+
+        if (!shouldCommit && eventStatus != "SCHEDULED") return false
+
+        if (null == refreshedAtMilliseconds) {
+            return true
+        }
+
+        if (startDatetime == null) return false
+
+        val diffLastCheck = DateTime.nowUnixMillisLong() - refreshedAtMilliseconds
+
+        if (fromNthLastWeeks(2)) {
+            return false
+        }
+
+        if (fromNthLastWeeks(1)) {
+            // check that is was 3 days ago we made a check
+            return diffLastCheck > day1 * 3
+        }
+
+        if (isIn2DaysOrWas2DaysAgo()) {
+            // check it's been 20minutes
+            return diffLastCheck > 1000L * 60 * 20
+        }
+
+        if (isInTheFutureAfter2Days()) {
+            // check it's been 1 day
+            return diffLastCheck > day1
+        }
+
+        return false
+    }
+
+    fun shouldCommitFinalUpdate(settings: EventSettings) =
+        !updatedPostEvent && settings.eventLifecycleStatus == "EVENT_FINISHED"
 }

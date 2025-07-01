@@ -4,9 +4,17 @@ import eu.codlab.lorcana.rph.sync.database.SyncDatabase
 import eu.codlab.lorcana.rph.sync.event.Event
 import eu.codlab.lorcana.rph.sync.extensions.isEquals
 import eu.codlab.lorcana.rph.sync.extensions.toSyncEvent
+import eu.codlab.lorcana.rph.sync.user.User
+
+interface IEventWrapper : CacheAccess<Event, Long, Unit> {
+    suspend fun forUserIdsOnly(user: User): List<Long>
+
+    suspend fun forUser(user: User): List<Event>
+}
 
 internal class EventWrapper :
-    AbstractWrapper<Event, Long, eu.codlab.lorcana.rph.event.Event, Unit, Unit>() {
+    AbstractWrapper<Event, Long, eu.codlab.lorcana.rph.event.Event, Unit, Unit>(),
+    IEventWrapper {
     private val events = SyncDatabase.events
 
     override fun getParentKey(model: Event) {
@@ -32,8 +40,14 @@ internal class EventWrapper :
         fromApi: eu.codlab.lorcana.rph.event.Event
     ) = cached.isEquals(fromApi)
 
-    suspend fun setUpdatedPostEvent(eventFromDatabase: Event, b: Boolean) {
-        val copy = eventFromDatabase.copy(updatedPostEvent = true)
+    suspend fun setInternalDataPostTreatment(
+        eventFromDatabase: Event, updatedPostEvent: Boolean,
+        refreshedAtMilliseconds: Long
+    ) {
+        val copy = eventFromDatabase.copy(
+            updatedPostEvent = updatedPostEvent,
+            refreshedAtMilliseconds = refreshedAtMilliseconds
+        )
 
         cache.indexOfFirst { it.modelId() == copy.modelId() }.let { existingId ->
             if (existingId >= 0) {
@@ -47,4 +61,8 @@ internal class EventWrapper :
 
         update(copy)
     }
+
+    override suspend fun forUserIdsOnly(user: User) = events.getAll(user)
+
+    override suspend fun forUser(user: User) = forUserIdsOnly(user).mapNotNull { cacheMap[it] }
 }

@@ -9,6 +9,7 @@ import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
+import korlibs.time.DateTime
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.minutes
 
@@ -79,7 +80,7 @@ class Sync {
             val events = loader.events(EventQueryParameters(page = lastPage))
 
             // checking the issue with some players
-            events.results.forEach { checkEvent(it, false) }
+            events.results.forEach { checkEvent(it) }
 
             if (null == events.next) {
                 println("synchronization done")
@@ -91,27 +92,55 @@ class Sync {
             }
         } while (synchronizationNeedsToContinue)
 
-        val eventInThePast = eventAccess.getCachedList().filter {
-            val settings = settingsAccess.getFromId(it.settingsId)
 
-            val closedYetUnsynced = settings?.eventLifecycleStatus == "EVENT_FINISHED" &&
-                    !it.updatedPostEvent
-            // for now checking only the ones which needs sync !
-            closedYetUnsynced
+        (1..(settings.lastPage() / 200 + 1)).forEach { lastPage ->
+            println("now rechecking quickly the page $lastPage")
+
+            val events = loader.events(
+                EventQueryParameters(
+                    page = lastPage,
+                    pageSize = 200
+                )
+            )
+
+            // checking the issue with some players
+            events.results.forEach { checkEvent(it, true) }
         }
+
+        val list = eventAccess.getCachedList()
+        println("number of events in -/+2days ${list.filter { it.isIn2DaysOrWas2DaysAgo() }.size}")
+        println("number of events in the future ${list.filter { it.isInTheFutureAfter2Days() }.size}")
+        println("number of events  from last week ${list.filter { it.fromNthLastWeeks(1) }.size}")
+        println("number of events  from 2+ weeks  ${list.filter { it.fromNthLastWeeks(2) }.size}")
+
+        val eventInThePast = eventAccess.getCachedList().filter {
+            val settings = settingsAccess.getFromId(it.settingsId)!!
+
+            it.requiresRefresh(settings)
+        }
+
+        println("requires refresh for ${eventInThePast.size}")
 
         eventInThePast.forEach {
             println("need synchronization for ${it.id}")
             val fromBackend = loader.event(it.id)
-            checkEvent(fromBackend, true)
+            checkEvent(fromBackend)
         }
     }
 
-    private suspend fun checkEvent(event: eu.codlab.lorcana.rph.event.Event, commit: Boolean) {
+    private suspend fun checkEvent(
+        event: eu.codlab.lorcana.rph.event.Event,
+        skipEquals: Boolean = false
+    ) {
         val afterCheck = eventWrapper.check(event)
         val (previous, new) = when (afterCheck) {
             is GeneratedModel -> afterCheck.previous to afterCheck.new
             is PreviousModel -> afterCheck.previous to null
+        }
+
+        if (skipEquals && new == null) {
+            println("skipping project")
+            return
         }
 
         val eventFromDatabase = new ?: previous ?: return // throw ?
@@ -152,7 +181,10 @@ class Sync {
             }
         }
 
-        settingsWrapper.check(event.settings)
+        val settings = when (val wrapper = settingsWrapper.check(event.settings)) {
+            is GeneratedModel -> wrapper.new ?: wrapper.previous
+            is PreviousModel -> wrapper.previous
+        }
 
         // TODO check the settings.event_lifecycle_status
         // TODO check the settings.show_registration_button
@@ -243,9 +275,14 @@ class Sync {
             }
         }
 
-        if (!commit) return
-
-        // now commit the event
-        eventWrapper.setUpdatedPostEvent(eventFromDatabase, true)
+        eventFromDatabase.shouldCommitFinalUpdate(settings!!).let { commit ->
+            println("event ${event.id} should be closed ? $commit // ${settings.eventLifecycleStatus}")
+            // now commit the event
+            eventWrapper.setInternalDataPostTreatment(
+                eventFromDatabase,
+                commit,
+                DateTime.nowUnixMillisLong()
+            )
+        }
     }
 }

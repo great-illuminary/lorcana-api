@@ -14,6 +14,14 @@ interface EventDao {
     @Query("SELECT * FROM event")
     suspend fun getAll(): List<Event>
 
+    @Query(
+        """
+        SELECT event.id FROM event
+        LEFT JOIN usereventstatus as ues ON ues.eventId = event.id
+        WHERE ues.userId = :userId"""
+    )
+    suspend fun getAll(userId: Long): List<Long>
+
     @Query("SELECT * FROM event WHERE id = :id")
     suspend fun get(id: Long): Event
 
