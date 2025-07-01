@@ -20,7 +20,7 @@ fun Event.toSyncEvent(
     registeredUserCount = registeredUserCount,
     fullAddress = fullAddress,
     convention = convention,
-    displayStatus = displayStatus?.name,
+    displayStatus = displayStatus?.name ?: cached?.displayStatus,
     name = name,
     pinnedByStore = pinnedByStore,
     useVerbatimName = useVerbatimName,
@@ -104,16 +104,18 @@ fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
     // TODO update the images one day ?
     //  if (fullHeaderImageUrl != other.fullHeaderImageUrl) return false
     if (startDatetimeISO != other.startDatetimeISO) return false
-    if (startDatetime != other.startDateTime?.unixMillisLong) return false
+    //if (startDatetime != other.startDateTime?.unixMillisLong) return false
     if (endDatetimeISO != other.endDatetime) return false
     if (day2StartDatetimeISO != other.day2StartDatetimeISO) return false
-    if (day2StartDatetime != other.day2StartDateTime?.unixMillisLong) return false
+    //if (day2StartDatetime != other.day2StartDateTime?.unixMillisLong) return false
     if (timerEndDatetime != other.timerEndDatetime) return false
     if (timerPausedAtDatetime != other.timerPausedAtDatetime) return false
     if (description != other.description) return false
     if (fullAddress != other.fullAddress) return false
     if (convention != other.convention) return false
-    if (displayStatus != other.displayStatus?.name) return false
+    other.displayStatus?.let {
+        if (displayStatus != it.name) return false
+    }
     if (name != other.name) return false
     if (queueStatus != other.queueStatus) return false
     if (gameType != other.gameType.name) return false
