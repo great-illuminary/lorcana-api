@@ -45,8 +45,13 @@ fun Route.routeRPH(environment: Environment) {
         }
 
         get {
-            val events = ravensburger.events()
-            call.respond(events)
+            try {
+                val events = ravensburger.events()
+                call.respond(events)
+            } catch (err: Throwable) {
+                err.printStackTrace()
+                call.respond(HttpStatusCode.InternalServerError)
+            }
         }
     }
 
