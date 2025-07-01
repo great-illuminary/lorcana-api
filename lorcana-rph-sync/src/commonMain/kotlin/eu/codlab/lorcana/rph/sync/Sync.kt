@@ -59,6 +59,8 @@ class Sync {
     }
 
     suspend fun start() {
+        initialize()
+
         while (true) {
             println("looping the events...")
             loop()
@@ -68,7 +70,6 @@ class Sync {
     }
 
     private suspend fun loop() {
-        initialize()
 
         var synchronizationNeedsToContinue = true
         do {
