@@ -32,7 +32,8 @@ class RavenburgerController {
                         }
                     )
                 },
-            gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(event.gameplayFormatId)
+            gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(event.gameplayFormatId),
+            store = event.storeId?.let { synchronizer.storeAccess.getFromId(it) }
         )
     }
 
@@ -51,7 +52,8 @@ class RavenburgerController {
                         )
                     },
                 tournamentPhases = synchronizer.tournamentPhaseAccess.getFromParent(it.id),
-                gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(it.gameplayFormatId)
+                gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(it.gameplayFormatId),
+                store = it.storeId?.let { synchronizer.storeAccess.getFromId(it) }
             )
         }
     }
@@ -69,5 +71,5 @@ class RavenburgerController {
         synchronizer.start()
     }
 
-    private suspend fun user(id: Long) = synchronizer.userAccess.getFromId(id)
+    private fun user(id: Long) = synchronizer.userAccess.getFromId(id)
 }

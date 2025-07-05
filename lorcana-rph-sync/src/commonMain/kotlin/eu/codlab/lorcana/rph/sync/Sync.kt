@@ -30,7 +30,7 @@ class Sync {
     private val userWrapper = UserWrapper()
 
     val eventAccess: IEventWrapper = eventWrapper
-    val storeAccess = eventWrapper.asCacheAccess()
+    val storeAccess = storeWrapper.asCacheAccess()
     val gameplayFormatAccess = gameplayFormatWrapper.asCacheAccess()
     val tournamentPhaseAccess = tournamentPhaseWrapper.asCacheAccess()
     val roundAccess = roundWrapper.asCacheAccess()
