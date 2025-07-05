@@ -12,7 +12,7 @@ sqlite = "2.4.0"
 
 codlab-ui-libraries = "1.14.1"
 codlab-file-access = "1.15.0"
-codlab-http-client = "1.20.0-alpha2"
+codlab-http-client = "1.20.0"
 
 lorcana-data = "0.20.6"
 
@@ -21,6 +21,8 @@ apache-httpclient = "5.0"
 sentry = "0.7.1"
 
 sqldelight = "2.0.0"
+
+weather-google-maps="0.1.5"
 
 [libraries]
 lorcana-data = { module = "eu.codlab:lorcana-data", version.ref = "lorcana-data" }
@@ -61,6 +63,8 @@ sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", versi
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+
+weather-google-maps = { module = "eu.codlab:kotlin-google-maps", version.ref = "weather-google-maps"}
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

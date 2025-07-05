@@ -3,6 +3,7 @@ package eu.codlab.lorcana.api.backend
 import eu.codlab.lorcana.api.backend.routing.MappingVirtualCard
 import eu.codlab.lorcana.api.backend.routing.artists
 import eu.codlab.lorcana.api.backend.routing.decks
+import eu.codlab.lorcana.api.backend.routing.routeMap
 import eu.codlab.lorcana.api.backend.routing.routeRPH
 import eu.codlab.lorcana.api.environment.Environment
 import eu.codlab.lorcana.raw.SetDescription
@@ -135,6 +136,7 @@ fun Application.configureRouting(environment: Environment) {
         decks(environment)
 
         route("/rph") {
+            routeMap()
             routeRPH(environment)
         }
     }
