@@ -12,7 +12,9 @@ import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
+import io.bkbn.kompendium.json.schema.definition.TypeDefinition
 import io.bkbn.kompendium.oas.common.ExternalDocumentation
+import io.bkbn.kompendium.oas.payload.Parameter
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -30,6 +32,23 @@ fun Route.routeRPH(environment: Environment) {
             get = GetInfo.builder {
                 summary("Retrieve the list of events")
                 description("Will give you all the events from the platform")
+
+                parameters(
+                    Parameter(
+                        name = "startingAt",
+                        required = false,
+                        schema = TypeDefinition.LONG,
+                        `in` = Parameter.Location.query,
+                        description = "When set, must be accompanied by startingLast"
+                    ),
+                    Parameter(
+                        name = "startingLast",
+                        required = false,
+                        schema = TypeDefinition.LONG,
+                        `in` = Parameter.Location.query,
+                        description = "When set, must be accompanied by startingAt"
+                    )
+                )
                 externalDocumentation(
                     ExternalDocumentation(
                         URI(environment.urlDocumentation),
@@ -47,7 +66,20 @@ fun Route.routeRPH(environment: Environment) {
         get {
             try {
                 val events = ravensburger.events()
-                call.respond(events)
+
+                fun param(key: String): Long? = call.queryParameters[key]?.toLongOrNull()
+
+                fun filterStart(start: Long, end: Long) = events.filter { holder ->
+                    holder.event.startDatetime?.let { it in start..end } ?: false
+                }
+
+                val interval = (param("startingAt") to param("startingLast"))
+
+                call.respond(
+                    interval.takeIf { it.first != null && it.second != null }?.let {
+                        filterStart(interval.first!!, interval.second!!)
+                    } ?: events
+                )
             } catch (err: Throwable) {
                 err.printStackTrace()
                 call.respond(HttpStatusCode.InternalServerError)
