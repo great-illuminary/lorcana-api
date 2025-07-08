@@ -38,7 +38,7 @@ class Sync {
     val eventStandingAccess = eventStandingWrapper.asCacheAccess()
     val userEventStatusAccess = userEventStatusWrapper.asCacheAccess()
     val eventMatchAccess = eventMatchWrapper.asCacheAccess()
-    val userAccess = userWrapper.asCacheAccess()
+    val userAccess: IUserWrapper = userWrapper
 
     private val wrappers = listOf(
         eventWrapper,
@@ -71,6 +71,7 @@ class Sync {
     }
 
     private suspend fun loop() {
+        checkUsersToFix()
 
         var synchronizationNeedsToContinue = true
         do {
@@ -92,19 +93,21 @@ class Sync {
             }
         } while (synchronizationNeedsToContinue)
 
-
-        (1..(settings.lastPage() / 200 + 1)).forEach { lastPage ->
+        (1..(settings.lastPage() / 10 + 1)).forEach { lastPage ->
             println("now rechecking quickly the page $lastPage")
-
-            val events = loader.events(
-                EventQueryParameters(
-                    page = lastPage,
-                    pageSize = 200
+            try {
+                val events = loader.events(
+                    EventQueryParameters(
+                        page = lastPage,
+                        pageSize = 250
+                    )
                 )
-            )
 
-            // checking the issue with some players
-            events.results.forEach { checkEvent(it, true) }
+                // checking the issue with some players
+                events.results.forEach { checkEvent(it, true) }
+            } catch (err: Throwable) {
+                err.printStackTrace()
+            }
         }
 
         val list = eventAccess.getCachedList()
@@ -285,4 +288,6 @@ class Sync {
             )
         }
     }
+
+    private suspend fun checkUsersToFix() = userWrapper.fixUsersWithoutProperIdentifier()
 }

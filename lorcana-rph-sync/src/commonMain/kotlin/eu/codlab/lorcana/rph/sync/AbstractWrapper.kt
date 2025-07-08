@@ -68,6 +68,18 @@ internal sealed class AbstractWrapper<
 
     abstract fun id(fromApi: FROM_API, parent: FOREIGN_PARENT?): TYPE
 
+    protected fun updateInternal(copy: MODEL) {
+        cache.indexOfFirst { it.modelId() == copy.modelId() }.let { existingId ->
+            if (existingId >= 0) {
+                cache[existingId] = copy
+            } else {
+                cache.add(copy)
+            }
+        }
+
+        cacheMap[copy.modelId()] = copy
+    }
+
     suspend fun check(
         fromApi: FROM_API,
         foreignParent: FOREIGN_PARENT? = null
@@ -82,15 +94,7 @@ internal sealed class AbstractWrapper<
         if (null == cached || !isEquals(cached, fromApi, foreignParent)) {
             val copy = toSync(fromApi, cached, foreignParent)
 
-            cache.indexOfFirst { it.modelId() == copy.modelId() }.let { existingId ->
-                if (existingId >= 0) {
-                    cache[existingId] = copy
-                } else {
-                    cache.add(copy)
-                }
-            }
-
-            cacheMap[copy.modelId()] = copy
+            updateInternal(copy)
 
             if (null == cached) {
                 insert(copy)

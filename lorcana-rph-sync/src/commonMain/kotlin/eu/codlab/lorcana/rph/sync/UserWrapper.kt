@@ -7,13 +7,17 @@ import eu.codlab.lorcana.rph.sync.extensions.toSync
 import eu.codlab.lorcana.rph.sync.standings.UserEventStatus
 import eu.codlab.lorcana.rph.sync.user.User
 
+interface IUserWrapper : CacheAccess<User, Long, Unit> {
+    suspend fun matching(matching: String): List<User>
+}
+
 internal class UserWrapper : AbstractWrapper<
         User,
         Long,
         EventMatchPlayer,
         UserEventStatus,
         Unit
-        >() {
+        >(), IUserWrapper {
     private val stores = SyncDatabase.users
 
     override fun getParentKey(model: User) {
@@ -42,6 +46,19 @@ internal class UserWrapper : AbstractWrapper<
 
     override suspend fun isEquals(cached: User, fromApi: EventMatchPlayer) =
         cached.isEquals(fromApi)
+
+    override suspend fun matching(matching: String) =
+        stores.getAll(matching).map { user -> cacheMap[user.id]!! }
+
+    suspend fun fixUsersWithoutProperIdentifier() {
+        stores.getAllToFix().forEach {
+            cacheMap[it.id]!!.copy(bestIdentifierInGame = it.bestIdentifierInGame).let { copy ->
+                println("updating the user ${copy.bestIdentifier}, setting \"${copy.bestIdentifierInGame}\"")
+                update(copy)
+                updateInternal(copy)
+            }
+        }
+    }
 }
 
 internal fun User.toEventMatchPlayer() = EventMatchPlayer(

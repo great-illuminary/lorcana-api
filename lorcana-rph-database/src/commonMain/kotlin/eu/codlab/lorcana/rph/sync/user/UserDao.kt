@@ -14,6 +14,18 @@ interface UserDao {
     @Query("SELECT * FROM user")
     suspend fun getAll(): List<User>
 
+    @Query("SELECT * FROM user WHERE bestIdentifier LIKE :matching OR bestIdentifierInGame LIKE :matching")
+    suspend fun getAll(matching: String): List<User>
+
+    @Query(
+        """
+            SELECT user.id AS id, ues.bestIdentifier AS bestIdentifierInGame FROM user
+            LEFT JOIN usereventstatus AS ues ON ues.userId=user.id
+            WHERE bestIdentifierInGame IS NULL AND ues.bestIdentifier IS NOT NULL
+           """
+    )
+    suspend fun getAllToFix(): List<UserToFixName>
+
     @Insert
     suspend fun insert(user: User)
 

@@ -49,7 +49,9 @@ dependencies {
 
     api(libs.lorcana.data)
     api(libs.weather.google.maps)
+    api(project(":lorcana-api-config"))
     api(project(":lorcana-dreamborn"))
+    api(project(":lorcana-rph-database"))
     api(project(":lorcana-rph-backend"))
 }
 
