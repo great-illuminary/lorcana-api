@@ -3,7 +3,9 @@ package eu.codlab.lorcana.rph.sync.store
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import eu.codlab.lorcana.rph.sync.ModelId
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity
 data class Store(
     @PrimaryKey(autoGenerate = true)

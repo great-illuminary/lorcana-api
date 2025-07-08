@@ -87,6 +87,38 @@ fun Route.routeRPH(environment: Environment) {
         }
     }
 
+    route("/store/{storeId}/events") {
+        install(NotarizedRoute()) {
+            get = GetInfo.builder {
+                summary("Get all the events from a specific store")
+                description("Will give you all the info about an event whatever its status")
+                externalDocumentation(
+                    ExternalDocumentation(
+                        URI(environment.urlDocumentation),
+                        "Get help on Discord"
+                    )
+                )
+                response {
+                    responseCode(HttpStatusCode.OK)
+                    responseType<EventHolderFull>()
+                    description("Get all information about an event")
+                }
+            }
+        }
+
+        get {
+            try {
+                val storeId = call.parameters["storeId"]!!.toLong()
+                val actualEvent = ravensburger.eventsForStore(storeId)
+
+                call.respond(actualEvent)
+            } catch (err: Throwable) {
+                err.printStackTrace()
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
+    }
+
     route("/user/{userId}/events") {
         install(NotarizedRoute()) {
             get = GetInfo.builder {

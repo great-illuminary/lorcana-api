@@ -4,9 +4,12 @@ import eu.codlab.lorcana.rph.sync.database.SyncDatabase
 import eu.codlab.lorcana.rph.sync.event.Event
 import eu.codlab.lorcana.rph.sync.extensions.isEquals
 import eu.codlab.lorcana.rph.sync.extensions.toSyncEvent
+import eu.codlab.lorcana.rph.sync.store.Store
 import eu.codlab.lorcana.rph.sync.user.User
 
 interface IEventWrapper : CacheAccess<Event, Long, Unit> {
+    suspend fun forStoreIdsOnly(store: Store): List<Long>
+
     suspend fun forUserIdsOnly(user: User): List<Long>
 
     suspend fun forUser(user: User): List<Event>
@@ -61,6 +64,8 @@ internal class EventWrapper :
 
         update(copy)
     }
+
+    override suspend fun forStoreIdsOnly(store: Store) = events.getAll(store)
 
     override suspend fun forUserIdsOnly(user: User) = events.getAll(user)
 

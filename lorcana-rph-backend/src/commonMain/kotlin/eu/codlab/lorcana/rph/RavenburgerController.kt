@@ -65,6 +65,13 @@ class RavenburgerController {
         return events.map { event(it) }
     }
 
+    suspend fun eventsForStore(storeId: Long): List<EventHolderFull> {
+        val store = store(storeId) ?: throw IllegalStateException("Not found")
+        val events = synchronizer.eventAccess.forStoreIdsOnly(store)
+
+        return events.map { event(it) }
+    }
+
     fun directApiAccess() = loader
 
     suspend fun startSync() {
@@ -72,4 +79,12 @@ class RavenburgerController {
     }
 
     private fun user(id: Long) = synchronizer.userAccess.getFromId(id)
+
+    private fun store(id: Long) = synchronizer.storeAccess.getFromId(id)
+
+    suspend fun users(matching: String? = null) = if (null != matching) {
+        synchronizer.userAccess.matching(matching)
+    } else {
+        synchronizer.userAccess.getCachedList()
+    }
 }
