@@ -58,7 +58,7 @@ class RavenburgerController {
         }
     }
 
-    suspend fun events(userId: Long): List<EventHolderFull> {
+    suspend fun eventsForUser(userId: Long): List<EventHolderFull> {
         val user = user(userId) ?: throw IllegalStateException("Not found")
         val events = synchronizer.eventAccess.forUserIdsOnly(user)
 

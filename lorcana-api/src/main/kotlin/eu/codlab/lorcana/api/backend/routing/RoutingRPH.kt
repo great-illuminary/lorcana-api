@@ -10,6 +10,7 @@ import eu.codlab.lorcana.rph.registrations.EventRegistrationsQueryParameters
 import eu.codlab.lorcana.rph.rounds.matches.EventMatch
 import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
+import eu.codlab.lorcana.rph.sync.user.User
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.json.schema.definition.TypeDefinition
@@ -26,6 +27,44 @@ import java.net.URI
 
 fun Route.routeRPH(environment: Environment) {
     val ravensburger = environment.ravenburgerController
+
+    route("/users") {
+        install(NotarizedRoute()) {
+            get = GetInfo.builder {
+                summary("Retrieve the list of users")
+                description("Will give you all the users from the platform")
+
+                parameters(
+                    Parameter(
+                        name = "matching",
+                        required = false,
+                        schema = TypeDefinition.LONG,
+                        `in` = Parameter.Location.query,
+                    )
+                )
+                externalDocumentation(
+                    ExternalDocumentation(
+                        URI(environment.urlDocumentation),
+                        "Get help on Discord"
+                    )
+                )
+                response {
+                    responseCode(HttpStatusCode.OK)
+                    responseType<List<User>>()
+                    description("List of users")
+                }
+            }
+        }
+
+        get {
+            try {
+                call.respond(ravensburger.users(call.queryParameters["matching"]))
+            } catch (err: Throwable) {
+                err.printStackTrace()
+                call.respond(HttpStatusCode.InternalServerError)
+            }
+        }
+    }
 
     route("/events") {
         install(NotarizedRoute()) {
@@ -141,7 +180,7 @@ fun Route.routeRPH(environment: Environment) {
         get {
             try {
                 val userId = call.parameters["userId"]!!.toLong()
-                val actualEvent = ravensburger.events(userId)
+                val actualEvent = ravensburger.eventsForUser(userId)
 
                 call.respond(actualEvent)
             } catch (err: Throwable) {
