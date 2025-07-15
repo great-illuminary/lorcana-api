@@ -14,7 +14,7 @@ codlab-ui-libraries = "1.14.1"
 codlab-file-access = "1.15.0"
 codlab-http-client = "1.20.0"
 
-lorcana-data = "0.20.7"
+lorcana-data = "0.20.10"
 
 apache-httpclient = "5.0"
 
