@@ -16,7 +16,19 @@ data class Store(
     val country: String? = null,
     val website: String? = null,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val email: String? = null,
+    val streetAddress: String? = null,
+    val zipcode: String? = null,
+    val phoneNumber: String? = null,
+    val storeTypes: String? = null,
+    val storeTypesPretty: String? = null,
 ) : ModelId<Long> {
     override fun modelId() = id
+
+    val storeTypesList: List<String>
+        get() = storeTypes?.split(",") ?: emptyList()
+
+    val storeTypesPrettyList: List<String>
+        get() = storeTypesPretty?.split(",") ?: emptyList()
 }

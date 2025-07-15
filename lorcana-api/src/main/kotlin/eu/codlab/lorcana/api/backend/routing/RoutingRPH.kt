@@ -10,6 +10,7 @@ import eu.codlab.lorcana.rph.registrations.EventRegistrationsQueryParameters
 import eu.codlab.lorcana.rph.rounds.matches.EventMatch
 import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
+import eu.codlab.lorcana.rph.sync.store.Store
 import eu.codlab.lorcana.rph.sync.user.User
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
@@ -59,6 +60,36 @@ fun Route.routeRPH(environment: Environment) {
         get {
             try {
                 call.respond(ravensburger.users(call.queryParameters["matching"]))
+            } catch (err: Throwable) {
+                err.printStackTrace()
+                call.respond(HttpStatusCode.InternalServerError)
+            }
+        }
+    }
+
+    route("/stores") {
+        install(NotarizedRoute()) {
+            get = GetInfo.builder {
+                summary("Retrieve the list of stores")
+                description("Will give you all the stores from the platform")
+
+                externalDocumentation(
+                    ExternalDocumentation(
+                        URI(environment.urlDocumentation),
+                        "Get help on Discord"
+                    )
+                )
+                response {
+                    responseCode(HttpStatusCode.OK)
+                    responseType<List<Store>>()
+                    description("List of stores")
+                }
+            }
+        }
+
+        get {
+            try {
+                call.respond(ravensburger.stores())
             } catch (err: Throwable) {
                 err.printStackTrace()
                 call.respond(HttpStatusCode.InternalServerError)

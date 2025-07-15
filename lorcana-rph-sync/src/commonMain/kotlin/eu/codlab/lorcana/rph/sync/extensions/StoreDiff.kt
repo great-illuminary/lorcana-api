@@ -11,7 +11,15 @@ fun StoreFull.toSyncStore(original: eu.codlab.lorcana.rph.sync.store.Store? = nu
         country = country ?: original?.country,
         website = website ?: original?.website,
         latitude = latitude ?: original?.latitude,
-        longitude = longitude ?: original?.longitude
+        longitude = longitude ?: original?.longitude,
+        // now also copy if required, the information from the fullstore, since those can only
+        // be populated when receiving it from the list of stores, we skip if req
+        email = email ?: original?.email,
+        streetAddress = streetAddress ?: original?.streetAddress,
+        zipcode = zipcode ?: original?.zipcode,
+        phoneNumber = phoneNumber ?: original?.phoneNumber,
+        storeTypes = storeTypes?.joinToString(",") ?: original?.storeTypes,
+        storeTypesPretty = storeTypesPretty?.joinToString(",") ?: original?.storeTypesPretty
     )
 
 fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(other: StoreFull): Boolean {
@@ -25,6 +33,13 @@ fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(other: StoreFull): Boolean {
     other.website?.let { if (website != it) return false }
     other.latitude?.let { if (latitude != it) return false }
     other.longitude?.let { if (longitude != it) return false }
+
+    other.email?.let { if (email != it) return false }
+    other.streetAddress?.let { if (streetAddress != it) return false }
+    other.zipcode?.let { if (zipcode != it) return false }
+    other.phoneNumber?.let { if (phoneNumber != it) return false }
+    other.storeTypes?.let { if (storeTypes != it.joinToString(",")) return false }
+    other.storeTypesPretty?.let { if (storeTypesPretty != it.joinToString(",")) return false }
 
     return true
 }

@@ -7,8 +7,11 @@ import eu.codlab.lorcana.rph.rounds.matches.EventMatch
 import eu.codlab.lorcana.rph.rounds.matches.EventMatchPlayer
 import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
+import eu.codlab.lorcana.rph.store.StoreFullRestLine
+import eu.codlab.lorcana.rph.store.StoresQueryParameters
 import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
+import eu.codlab.lorcana.rph.utils.Page
 import korlibs.time.DateTime
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.minutes
@@ -73,27 +76,11 @@ class Sync {
     private suspend fun loop() {
         checkUsersToFix()
 
-        var synchronizationNeedsToContinue = true
-        do {
-            var lastPage = settings.lastPage()
-            println("now performing the synchronization for the page $lastPage")
+        syncStores()
 
-            val events = loader.events(EventQueryParameters(page = lastPage))
+        syncEvents()
 
-            // checking the issue with some players
-            events.results.forEach { checkEvent(it) }
-
-            if (null == events.next) {
-                println("synchronization done")
-                // nothing to do now... we finished
-                synchronizationNeedsToContinue = false
-            } else {
-                lastPage++
-                settings.setCurrentPage(lastPage)
-            }
-        } while (synchronizationNeedsToContinue)
-
-        (1..(settings.lastPage() / 10 + 1)).forEach { lastPage ->
+        (1..(settings.lastPage(PageType.Events) / 10 + 1)).forEach { lastPage ->
             println("now rechecking quickly the page $lastPage")
             try {
                 val events = loader.events(
@@ -129,6 +116,49 @@ class Sync {
             val fromBackend = loader.event(it.id)
             checkEvent(fromBackend)
         }
+    }
+
+    private suspend fun syncEvents() =
+        performSync(
+            pageType = PageType.Events,
+            check = { checkEvent(it) },
+        ) { loader.events(EventQueryParameters(page = it)) }
+
+    private suspend fun syncStores() =
+        performSync(
+            pageType = PageType.Stores,
+            check = { checkStore(it) },
+        ) { loader.stores(StoresQueryParameters(page = it, pageSize = 250)) }
+
+    private suspend fun <T> performSync(
+        pageType: PageType,
+        check: suspend (T) -> Unit,
+        getObjects: suspend (Int) -> Page<T>,
+    ) {
+        var synchronizationNeedsToContinue = true
+        do {
+            var lastPage = settings.lastPage(pageType)
+            println("now performing the synchronization for the page $lastPage")
+
+            val events = getObjects(lastPage)
+
+            // checking the issue with some players
+            events.results.forEach { check(it) }
+
+            if (null == events.next) {
+                println("synchronization done")
+                // nothing to do now... we finished
+                synchronizationNeedsToContinue = false
+            } else {
+                lastPage++
+                settings.setCurrentPage(pageType, lastPage)
+            }
+        } while (synchronizationNeedsToContinue)
+    }
+
+    private suspend fun checkStore(storeFullRestLine: StoreFullRestLine) {
+        // skipping the "other" information
+        storeWrapper.check(storeFullRestLine.store)
     }
 
     private suspend fun checkEvent(

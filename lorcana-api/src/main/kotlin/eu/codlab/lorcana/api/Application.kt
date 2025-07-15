@@ -21,7 +21,7 @@ fun main() {
         }
 
         async {
-            environment.ravenburgerController.startSync()
+            environment.ravensburgerController.startSync()
         }
 
         try {

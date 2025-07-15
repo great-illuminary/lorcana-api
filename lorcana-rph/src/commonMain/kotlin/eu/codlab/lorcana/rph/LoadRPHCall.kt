@@ -6,6 +6,8 @@ import eu.codlab.lorcana.rph.registrations.EventRegistrationsQueryParameters
 import eu.codlab.lorcana.rph.rounds.matches.EventMatch
 import eu.codlab.lorcana.rph.rounds.standings.EventStanding
 import eu.codlab.lorcana.rph.rounds.standings.UserEventStatus
+import eu.codlab.lorcana.rph.store.StoreFullRestLine
+import eu.codlab.lorcana.rph.store.StoresQueryParameters
 import eu.codlab.lorcana.rph.utils.Clients
 import eu.codlab.lorcana.rph.utils.Page
 
@@ -37,4 +39,7 @@ class LoadRPHCall {
         parameters: EventRegistrationsQueryParameters = EventRegistrationsQueryParameters()
     ) =
         Clients.get<Page<EventMatch>>("$rph/tournament-rounds/$id/matches/paginated/?${parameters.toUrl}")
+
+    suspend fun stores(parameters: StoresQueryParameters = StoresQueryParameters()) =
+        Clients.get<Page<StoreFullRestLine>>("$workersDev/api/v2/game-stores/?${parameters.toUrl}")
 }

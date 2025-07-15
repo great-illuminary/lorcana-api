@@ -1,0 +1,1121 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "219c0c27e208f0fd14c2934366f6be1f",
+    "entities": [
+      {
+        "tableName": "Store",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `fullAddress` TEXT NOT NULL, `administrativeAreaLevel1Short` TEXT, `country` TEXT, `website` TEXT, `latitude` REAL, `longitude` REAL, `email` TEXT, `streetAddress` TEXT, `zipcode` TEXT, `phoneNumber` TEXT, `storeTypes` TEXT, `storeTypesPretty` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullAddress",
+            "columnName": "fullAddress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "administrativeAreaLevel1Short",
+            "columnName": "administrativeAreaLevel1Short",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "website",
+            "columnName": "website",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "streetAddress",
+            "columnName": "streetAddress",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "zipcode",
+            "columnName": "zipcode",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "phoneNumber",
+            "columnName": "phoneNumber",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "storeTypes",
+            "columnName": "storeTypes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "storeTypesPretty",
+            "columnName": "storeTypesPretty",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "User",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pronouns` TEXT, `bestIdentifier` TEXT, `bestIdentifierInGame` TEXT, `gameUserProfilePictureUrl` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pronouns",
+            "columnName": "pronouns",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bestIdentifier",
+            "columnName": "bestIdentifier",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bestIdentifierInGame",
+            "columnName": "bestIdentifierInGame",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "gameUserProfilePictureUrl",
+            "columnName": "gameUserProfilePictureUrl",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "Event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullHeaderImageUrl` TEXT NOT NULL, `startDatetimeISO` TEXT, `startDatetime` INTEGER, `endDatetimeISO` TEXT, `day2StartDatetimeISO` TEXT, `day2StartDatetime` INTEGER, `timerEndDatetime` TEXT, `timerPausedAtDatetime` TEXT, `timerIsRunning` INTEGER NOT NULL, `description` TEXT NOT NULL, `registeredUserCount` INTEGER NOT NULL, `fullAddress` TEXT NOT NULL, `convention` TEXT, `displayStatus` TEXT, `name` TEXT NOT NULL, `pinnedByStore` INTEGER NOT NULL, `useVerbatimName` INTEGER NOT NULL, `queueStatus` TEXT NOT NULL, `gameType` TEXT NOT NULL, `source` TEXT, `eventStatus` TEXT NOT NULL, `eventFormat` TEXT NOT NULL, `eventType` TEXT NOT NULL, `pairingSystem` TEXT, `rulesEnforcementLevel` TEXT NOT NULL, `timezone` TEXT, `eventAddressOverride` TEXT, `eventIsOnline` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `costInCents` REAL, `currency` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `url` TEXT, `numberOfRcInvites` INTEGER, `topCutSize` INTEGER, `numberOfRounds` INTEGER, `numberOfDays` INTEGER, `isHeadliningEvent` INTEGER NOT NULL, `isOnDemand` INTEGER NOT NULL, `preventSync` INTEGER NOT NULL, `headerImage` TEXT, `startingTableNumber` INTEGER NOT NULL, `endingTableNumber` INTEGER, `adminListDisplayOrder` INTEGER NOT NULL, `prizesAwarded` INTEGER NOT NULL, `isTestEvent` INTEGER NOT NULL, `isTemplate` INTEGER NOT NULL, `taxEnabled` INTEGER NOT NULL, `polymorphicCtype` INTEGER NOT NULL, `game` INTEGER NOT NULL, `productList` TEXT, `eventFactoryCreatedBy` TEXT, `eventConfigurationTemplate` TEXT NOT NULL, `bannerImage` INTEGER NOT NULL, `phaseTemplateGroupId` TEXT NOT NULL, `settingsId` INTEGER NOT NULL, `storeId` INTEGER, `gameplayFormatId` TEXT NOT NULL, `updatedPostEvent` INTEGER NOT NULL, `refreshedAtMilliseconds` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullHeaderImageUrl",
+            "columnName": "fullHeaderImageUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDatetimeISO",
+            "columnName": "startDatetimeISO",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "startDatetime",
+            "columnName": "startDatetime",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "endDatetimeISO",
+            "columnName": "endDatetimeISO",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "day2StartDatetimeISO",
+            "columnName": "day2StartDatetimeISO",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "day2StartDatetime",
+            "columnName": "day2StartDatetime",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "timerEndDatetime",
+            "columnName": "timerEndDatetime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "timerPausedAtDatetime",
+            "columnName": "timerPausedAtDatetime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "timerIsRunning",
+            "columnName": "timerIsRunning",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registeredUserCount",
+            "columnName": "registeredUserCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullAddress",
+            "columnName": "fullAddress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "convention",
+            "columnName": "convention",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "displayStatus",
+            "columnName": "displayStatus",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinnedByStore",
+            "columnName": "pinnedByStore",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "useVerbatimName",
+            "columnName": "useVerbatimName",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "queueStatus",
+            "columnName": "queueStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gameType",
+            "columnName": "gameType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eventStatus",
+            "columnName": "eventStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventFormat",
+            "columnName": "eventFormat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventType",
+            "columnName": "eventType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pairingSystem",
+            "columnName": "pairingSystem",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rulesEnforcementLevel",
+            "columnName": "rulesEnforcementLevel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timezone",
+            "columnName": "timezone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eventAddressOverride",
+            "columnName": "eventAddressOverride",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eventIsOnline",
+            "columnName": "eventIsOnline",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "costInCents",
+            "columnName": "costInCents",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capacity",
+            "columnName": "capacity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "numberOfRcInvites",
+            "columnName": "numberOfRcInvites",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "topCutSize",
+            "columnName": "topCutSize",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "numberOfRounds",
+            "columnName": "numberOfRounds",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "numberOfDays",
+            "columnName": "numberOfDays",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isHeadliningEvent",
+            "columnName": "isHeadliningEvent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isOnDemand",
+            "columnName": "isOnDemand",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preventSync",
+            "columnName": "preventSync",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "headerImage",
+            "columnName": "headerImage",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "startingTableNumber",
+            "columnName": "startingTableNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endingTableNumber",
+            "columnName": "endingTableNumber",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "adminListDisplayOrder",
+            "columnName": "adminListDisplayOrder",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prizesAwarded",
+            "columnName": "prizesAwarded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isTestEvent",
+            "columnName": "isTestEvent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isTemplate",
+            "columnName": "isTemplate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taxEnabled",
+            "columnName": "taxEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "polymorphicCtype",
+            "columnName": "polymorphicCtype",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "game",
+            "columnName": "game",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productList",
+            "columnName": "productList",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eventFactoryCreatedBy",
+            "columnName": "eventFactoryCreatedBy",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eventConfigurationTemplate",
+            "columnName": "eventConfigurationTemplate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bannerImage",
+            "columnName": "bannerImage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phaseTemplateGroupId",
+            "columnName": "phaseTemplateGroupId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "settingsId",
+            "columnName": "settingsId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "storeId",
+            "columnName": "storeId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "gameplayFormatId",
+            "columnName": "gameplayFormatId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedPostEvent",
+            "columnName": "updatedPostEvent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "refreshedAtMilliseconds",
+            "columnName": "refreshedAtMilliseconds",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Event_storeId",
+            "unique": false,
+            "columnNames": [
+              "storeId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Event_storeId` ON `${TABLE_NAME}` (`storeId`)"
+          },
+          {
+            "name": "index_Event_startDatetimeISO",
+            "unique": false,
+            "columnNames": [
+              "startDatetimeISO"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Event_startDatetimeISO` ON `${TABLE_NAME}` (`startDatetimeISO`)"
+          },
+          {
+            "name": "index_Event_startDatetime",
+            "unique": false,
+            "columnNames": [
+              "startDatetime"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Event_startDatetime` ON `${TABLE_NAME}` (`startDatetime`)"
+          },
+          {
+            "name": "index_Event_endDatetimeISO",
+            "unique": false,
+            "columnNames": [
+              "endDatetimeISO"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Event_endDatetimeISO` ON `${TABLE_NAME}` (`endDatetimeISO`)"
+          },
+          {
+            "name": "index_Event_day2StartDatetimeISO",
+            "unique": false,
+            "columnNames": [
+              "day2StartDatetimeISO"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Event_day2StartDatetimeISO` ON `${TABLE_NAME}` (`day2StartDatetimeISO`)"
+          },
+          {
+            "name": "index_Event_day2StartDatetime",
+            "unique": false,
+            "columnNames": [
+              "day2StartDatetime"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Event_day2StartDatetime` ON `${TABLE_NAME}` (`day2StartDatetime`)"
+          }
+        ]
+      },
+      {
+        "tableName": "EventSettings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `decklistStatus` TEXT NOT NULL, `eventLifecycleStatus` TEXT NOT NULL, `showRegistrationButton` INTEGER NOT NULL, `roundDurationInMinutes` INTEGER NOT NULL, `paymentInStore` INTEGER NOT NULL, `paymentOnSpicerack` INTEGER NOT NULL, `maximumNumberOfGameWinsPerMatch` INTEGER NOT NULL, `maximumNumberOfDrawsPerMatch` INTEGER, `checkinMethodsCommaSeparated` TEXT NOT NULL, `stripePriceId` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "decklistStatus",
+            "columnName": "decklistStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventLifecycleStatus",
+            "columnName": "eventLifecycleStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showRegistrationButton",
+            "columnName": "showRegistrationButton",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roundDurationInMinutes",
+            "columnName": "roundDurationInMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paymentInStore",
+            "columnName": "paymentInStore",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paymentOnSpicerack",
+            "columnName": "paymentOnSpicerack",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maximumNumberOfGameWinsPerMatch",
+            "columnName": "maximumNumberOfGameWinsPerMatch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maximumNumberOfDrawsPerMatch",
+            "columnName": "maximumNumberOfDrawsPerMatch",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "checkinMethodsCommaSeparated",
+            "columnName": "checkinMethodsCommaSeparated",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stripePriceId",
+            "columnName": "stripePriceId",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "GameplayFormat",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `description` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "TournamentPhase",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `eventId` INTEGER NOT NULL, `firstRoundType` TEXT, `status` TEXT NOT NULL, `orderInPhases` INTEGER NOT NULL, `numberOfRounds` INTEGER, `roundType` TEXT NOT NULL, `rankRequiredToEnterPhase` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventId",
+            "columnName": "eventId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstRoundType",
+            "columnName": "firstRoundType",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderInPhases",
+            "columnName": "orderInPhases",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfRounds",
+            "columnName": "numberOfRounds",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "roundType",
+            "columnName": "roundType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rankRequiredToEnterPhase",
+            "columnName": "rankRequiredToEnterPhase",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "Round",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tournamentPhaseId` INTEGER NOT NULL, `roundNumber` INTEGER NOT NULL, `finalRoundInEvent` INTEGER NOT NULL, `pairingsStatus` TEXT NOT NULL, `standingsStatus` TEXT NOT NULL, `roundType` TEXT NOT NULL, `status` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tournamentPhaseId",
+            "columnName": "tournamentPhaseId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roundNumber",
+            "columnName": "roundNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finalRoundInEvent",
+            "columnName": "finalRoundInEvent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pairingsStatus",
+            "columnName": "pairingsStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "standingsStatus",
+            "columnName": "standingsStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roundType",
+            "columnName": "roundType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "Setting",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `key` TEXT NOT NULL, `value` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "EventStanding",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rank` INTEGER NOT NULL, `record` TEXT NOT NULL, `matchRecord` TEXT NOT NULL, `matchPoints` INTEGER NOT NULL, `opponentMatchWinPercentage` REAL NOT NULL, `opponentGameWinPercentage` REAL NOT NULL, `roundId` INTEGER NOT NULL, `playerId` INTEGER NOT NULL, PRIMARY KEY(`roundId`, `playerId`))",
+        "fields": [
+          {
+            "fieldPath": "rank",
+            "columnName": "rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record",
+            "columnName": "record",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchRecord",
+            "columnName": "matchRecord",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchPoints",
+            "columnName": "matchPoints",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opponentMatchWinPercentage",
+            "columnName": "opponentMatchWinPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opponentGameWinPercentage",
+            "columnName": "opponentGameWinPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roundId",
+            "columnName": "roundId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playerId",
+            "columnName": "playerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "roundId",
+            "playerId"
+          ]
+        }
+      },
+      {
+        "tableName": "UserEventStatus",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `matchesWon` INTEGER NOT NULL, `matchesDrawn` INTEGER NOT NULL, `matchesLost` INTEGER NOT NULL, `totalMatchPoints` INTEGER NOT NULL, `registrationStatus` TEXT, `fullProfilePictureUrl` TEXT, `bestIdentifier` TEXT NOT NULL, `specialUserIdentifier` TEXT, `finalPlaceInStandings` INTEGER, `registrationCompletedDatetime` TEXT, `eventId` INTEGER NOT NULL, `userId` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchesWon",
+            "columnName": "matchesWon",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchesDrawn",
+            "columnName": "matchesDrawn",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchesLost",
+            "columnName": "matchesLost",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalMatchPoints",
+            "columnName": "totalMatchPoints",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registrationStatus",
+            "columnName": "registrationStatus",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "fullProfilePictureUrl",
+            "columnName": "fullProfilePictureUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bestIdentifier",
+            "columnName": "bestIdentifier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "specialUserIdentifier",
+            "columnName": "specialUserIdentifier",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "finalPlaceInStandings",
+            "columnName": "finalPlaceInStandings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "registrationCompletedDatetime",
+            "columnName": "registrationCompletedDatetime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eventId",
+            "columnName": "eventId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "EventMatch",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `tableNumber` INTEGER NOT NULL, `order` INTEGER, `status` TEXT NOT NULL, `podNumber` INTEGER, `matchIsIntentionalDraw` INTEGER NOT NULL, `matchIsUnintentionalDraw` INTEGER NOT NULL, `matchIsBye` INTEGER NOT NULL, `matchIsLoss` INTEGER NOT NULL, `reportsAreInConflict` INTEGER NOT NULL, `gamesDrawn` INTEGER, `gamesWonByWinner` INTEGER, `gamesWonByLoser` INTEGER, `isGhostMatch` INTEGER NOT NULL, `isFeatureMatch` INTEGER NOT NULL, `deckCheckStarted` INTEGER NOT NULL, `deckCheckCompleted` INTEGER NOT NULL, `timeExtensionSeconds` INTEGER NOT NULL, `teamEventMatch` TEXT, `tournamentRound` INTEGER NOT NULL, `reportingPlayer` INTEGER, `winningPlayer` INTEGER, `assignedJudge` INTEGER, `player1` INTEGER NOT NULL, `player1Order` INTEGER, `player2` INTEGER, `player2Order` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tableNumber",
+            "columnName": "tableNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "podNumber",
+            "columnName": "podNumber",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "matchIsIntentionalDraw",
+            "columnName": "matchIsIntentionalDraw",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchIsUnintentionalDraw",
+            "columnName": "matchIsUnintentionalDraw",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchIsBye",
+            "columnName": "matchIsBye",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchIsLoss",
+            "columnName": "matchIsLoss",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reportsAreInConflict",
+            "columnName": "reportsAreInConflict",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gamesDrawn",
+            "columnName": "gamesDrawn",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "gamesWonByWinner",
+            "columnName": "gamesWonByWinner",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "gamesWonByLoser",
+            "columnName": "gamesWonByLoser",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isGhostMatch",
+            "columnName": "isGhostMatch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFeatureMatch",
+            "columnName": "isFeatureMatch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deckCheckStarted",
+            "columnName": "deckCheckStarted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deckCheckCompleted",
+            "columnName": "deckCheckCompleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeExtensionSeconds",
+            "columnName": "timeExtensionSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "teamEventMatch",
+            "columnName": "teamEventMatch",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tournamentRound",
+            "columnName": "tournamentRound",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reportingPlayer",
+            "columnName": "reportingPlayer",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "winningPlayer",
+            "columnName": "winningPlayer",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "assignedJudge",
+            "columnName": "assignedJudge",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "player1",
+            "columnName": "player1",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "player1Order",
+            "columnName": "player1Order",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "player2",
+            "columnName": "player2",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "player2Order",
+            "columnName": "player2Order",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '219c0c27e208f0fd14c2934366f6be1f')"
+    ]
+  }
+}

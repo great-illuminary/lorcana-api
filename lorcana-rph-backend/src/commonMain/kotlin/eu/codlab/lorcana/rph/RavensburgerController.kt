@@ -2,7 +2,7 @@ package eu.codlab.lorcana.rph
 
 import eu.codlab.lorcana.rph.sync.Sync
 
-class RavenburgerController {
+class RavensburgerController {
     private val loader = LoadRPHCall()
     private val synchronizer = Sync()
 
@@ -34,6 +34,25 @@ class RavenburgerController {
                 },
             gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(event.gameplayFormatId),
             store = event.storeId?.let { synchronizer.storeAccess.getFromId(it) }
+        )
+    }
+
+    fun stores() = synchronizer.storeAccess.getCachedList().map {
+        StoreHolder(
+            id = it.id,
+            name = it.name,
+            fullAddress = it.fullAddress,
+            administrativeAreaLevel1Short = it.administrativeAreaLevel1Short,
+            country = it.country,
+            website = it.website,
+            latitude = it.latitude,
+            longitude = it.longitude,
+            email = it.email,
+            streetAddress = it.streetAddress,
+            zipcode = it.zipcode,
+            phoneNumber = it.phoneNumber,
+            storeTypes = it.storeTypesList,
+            storeTypesPretty = it.storeTypesPrettyList
         )
     }
 
