@@ -1,28 +1,35 @@
 package eu.codlab.lorcana.rph.sync.extensions
 
 import eu.codlab.lorcana.rph.store.StoreFull
+import eu.codlab.lorcana.rph.store.StoreFullRestLine
 
-fun StoreFull.toSyncStore(original: eu.codlab.lorcana.rph.sync.store.Store? = null) =
-    eu.codlab.lorcana.rph.sync.store.Store(
-        id = id,
-        name = name,
-        fullAddress = fullAddress,
-        administrativeAreaLevel1Short = original?.administrativeAreaLevel1Short,
-        country = country ?: original?.country,
-        website = website ?: original?.website,
-        latitude = latitude ?: original?.latitude,
-        longitude = longitude ?: original?.longitude,
-        // now also copy if required, the information from the fullstore, since those can only
-        // be populated when receiving it from the list of stores, we skip if req
-        email = email ?: original?.email,
-        streetAddress = streetAddress ?: original?.streetAddress,
-        zipcode = zipcode ?: original?.zipcode,
-        phoneNumber = phoneNumber ?: original?.phoneNumber,
-        storeTypes = storeTypes?.joinToString(",") ?: original?.storeTypes,
-        storeTypesPretty = storeTypesPretty?.joinToString(",") ?: original?.storeTypesPretty
-    )
+fun StoreFull.toSyncStore(
+    original: eu.codlab.lorcana.rph.sync.store.Store? = null,
+    foreignParent: StoreFullRestLine? = null
+) = eu.codlab.lorcana.rph.sync.store.Store(
+    id = id,
+    name = name,
+    fullAddress = fullAddress,
+    administrativeAreaLevel1Short = original?.administrativeAreaLevel1Short,
+    country = country ?: original?.country,
+    website = website ?: original?.website,
+    latitude = latitude ?: original?.latitude,
+    longitude = longitude ?: original?.longitude,
+    // now also copy if required, the information from the fullstore, since those can only
+    // be populated when receiving it from the list of stores, we skip if req
+    email = email ?: original?.email,
+    streetAddress = streetAddress ?: original?.streetAddress,
+    zipcode = zipcode ?: original?.zipcode,
+    phoneNumber = phoneNumber ?: original?.phoneNumber,
+    storeTypes = storeTypes?.joinToString(",") ?: original?.storeTypes,
+    storeTypesPretty = storeTypesPretty?.joinToString(",") ?: original?.storeTypesPretty,
+    uuid = foreignParent?.id ?: original?.uuid ?: ""
+)
 
-fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(other: StoreFull): Boolean {
+fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(
+    other: StoreFull,
+    foreignParent: StoreFullRestLine? = null
+): Boolean {
     if (id != other.id) return false
     if (name != other.name) return false
     if (fullAddress != other.fullAddress) return false
@@ -41,5 +48,6 @@ fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(other: StoreFull): Boolean {
     other.storeTypes?.let { if (storeTypes != it.joinToString(",")) return false }
     other.storeTypesPretty?.let { if (storeTypesPretty != it.joinToString(",")) return false }
 
+    foreignParent?.let { if (uuid != it.id) return false }
     return true
 }

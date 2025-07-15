@@ -1,12 +1,18 @@
 package eu.codlab.lorcana.rph.sync
 
+import eu.codlab.lorcana.rph.store.StoreFull
+import eu.codlab.lorcana.rph.store.StoreFullRestLine
 import eu.codlab.lorcana.rph.sync.database.SyncDatabase
 import eu.codlab.lorcana.rph.sync.extensions.isEquals
 import eu.codlab.lorcana.rph.sync.extensions.toSyncStore
 import eu.codlab.lorcana.rph.sync.store.Store
 
 internal class StoreWrapper :
-    AbstractWrapper<Store, Long, eu.codlab.lorcana.rph.store.StoreFull, Unit, Unit>() {
+    AbstractWrapper<Store,
+            Long,
+            StoreFull,
+            StoreFullRestLine,
+            Unit>() { // parent key is not known unfortunately
     private val stores = SyncDatabase.stores
 
     override fun getParentKey(model: Store) {
@@ -16,8 +22,8 @@ internal class StoreWrapper :
     override suspend fun list() = stores.getAll()
 
     override fun id(
-        fromApi: eu.codlab.lorcana.rph.store.StoreFull,
-        parent: Unit?
+        fromApi: StoreFull,
+        parent: StoreFullRestLine?
     ) = fromApi.id
 
     override suspend fun insert(copy: Store) = stores.insert(copy)
@@ -25,13 +31,18 @@ internal class StoreWrapper :
     override suspend fun update(copy: Store) = stores.update(copy)
 
     override suspend fun toSync(
-        fromApi: eu.codlab.lorcana.rph.store.StoreFull,
+        fromApi:StoreFull,
         cached: Store?,
-        foreignParent: Unit?
-    ) = fromApi.toSyncStore(cached)
+        foreignParent: StoreFullRestLine?
+    ) = fromApi.toSyncStore(cached, foreignParent)
+
+    override suspend fun isEquals(cached: Store, fromApi: StoreFull): Boolean {
+        TODO("Shouldn't have been called")
+    }
 
     override suspend fun isEquals(
         cached: Store,
-        fromApi: eu.codlab.lorcana.rph.store.StoreFull
-    ) = cached.isEquals(fromApi)
+        fromApi: StoreFull,
+        parent: StoreFullRestLine?
+    ) = cached.isEquals(fromApi, parent)
 }

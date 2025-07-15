@@ -77,25 +77,10 @@ class Sync {
         checkUsersToFix()
 
         syncStores()
+        fastSyncStore()
 
         syncEvents()
-
-        (1..(settings.lastPage(PageType.Events) / 10 + 1)).forEach { lastPage ->
-            println("now rechecking quickly the page $lastPage")
-            try {
-                val events = loader.events(
-                    EventQueryParameters(
-                        page = lastPage,
-                        pageSize = 250
-                    )
-                )
-
-                // checking the issue with some players
-                events.results.forEach { checkEvent(it, true) }
-            } catch (err: Throwable) {
-                err.printStackTrace()
-            }
-        }
+        fastSyncEvent()
 
         val list = eventAccess.getCachedList()
         println("number of events in -/+2days ${list.filter { it.isIn2DaysOrWas2DaysAgo() }.size}")
@@ -118,6 +103,47 @@ class Sync {
         }
     }
 
+    private suspend fun fastSyncStore() = fastSync(
+        PageType.Stores,
+        { checkStore(it) },
+    ) {
+        loader.stores(
+            StoresQueryParameters(
+                page = it,
+                pageSize = 250
+            )
+        )
+    }
+
+    private suspend fun fastSyncEvent() = fastSync(
+        PageType.Events,
+        { checkEvent(it, true) },
+    ) {
+        loader.events(
+            EventQueryParameters(
+                page = it,
+                pageSize = 250
+            )
+        )
+    }
+
+    private suspend fun <T> fastSync(
+        pageType: PageType = PageType.Events,
+        check: suspend (T) -> Unit,
+        getObjects: suspend (Int) -> Page<T>
+    ) {
+        (1..(settings.lastPage(pageType) / 10 + 1)).forEach { lastPage ->
+            println("now rechecking quickly the page $lastPage")
+            try {
+                val events = getObjects(lastPage)
+
+                events.results.forEach { check(it) }
+            } catch (err: Throwable) {
+                err.printStackTrace()
+            }
+        }
+    }
+
     private suspend fun syncEvents() =
         performSync(
             pageType = PageType.Events,
@@ -128,7 +154,7 @@ class Sync {
         performSync(
             pageType = PageType.Stores,
             check = { checkStore(it) },
-        ) { loader.stores(StoresQueryParameters(page = it, pageSize = 250)) }
+        ) { loader.stores(StoresQueryParameters(page = it)) }
 
     private suspend fun <T> performSync(
         pageType: PageType,
@@ -158,7 +184,7 @@ class Sync {
 
     private suspend fun checkStore(storeFullRestLine: StoreFullRestLine) {
         // skipping the "other" information
-        storeWrapper.check(storeFullRestLine.store)
+        storeWrapper.check(storeFullRestLine.store, storeFullRestLine)
     }
 
     private suspend fun checkEvent(

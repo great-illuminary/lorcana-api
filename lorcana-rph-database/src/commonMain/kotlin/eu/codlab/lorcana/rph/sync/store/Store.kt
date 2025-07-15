@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.rph.sync.store
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import eu.codlab.lorcana.rph.sync.ModelId
@@ -23,6 +24,10 @@ data class Store(
     val phoneNumber: String? = null,
     val storeTypes: String? = null,
     val storeTypesPretty: String? = null,
+    @ColumnInfo(
+        defaultValue = ""
+    )
+    val uuid: String = ""
 ) : ModelId<Long> {
     override fun modelId() = id
 
