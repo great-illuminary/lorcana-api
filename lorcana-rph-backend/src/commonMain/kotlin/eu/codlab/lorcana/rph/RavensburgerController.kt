@@ -37,24 +37,7 @@ class RavensburgerController {
         )
     }
 
-    fun stores() = synchronizer.storeAccess.getCachedList().map {
-        StoreHolder(
-            id = it.id,
-            name = it.name,
-            fullAddress = it.fullAddress,
-            administrativeAreaLevel1Short = it.administrativeAreaLevel1Short,
-            country = it.country,
-            website = it.website,
-            latitude = it.latitude,
-            longitude = it.longitude,
-            email = it.email,
-            streetAddress = it.streetAddress,
-            zipcode = it.zipcode,
-            phoneNumber = it.phoneNumber,
-            storeTypes = it.storeTypesList,
-            storeTypesPretty = it.storeTypesPrettyList
-        )
-    }
+    fun stores() = synchronizer.storeAccess.getCachedList().map { it.toStoreHolder() }
 
     fun events(): List<EventHolder> {
         val events = synchronizer.eventAccess.getCachedList()
@@ -72,7 +55,9 @@ class RavensburgerController {
                     },
                 tournamentPhases = synchronizer.tournamentPhaseAccess.getFromParent(it.id),
                 gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(it.gameplayFormatId),
-                store = it.storeId?.let { synchronizer.storeAccess.getFromId(it) }
+                store = it.storeId?.let { s ->
+                    synchronizer.storeAccess.getFromId(s)?.toStoreHolder()
+                }
             )
         }
     }

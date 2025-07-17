@@ -2,6 +2,7 @@ package eu.codlab.lorcana.api.backend.routing
 
 import eu.codlab.lorcana.api.environment.Environment
 import eu.codlab.lorcana.rph.EventHolderFull
+import eu.codlab.lorcana.rph.StoreHolder
 import eu.codlab.lorcana.rph.event.Event
 import eu.codlab.lorcana.rph.event.EventQueryParameters
 import eu.codlab.lorcana.rph.event.Round
@@ -81,7 +82,7 @@ fun Route.routeRPH(environment: Environment) {
                 )
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<List<Store>>()
+                    responseType<List<StoreHolder>>()
                     description("List of stores")
                 }
             }

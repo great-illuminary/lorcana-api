@@ -14,7 +14,7 @@ data class EventHolder(
     val tournamentPhases: List<TournamentPhase>,
     val registrations: List<UserEventStatusHolder>,
     val gameplayFormat: GameplayFormat? = null,
-    val store: Store?,
+    val store: StoreHolder?,
 )
 
 @Serializable

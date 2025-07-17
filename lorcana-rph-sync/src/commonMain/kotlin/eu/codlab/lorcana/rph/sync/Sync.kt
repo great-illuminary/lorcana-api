@@ -99,7 +99,13 @@ class Sync {
         eventInThePast.forEach {
             println("need synchronization for ${it.id}")
             val fromBackend = loader.event(it.id)
-            checkEvent(fromBackend)
+            try {
+                checkEvent(fromBackend)
+            } catch(err: Throwable) {
+                // TODO manage 404 in a new error
+                // {"code":"RESP002","detail":"The requested URL page returned a 404 HTTP Status Code. Please make sure this URL exists and retry your request.","instance":"/v1","status":404,"title":"Page not found (RESP002)","type":"https://docs.zenrows.com/api-error-codes#RESP002"}
+                // Exception in thread "main" java.lang.IllegalStateException: Couldn't load https://api.ravensburgerplay.com/api/v2/events/163408/
+            }
         }
     }
 
