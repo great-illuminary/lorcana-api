@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.api.backend.routing
 
 import eu.codlab.lorcana.api.environment.Environment
+import eu.codlab.lorcana.api.environment.discord
 import eu.codlab.lorcana.dreamborn.database.MappingDeck
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptorLight
 import io.bkbn.kompendium.core.metadata.GetInfo
@@ -25,12 +26,9 @@ fun Route.decks(environment: Environment) {
             get = GetInfo.builder {
                 summary(summary)
                 description(description)
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<List<MappingDeck>>()
@@ -108,12 +106,9 @@ fun Route.decks(environment: Environment) {
             get = GetInfo.builder {
                 summary("Retrieve the actual full deck from a given id")
                 description("Will give you all data for a given deck")
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<MappingDeck>()

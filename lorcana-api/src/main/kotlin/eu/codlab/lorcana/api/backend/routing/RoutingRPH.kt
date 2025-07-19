@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.api.backend.routing
 
 import eu.codlab.lorcana.api.environment.Environment
+import eu.codlab.lorcana.api.environment.discord
 import eu.codlab.lorcana.rph.EventHolderFull
 import eu.codlab.lorcana.rph.StoreHolder
 import eu.codlab.lorcana.rph.event.Event
@@ -44,12 +45,9 @@ fun Route.routeRPH(environment: Environment) {
                         `in` = Parameter.Location.query,
                     )
                 )
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<List<User>>()
@@ -74,12 +72,8 @@ fun Route.routeRPH(environment: Environment) {
                 summary("Retrieve the list of stores")
                 description("Will give you all the stores from the platform")
 
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<List<StoreHolder>>()
@@ -120,12 +114,9 @@ fun Route.routeRPH(environment: Environment) {
                         description = "When set, must be accompanied by startingAt"
                     )
                 )
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<List<Event>>()
@@ -162,13 +153,19 @@ fun Route.routeRPH(environment: Environment) {
         install(NotarizedRoute()) {
             get = GetInfo.builder {
                 summary("Get all the events from a specific store")
-                description("Will give you all the info about an event whatever its status")
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
+                description("Retrieve the lists of events for a given store")
+
+                parameters(
+                    Parameter(
+                        name = "storeId",
+                        required = true,
+                        schema = TypeDefinition.INT,
+                        `in` = Parameter.Location.path
                     )
                 )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<EventHolderFull>()
@@ -195,12 +192,9 @@ fun Route.routeRPH(environment: Environment) {
             get = GetInfo.builder {
                 summary("Get all the events where a specific user belongs")
                 description("Will give you all the info about an event whatever its status")
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<EventHolderFull>()
@@ -227,12 +221,9 @@ fun Route.routeRPH(environment: Environment) {
             get = GetInfo.builder {
                 summary("Retrieve the information about an event")
                 description("Will give you all the info about an event whatever its status")
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<EventHolderFull>()
@@ -259,12 +250,9 @@ fun Route.routeRPH(environment: Environment) {
             get = GetInfo.builder {
                 summary("Retrieve the list of events")
                 description("Will give you all the events from the platform")
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
-                    )
-                )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<List<Event>>()
@@ -285,12 +273,18 @@ fun Route.routeRPH(environment: Environment) {
             get = GetInfo.builder {
                 summary("Retrieve the information about an event")
                 description("Will give you all the info about an event whatever its status")
-                externalDocumentation(
-                    ExternalDocumentation(
-                        URI(environment.urlDocumentation),
-                        "Get help on Discord"
+
+                parameters(
+                    Parameter(
+                        name = "eventId",
+                        required = true,
+                        schema = TypeDefinition.INT,
+                        `in` = Parameter.Location.path
                     )
                 )
+
+                discord(environment)
+
                 response {
                     responseCode(HttpStatusCode.OK)
                     responseType<EventExtended>()
