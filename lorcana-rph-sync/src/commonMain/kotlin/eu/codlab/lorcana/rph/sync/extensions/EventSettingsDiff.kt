@@ -14,7 +14,8 @@ fun EventSettings.toSync(original: eu.codlab.lorcana.rph.sync.event.EventSetting
         maximumNumberOfGameWinsPerMatch = maximumNumberOfGameWinsPerMatch,
         maximumNumberOfDrawsPerMatch = maximumNumberOfDrawsPerMatch,
         checkinMethodsCommaSeparated = checkinMethods.joinToString(","),
-        stripePriceId = stripePriceId
+        stripePriceId = stripePriceId,
+        maximumNumberOfPlayersInMatch = maximumNumberOfPlayersInMatch
     )
 
 fun eu.codlab.lorcana.rph.sync.event.EventSettings.isEquals(other: EventSettings): Boolean {
@@ -29,6 +30,7 @@ fun eu.codlab.lorcana.rph.sync.event.EventSettings.isEquals(other: EventSettings
     if (maximumNumberOfDrawsPerMatch != other.maximumNumberOfDrawsPerMatch) return false
     if (checkinMethodsCommaSeparated != other.checkinMethods.joinToString(",")) return false
     if (stripePriceId != other.stripePriceId) return false
+    if (maximumNumberOfPlayersInMatch != other.maximumNumberOfPlayersInMatch) return false
 
     return true
 }

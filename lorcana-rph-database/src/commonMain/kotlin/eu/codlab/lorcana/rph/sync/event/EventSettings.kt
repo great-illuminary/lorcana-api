@@ -19,7 +19,8 @@ data class EventSettings(
     val maximumNumberOfGameWinsPerMatch: Int,
     val maximumNumberOfDrawsPerMatch: Int? = null,
     val checkinMethodsCommaSeparated: String,
-    val stripePriceId: String?
+    val stripePriceId: String?,
+    val maximumNumberOfPlayersInMatch: Int?
 ) : ModelId<Long> {
     override fun modelId() = id
 }

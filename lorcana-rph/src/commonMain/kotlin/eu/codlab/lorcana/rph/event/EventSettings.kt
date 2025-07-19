@@ -25,5 +25,7 @@ data class EventSettings(
     @SerialName("checkin_methods")
     val checkinMethods: List<String> = emptyList(),
     @SerialName("stripe_price_id")
-    val stripePriceId: String?
+    val stripePriceId: String?,
+    @SerialName("maximum_number_of_players_in_match")
+    val maximumNumberOfPlayersInMatch: Int? = null
 )
