@@ -46,8 +46,6 @@ internal class NuxtExtractor(fromString: String) {
 
             val data: ExpectedArgumentIndexesInfo =
                 json.decodeFromString(originalMappedArguments[indexForDeckData])
-            println("having arguments -> and cards are normally at ${data.cards}")
-            println(originalMappedArguments)
 
             // manage an edge case where the index were shift by 1 -> since it would introduce more issues
             //   just bypass this

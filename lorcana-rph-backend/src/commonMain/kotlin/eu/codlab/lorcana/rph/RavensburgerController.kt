@@ -2,9 +2,11 @@ package eu.codlab.lorcana.rph
 
 import eu.codlab.lorcana.rph.sync.Sync
 
-class RavensburgerController {
+class RavensburgerController(
+    onError: (Throwable) -> Unit
+) {
     private val loader = LoadRPHCall()
-    private val synchronizer = Sync()
+    private val synchronizer = Sync(onError)
 
     fun event(id: Long): EventHolderFull {
         val event = synchronizer.eventAccess.getFromId(id)!!
@@ -33,7 +35,7 @@ class RavensburgerController {
                     )
                 },
             gameplayFormat = synchronizer.gameplayFormatAccess.getFromId(event.gameplayFormatId),
-            store = event.storeId?.let { synchronizer.storeAccess.getFromId(it) }
+            store = event.storeId?.let { synchronizer.storeAccess.getFromId(it)?.toStoreHolder() }
         )
     }
 

@@ -16,7 +16,9 @@ import korlibs.time.DateTime
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.minutes
 
-class Sync {
+class Sync(
+    private val onError: (Throwable) -> Unit
+) {
     private val loader = LoadRPHCall()
 
     private val settings = Settings()
@@ -67,20 +69,26 @@ class Sync {
 
         while (true) {
             println("looping the events...")
-            loop()
+            tryCatch { loop() }
 
             delay(10.minutes)
         }
     }
 
     private suspend fun loop() {
-        checkUsersToFix()
+        tryCatch {
+            checkUsersToFix()
+        }
 
-        syncStores()
-        fastSyncStore()
+        tryCatch {
+            syncStores()
+            fastSyncStore()
+        }
 
-        syncEvents()
-        fastSyncEvent()
+        tryCatch {
+            syncEvents()
+            fastSyncEvent()
+        }
 
         val list = eventAccess.getCachedList()
         println("number of events in -/+2days ${list.filter { it.isIn2DaysOrWas2DaysAgo() }.size}")
@@ -98,14 +106,12 @@ class Sync {
 
         eventInThePast.forEach {
             println("need synchronization for ${it.id}")
-            val fromBackend = loader.event(it.id)
-            try {
-                checkEvent(fromBackend)
-            } catch(err: Throwable) {
-                // TODO manage 404 in a new error
-                // {"code":"RESP002","detail":"The requested URL page returned a 404 HTTP Status Code. Please make sure this URL exists and retry your request.","instance":"/v1","status":404,"title":"Page not found (RESP002)","type":"https://docs.zenrows.com/api-error-codes#RESP002"}
-                // Exception in thread "main" java.lang.IllegalStateException: Couldn't load https://api.ravensburgerplay.com/api/v2/events/163408/
+            tryCatch {
+                checkEvent(loader.event(it.id))
             }
+            // TODO manage 404 in a new error
+            // {"code":"RESP002","detail":"The requested URL page returned a 404 HTTP Status Code. Please make sure this URL exists and retry your request.","instance":"/v1","status":404,"title":"Page not found (RESP002)","type":"https://docs.zenrows.com/api-error-codes#RESP002"}
+            // Exception in thread "main" java.lang.IllegalStateException: Couldn't load https://api.ravensburgerplay.com/api/v2/events/163408/
         }
     }
 
@@ -123,7 +129,11 @@ class Sync {
 
     private suspend fun fastSyncEvent() = fastSync(
         PageType.Events,
-        { checkEvent(it, true) },
+        {
+            tryCatch {
+                checkEvent(it, true)
+            }
+        },
     ) {
         loader.events(
             EventQueryParameters(
@@ -153,13 +163,13 @@ class Sync {
     private suspend fun syncEvents() =
         performSync(
             pageType = PageType.Events,
-            check = { checkEvent(it) },
+            check = { tryCatch { checkEvent(it) } },
         ) { loader.events(EventQueryParameters(page = it)) }
 
     private suspend fun syncStores() =
         performSync(
             pageType = PageType.Stores,
-            check = { checkStore(it) },
+            check = { tryCatch { checkStore(it) } },
         ) { loader.stores(StoresQueryParameters(page = it)) }
 
     private suspend fun <T> performSync(
@@ -210,7 +220,9 @@ class Sync {
 
         val eventFromDatabase = new ?: previous ?: return // throw ?
 
-        val known = userEventStatusAccess.getFromParent(eventFromDatabase.id)
+        val known = userEventStatusAccess.getFromParent(eventFromDatabase.id).filter {
+            it.registrationStatus != "DROPPED"
+        }
 
         // note : this would be problematic for cases which are :
         // user A joins, user B joins, user A leave
@@ -242,6 +254,16 @@ class Sync {
 
                         userWrapper.check(nonNullUser)
                     }
+                }
+
+                // now check the dropped user
+                userEventStatusWrapper.getFromParent(eventFromDatabase.id).filter { fromDb ->
+                    // we want all the participants which are not in the tournament anymore
+                    null == registrations.find { it.id == fromDb.id }
+                }.forEach { fromDb ->
+                    println("changing the status for the participant ${fromDb.userId} to DROPPED")
+                    val dropped = fromDb.copy(registrationStatus = "DROPPED")
+                    userEventStatusWrapper.update(dropped)
                 }
             }
         }
@@ -352,4 +374,10 @@ class Sync {
     }
 
     private suspend fun checkUsersToFix() = userWrapper.fixUsersWithoutProperIdentifier()
+
+    private suspend fun tryCatch(body: suspend () -> Unit) = try {
+        body()
+    } catch (err: Throwable) {
+        onError(err)
+    }
 }

@@ -26,7 +26,7 @@ internal class UserEventStatusWrapper : AbstractWrapper<
 
     override suspend fun insert(copy: UserEventStatus) = stores.insert(copy)
 
-    override suspend fun update(copy: UserEventStatus) = stores.update(copy)
+    public override suspend fun update(copy: UserEventStatus) = stores.update(copy)
 
     override suspend fun toSync(
         fromApi: eu.codlab.lorcana.rph.rounds.standings.UserEventStatus,
