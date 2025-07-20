@@ -3,6 +3,7 @@ package eu.codlab.lorcana.api.backend.routing
 import eu.codlab.lorcana.api.environment.Environment
 import eu.codlab.lorcana.api.environment.discord
 import eu.codlab.lorcana.api.holders.artists.ArtistHolder
+import eu.codlab.lorcana.api.utils.installWithOpenApiCategory
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode
@@ -12,10 +13,13 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 
 fun Route.artists(environment: Environment) {
+    fun Route.overrideInstall(body: NotarizedRoute.Config.() -> Unit) =
+        installWithOpenApiCategory("Artists", body)
+
     val artistsHolder = ArtistHolder(environment.lorcanaLoaded)
 
     route("/cards") {
-        install(NotarizedRoute()) {
+        overrideInstall {
             get = GetInfo.builder {
                 summary("Retrieve the cards for each artists")
                 description("Will return a map of artists to their corresponding stats")
@@ -36,7 +40,7 @@ fun Route.artists(environment: Environment) {
     }
 
     route("/stats") {
-        install(NotarizedRoute()) {
+        overrideInstall {
             get = GetInfo.builder {
                 summary("Retrieve the stats for each artists")
                 description("Will return a map of artists to their corresponding stats")

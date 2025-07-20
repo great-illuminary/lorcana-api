@@ -7,15 +7,12 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
 class TestDocumentation {
-
     @Test
     fun testBackend() {
         runBlocking {

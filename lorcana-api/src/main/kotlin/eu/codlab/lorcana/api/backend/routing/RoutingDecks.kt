@@ -2,27 +2,30 @@ package eu.codlab.lorcana.api.backend.routing
 
 import eu.codlab.lorcana.api.environment.Environment
 import eu.codlab.lorcana.api.environment.discord
+import eu.codlab.lorcana.api.utils.installWithOpenApiCategory
 import eu.codlab.lorcana.dreamborn.database.MappingDeck
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptorLight
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
-import io.bkbn.kompendium.oas.common.ExternalDocumentation
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.RoutingHandler
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
-import java.net.URI
 
+@Suppress("LongMethod")
 fun Route.decks(environment: Environment) {
+    fun Route.overrideInstall(body: NotarizedRoute.Config.() -> Unit) =
+        installWithOpenApiCategory("Decks", body)
+
     fun Route.routeDecks(
         path: String,
         summary: String,
         description: String,
         body: RoutingHandler
     ) = route(path) {
-        install(NotarizedRoute()) {
+        overrideInstall {
             get = GetInfo.builder {
                 summary(summary)
                 description(description)
@@ -95,14 +98,14 @@ fun Route.decks(environment: Environment) {
                         url = ""
                     )
                 )
-            } catch (err: Throwable) {
+            } catch (_: Throwable) {
                 call.respond(HttpStatusCode.NotFound)
             }
         }
     }
 
     route("/deck/{deck}") {
-        install(NotarizedRoute()) {
+        overrideInstall {
             get = GetInfo.builder {
                 summary("Retrieve the actual full deck from a given id")
                 description("Will give you all data for a given deck")
