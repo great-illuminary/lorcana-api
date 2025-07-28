@@ -2,7 +2,7 @@ plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.kotlin.serialization)
     alias(libs.plugins.room)
-    alias(libs.plugins.ksp)
+    alias(additionals.plugins.ksp)
     id("jvmCompat")
 }
 
@@ -22,7 +22,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 api(kotlin("test"))
-                api(libs.kotlinx.coroutines.test)
+                api(additionals.kotlinx.coroutines.test)
             }
         }
     }

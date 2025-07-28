@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-ext.GRADLE_EXTENDED_VERSION_USED = "01403596471938dbeb1dd653f612407104b7393c"
+ext.GRADLE_EXTENDED_VERSION_USED = "acdd6d07d98db1e3f0fcbd96e31067ab69788d29"
 
 apply from: "https://raw.githubusercontent.com/the-inkwell/gradle-tools/${ext.GRADLE_EXTENDED_VERSION_USED}/extended.gradle"
 
@@ -27,7 +27,6 @@ dependencyResolutionManagement {
 includeBuild "gradle/extended/${ext.GRADLE_EXTENDED_VERSION_USED}/kt-plugins"
 include(':lorcana-dreamborn-config')
 include(':lorcana-dreamborn')
-include(':lorcana-rph')
 include(':lorcana-rph-database')
 include(':lorcana-rph-sync')
 include(':lorcana-rph-backend')

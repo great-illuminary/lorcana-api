@@ -2,7 +2,7 @@ plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.kotlin.serialization)
     alias(libs.plugins.room)
-    alias(libs.plugins.ksp)
+    alias(additionals.plugins.ksp)
     id("jvmCompat")
 }
 
@@ -12,7 +12,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":lorcana-rph"))
+                implementation(libs.ravensburger.play.hub)
+                api(additionals.multiplatform.file.access)
                 api(project(":lorcana-rph-database"))
             }
         }
@@ -20,7 +21,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 api(kotlin("test"))
-                api(libs.kotlinx.coroutines.test)
+                api(additionals.kotlinx.coroutines.test)
             }
         }
     }

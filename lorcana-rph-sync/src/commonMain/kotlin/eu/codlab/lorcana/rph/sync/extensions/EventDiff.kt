@@ -1,17 +1,22 @@
 package eu.codlab.lorcana.rph.sync.extensions
 
 import eu.codlab.lorcana.rph.event.Event
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
+@Suppress("LongMethod")
 fun Event.toSyncEvent(
     cached: eu.codlab.lorcana.rph.sync.event.Event?
 ) = eu.codlab.lorcana.rph.sync.event.Event(
     id = id,
     fullHeaderImageUrl = fullHeaderImageUrl,
     startDatetimeISO = startDatetimeISO,
-    startDatetime = startDateTime?.unixMillisLong,
+    startDatetime = startDateTime?.toEpochMilliseconds(),
     endDatetimeISO = endDatetime,
     day2StartDatetimeISO = day2StartDatetimeISO,
-    day2StartDatetime = day2StartDateTime?.unixMillisLong,
+    day2StartDatetime = day2StartDateTime?.toEpochMilliseconds(),
     timerEndDatetime = timerEndDatetime,
     timerPausedAtDatetime = timerPausedAtDatetime,
     timerIsRunning = timerIsRunning,
@@ -65,11 +70,12 @@ fun Event.toSyncEvent(
     phaseTemplateGroupId = phaseTemplateGroupId,
     // foreign keys
     settingsId = settings.id,
-    storeId = store.id(),
+    storeId = store.id,
     gameplayFormatId = gameplayFormat.id,
     updatedPostEvent = cached?.updatedPostEvent ?: false
 )
 
+@Suppress("LongMethod", "ComplexMethod")
 fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
     if (id != other.id) return false
     if (timerIsRunning != other.timerIsRunning) return false
@@ -99,15 +105,15 @@ fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
     if (game != other.game) return false
     if (bannerImage != other.bannerImage) return false
     if (settingsId != other.settings.id) return false
-    if (storeId != other.store.id()) return false
+    if (storeId != other.store.id) return false
     if (gameplayFormatId != other.gameplayFormat.id) return false
     // TODO update the images one day ?
     //  if (fullHeaderImageUrl != other.fullHeaderImageUrl) return false
     if (startDatetimeISO != other.startDatetimeISO) return false
-    //if (startDatetime != other.startDateTime?.unixMillisLong) return false
+    // if (startDatetime != other.startDateTime?.unixMillisLong) return false
     if (endDatetimeISO != other.endDatetime) return false
     if (day2StartDatetimeISO != other.day2StartDatetimeISO) return false
-    //if (day2StartDatetime != other.day2StartDateTime?.unixMillisLong) return false
+    // if (day2StartDatetime != other.day2StartDateTime?.unixMillisLong) return false
     if (timerEndDatetime != other.timerEndDatetime) return false
     if (timerPausedAtDatetime != other.timerPausedAtDatetime) return false
     if (description != other.description) return false

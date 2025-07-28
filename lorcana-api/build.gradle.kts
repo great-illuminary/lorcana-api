@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(additionals.plugins.kotlin.jvm)
+    alias(additionals.plugins.kotlin.serialization)
     id("jvmCompat")
 }
 
@@ -17,9 +17,9 @@ application {
 }
 
 dependencies {
-    api(libs.kotlinx.coroutines)
-    api(libs.kotlinx.coroutines.core.jvm)
-    api(libs.kotlinx.coroutines.jvm)
+    api(additionals.kotlinx.coroutines)
+    api(additionals.kotlinx.coroutines.core)
+    api(additionals.kotlinx.coroutines.jvm)
     api(libs.ktor.server.core)
     api(libs.ktor.server.netty)
     api(libs.ktor.server.contentnegociation)
@@ -36,14 +36,14 @@ dependencies {
 
     api(additionals.kotlinx.serialization.json)
 
-    api(libs.file.access)
+    api(additionals.multiplatform.file.access)
 
     api(libs.sentry)
 
     testApi(libs.ktor.server.tests.jvm)
     testApi(kotlin("test"))
 
-    api(libs.kotlinx.coroutines.jvm)
+    api(additionals.kotlinx.coroutines.jvm)
 
     api(additionals.multiplatform.platform)
 

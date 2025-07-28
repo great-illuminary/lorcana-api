@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(additionals.plugins.kotlin.jvm)
+    alias(additionals.plugins.kotlin.serialization)
     alias(libs.plugins.sqldelight)
     id("jvmCompat")
 }
@@ -22,23 +22,23 @@ repositories {
 }
 
 dependencies {
-    api(libs.kotlinx.coroutines)
-    api(libs.kotlinx.coroutines.core.jvm)
-    api(libs.kotlinx.coroutines.jvm)
+    api(additionals.kotlinx.coroutines)
+    api(additionals.kotlinx.coroutines.core)
+    api(additionals.kotlinx.coroutines.jvm)
 
     api(libs.apache.httpclient)
     api(libs.apache.httpclient.fluent)
 
     api(additionals.kotlinx.serialization.json)
 
-    api(libs.file.access)
+    api(additionals.multiplatform.file.access)
 
     api(libs.sentry)
 
     testApi(kotlin("test"))
 
-    api(libs.kotlinx.coroutines.jvm)
-    api(libs.http.client)
+    api(additionals.kotlinx.coroutines.jvm)
+    api(additionals.multiplatform.http.client)
 
     api(libs.sqldelight.runtime)
     api(libs.sqldelight.driver.sqlite)

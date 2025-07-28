@@ -2,7 +2,7 @@ plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.kotlin.serialization)
     alias(libs.plugins.room)
-    alias(libs.plugins.ksp)
+    alias(additionals.plugins.ksp)
     id("jvmCompat")
 }
 
@@ -14,7 +14,7 @@ kotlin {
             dependencies {
                 api(additionals.kotlinx.serialization.json)
 
-                api(project(":lorcana-rph"))
+                api(libs.ravensburger.play.hub)
                 implementation(project(":lorcana-rph-sync"))
             }
         }
@@ -22,7 +22,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 api(kotlin("test"))
-                api(libs.kotlinx.coroutines.test)
+                api(additionals.kotlinx.coroutines.test)
             }
         }
     }

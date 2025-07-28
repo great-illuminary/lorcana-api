@@ -5,6 +5,39 @@ import eu.codlab.lorcana.rph.sync.Sync
 class RavensburgerController(
     onError: (Throwable) -> Unit
 ) {
+    /**
+     * Access the Play Hub's API directly.
+     *
+     * Notice : if issues arise in the future with the frontend, it will be possible
+     * to load those through the proxy as a fallback via
+     *
+     * // inside the controller
+     * val clientWithProxy = createClient(
+     *   Configuration(
+     *     json = json,
+     *     enableLogs = true,
+     *     socketTimeoutMillis = 30000,
+     *     connectTimeoutMillis = 30000,
+     *     requestTimeoutMillis = 30000,
+     *     proxyConfiguration = ProxyConfiguration(
+     *       proxyConfig = ProxyBuilder.http(Url("http://api.zenrows.com:8001")),
+     *       proxyAuthentication = {
+     *         Config.zenrows to "js_render=true&premium_proxy=true&proxy_country=fr"
+     *       },
+     *       trustCertificatesOnAndroidJvm = true
+     *     ),
+     *   )
+     * ) { }
+     *
+     * private val loader = LoadRPHCall { url ->
+     *   clientWithProxy.get(url) {
+     *     val clientInfo =
+     *       "${Config.zenrows}:js_render=true&premium_proxy=true&proxy_country=fr"
+     *     val basicAuth = Base64.getEncoder().encodeToString(clientInfo.toByteArray())
+     *     header(HttpHeaders.ProxyAuthorization, "Basic $basicAuth")
+     *   }
+     * }
+     */
     private val loader = LoadRPHCall()
     private val synchronizer = Sync(onError)
 
