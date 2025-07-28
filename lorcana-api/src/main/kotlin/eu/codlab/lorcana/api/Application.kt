@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.time.Duration.Companion.minutes
 
 fun main() {
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
     runBlocking {
         val environment = Environment.initialize()
 
@@ -27,7 +28,7 @@ fun main() {
         try {
             backend.start()
         } catch (err: Throwable) {
-            // todo: manage sentry call here
+            // manage sentry call here
         }
     }
 }

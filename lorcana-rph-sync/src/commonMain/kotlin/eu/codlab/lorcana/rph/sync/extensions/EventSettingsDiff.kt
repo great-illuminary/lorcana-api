@@ -2,7 +2,7 @@ package eu.codlab.lorcana.rph.sync.extensions
 
 import eu.codlab.lorcana.rph.event.EventSettings
 
-fun EventSettings.toSync(original: eu.codlab.lorcana.rph.sync.event.EventSettings? = null) =
+fun EventSettings.toSync() =
     eu.codlab.lorcana.rph.sync.event.EventSettings(
         id = id,
         decklistStatus = decklistStatus,

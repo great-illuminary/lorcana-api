@@ -2,19 +2,18 @@ import java.math.BigInteger
 import kotlin.test.Test
 
 class Test {
-
     val alpha = "abcdefghijklmnopqrstuvwxyz"
     val num = "0123456789"
 
     val values = num + alpha + alpha.uppercase()
 
     @Test
-    fun test() {
+    fun testSomeFactorials() {
         val A = BigInteger("47026247687942121848144207491837523525")
         val c = BigInteger("15750249268501108917")
-        val M = BigInteger.valueOf(2).pow(128) //120
-        val treshold = BigInteger.valueOf(2).pow(120) //120
-        var max = BigInteger.valueOf(2).pow(128) //128
+        val M = BigInteger.valueOf(2).pow(128) // 120
+        val treshold = BigInteger.valueOf(2).pow(120) // 120
+        var max = BigInteger.valueOf(2).pow(128) // 128
 
         var currentValue = (c).mod(M)
         println(currentValue.toDreamborn())

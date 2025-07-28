@@ -44,7 +44,8 @@ internal class EventWrapper :
     ) = cached.isEquals(fromApi)
 
     suspend fun setInternalDataPostTreatment(
-        eventFromDatabase: Event, updatedPostEvent: Boolean,
+        eventFromDatabase: Event,
+        updatedPostEvent: Boolean,
         refreshedAtMilliseconds: Long
     ) {
         val copy = eventFromDatabase.copy(

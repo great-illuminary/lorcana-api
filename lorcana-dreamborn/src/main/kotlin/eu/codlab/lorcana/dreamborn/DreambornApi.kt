@@ -19,10 +19,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.Url
 import io.ktor.http.isSuccess
 import io.ktor.http.userAgent
-import java.security.cert.X509Certificate
 import java.util.Base64
-import javax.net.ssl.SSLContext
-import javax.net.ssl.X509TrustManager
 
 internal class DreambornApi {
     private val client = createClient(
@@ -32,6 +29,7 @@ internal class DreambornApi {
             requestTimeoutMillis = 30000
         )
     ) { }
+
     private val clientWithProxy = createClient(
         Configuration(
             socketTimeoutMillis = 30000,
@@ -75,8 +73,8 @@ internal class DreambornApi {
             return client.get("$url/decks/?$suffix&archetype") {
                 configureHeaders()
             }.body()
-        } catch (err: Throwable) {
-            //
+        } catch (_: Throwable) {
+            // nothing
         }
 
         val dreambornUrlPart = "$url/decks/?$suffix&archetype"
@@ -84,54 +82,24 @@ internal class DreambornApi {
             ?: throw IllegalStateException("Couldn't load info")
     }
 
-    /*
-    private suspend inline fun getProxied(url: String) {
-        ignoreCertWarning()
-
-        val uri =
-            URI("http://${Config.zenrows}:js_render=true&premium_proxy=true&proxy_country=fr@api.zenrows.com:8001")
-
-        val userInfo = uri.userInfo.split(":")
-        val user = userInfo[0]
-        val pass = userInfo[1]
-
-        // org.apache.hc.client5.http.impl.classic.ProtocolExec
-        println("user info are ${uri.userInfo}")
-        println("set user $user")
-        println("set pass $pass")
-        val basicAuth = String(Base64.getEncoder().encode(uri.userInfo.toByteArray()))
-        println("basicAuth -> $basicAuth")
-        val response: String = Executor.newInstance()
-            .auth(HttpHost(uri.host, uri.port), user, pass.toCharArray())
-            .authPreemptiveProxy(HttpHost(uri.host, uri.port))
-            .execute(
-                Request
-                    .get(url)
-                    .addHeader("Proxy-Authorization", "Basic $basicAuth")
-                    .viaProxy(HttpHost.create(uri))
-            ).returnContent().asString()
-
-        //println("obtained proxied response")
-        //println(response)
-    }
-     */
-
-    private suspend inline fun <reified T> get(url: String): T? {
-        try {
-            val request = clientWithProxy.get(url) {
-                val clientInfo =
-                    "${Config.zenrows}:js_render=true&premium_proxy=true&proxy_country=fr"
-                val basicAuth = Base64.getEncoder().encodeToString(clientInfo.toByteArray())
-                header(HttpHeaders.ProxyAuthorization, "Basic $basicAuth")
-            }
-            if (!request.status.isSuccess()) return null
-            return request.body()
-        } catch (err: HttpRequestTimeoutException) {
-            // nothing
-        } catch (err: Throwable) {
-            // nothing
+    private suspend inline fun <reified T> get(url: String): T? = try {
+        val request = clientWithProxy.get(url) {
+            val clientInfo =
+                "${Config.zenrows}:js_render=true&premium_proxy=true&proxy_country=fr"
+            val basicAuth = Base64.getEncoder().encodeToString(clientInfo.toByteArray())
+            header(HttpHeaders.ProxyAuthorization, "Basic $basicAuth")
         }
-        return null
+        if (request.status.isSuccess()) {
+            request.body()
+        } else {
+            null
+        }
+    } catch (_: HttpRequestTimeoutException) {
+        // nothing
+        null
+    } catch (_: Throwable) {
+        // nothing
+        null
     }
 
     suspend fun deckLight(deck: String): DeckDescriptorLight? {
@@ -139,7 +107,7 @@ internal class DreambornApi {
             client.get("$url/_tts/decks/$deck") { userAgent("Tabletop Simulator") }
                 .let { if (it.status.isSuccess()) it else throw IllegalStateException("Couldn't load") }
                 .body<APIDeckDescriptorLight?>()?.toPublic()
-        } catch (err: Throwable) {
+        } catch (_: Throwable) {
             // nothing
             null
         }
@@ -150,11 +118,12 @@ internal class DreambornApi {
             return client.get("$url/decks/$deck?currency=$currency")
                 .let { if (it.status.isSuccess()) it else throw IllegalStateException("Couldn't load") }
                 .body()
-        } catch (err: Throwable) {
+        } catch (_: Throwable) {
             // nothing
         }
 
-        try {
+        @Suppress("TooGenericExceptionCaught")
+        return try {
             val dreambornUrlPart = "https://dreamborn.ink/decks/$deck"
             val source: String = get<String>(dreambornUrlPart)
                 ?: throw IllegalStateException("Couldn't load info")
@@ -164,9 +133,9 @@ internal class DreambornApi {
             val (nuxtData) = regexp.find(source)!!.destructured
             val extractor = NuxtExtractor(nuxtData)
 
-            return extractor.extractDeck()
-        } catch (err: Throwable) {
-            return null
+            extractor.extractDeck()
+        } catch (_: Throwable) {
+            null
         }
     }
 
@@ -192,38 +161,5 @@ internal class DreambornApi {
         }
 
         header("Sec-Fetch-Dest", "empty")
-    }
-
-    private var installed = false
-
-    private fun ignoreCertWarning() {
-        if (installed) return
-        installed = true
-        var ctx: SSLContext? = null
-        val trustAllCerts = arrayOf<X509TrustManager>(object : X509TrustManager {
-            override fun getAcceptedIssuers(): Array<X509Certificate> {
-                return emptyArray()
-            }
-
-            override fun checkClientTrusted(
-                certs: Array<X509Certificate?>?,
-                authType: String?
-            ) {
-            }
-
-            override fun checkServerTrusted(
-                certs: Array<X509Certificate?>?,
-                authType: String?
-            ) {
-            }
-        })
-
-        try {
-            ctx = SSLContext.getInstance("SSL")
-            ctx.init(null, trustAllCerts, null)
-            SSLContext.setDefault(ctx)
-        } catch (_: Exception) {
-            // nothing
-        }
     }
 }

@@ -11,13 +11,15 @@ interface IUserWrapper : CacheAccess<User, Long, Unit> {
     suspend fun matching(matching: String): List<User>
 }
 
-internal class UserWrapper : AbstractWrapper<
-        User,
-        Long,
-        EventMatchPlayer,
-        UserEventStatus,
-        Unit
-        >(), IUserWrapper {
+internal class UserWrapper :
+    AbstractWrapper<
+            User,
+            Long,
+            EventMatchPlayer,
+            UserEventStatus,
+            Unit
+            >(),
+    IUserWrapper {
     private val stores = SyncDatabase.users
 
     override fun getParentKey(model: User) {

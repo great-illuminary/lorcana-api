@@ -20,6 +20,7 @@ internal class UserControllerImpl(database: AppDatabase) : UserController {
     private val dao = database.getUserDao()
 
     override suspend fun getAll() = dao.getAll()
+
     override suspend fun getAll(matching: String) = dao.getAll("%$matching%")
 
     override suspend fun getAllToFix() = dao.getAllToFix()

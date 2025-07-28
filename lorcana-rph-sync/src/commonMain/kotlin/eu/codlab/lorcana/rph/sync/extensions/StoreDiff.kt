@@ -26,6 +26,7 @@ fun StoreFull.toSyncStore(
     uuid = foreignParent?.id ?: original?.uuid ?: ""
 )
 
+@Suppress("ComplexMethod")
 fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(
     other: StoreFull,
     foreignParent: StoreFullRestLine? = null

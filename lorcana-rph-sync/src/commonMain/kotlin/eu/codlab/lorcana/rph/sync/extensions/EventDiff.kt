@@ -1,8 +1,6 @@
 package eu.codlab.lorcana.rph.sync.extensions
 
 import eu.codlab.lorcana.rph.event.Event
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)

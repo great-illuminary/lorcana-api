@@ -8,6 +8,8 @@ import korlibs.time.DateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 @Entity(
     indices = [
@@ -96,19 +98,13 @@ data class Event(
     override fun modelId() = id
 
     companion object {
-        private val day1 = 1000L * 60 * 60 * 24
-
-        // event in the past
-        // 2 weeks = 1000ms * 60sec * 60min * 64hour * 15day
-        private val week2 = day1 * 15
-
-        private val week1 = day1 * 7
+        private val week1 = 7.days.inWholeMilliseconds
     }
 
     fun isIn2DaysOrWas2DaysAgo(): Boolean {
         val deltaStart = DateTime.nowUnixMillisLong() - (startDatetime ?: 0L)
         // the event is in the future or 2 days ago/in 2 days
-        return abs(deltaStart) < day1 * 2
+        return abs(deltaStart) < 2.days.inWholeMilliseconds
     }
 
     fun isInTheFutureAfter2Days(): Boolean {
@@ -121,7 +117,7 @@ data class Event(
         if (isIn2DaysOrWas2DaysAgo() || isInTheFutureAfter2Days()) return false
         val diffLastCheck = DateTime.nowUnixMillisLong() - (startDatetime ?: 0)
 
-        return diffLastCheck < day1 * 7 * numberWeeks && diffLastCheck > day1 * 7 * (numberWeeks - 1)
+        return diffLastCheck < week1 * numberWeeks && diffLastCheck > week1 * (numberWeeks - 1)
     }
 
     @Suppress("ReturnCount")
@@ -144,17 +140,17 @@ data class Event(
 
         if (fromNthLastWeeks(1)) {
             // check that is was 3 days ago we made a check
-            return diffLastCheck > day1 * 3
+            return diffLastCheck > 3.days.inWholeMilliseconds
         }
 
         if (isIn2DaysOrWas2DaysAgo()) {
             // check it's been 20minutes
-            return diffLastCheck > 1000L * 60 * 20
+            return diffLastCheck > 20.minutes.inWholeMilliseconds
         }
 
         if (isInTheFutureAfter2Days()) {
             // check it's been 1 day
-            return diffLastCheck > day1
+            return diffLastCheck > 1.days.inWholeMilliseconds
         }
 
         return false

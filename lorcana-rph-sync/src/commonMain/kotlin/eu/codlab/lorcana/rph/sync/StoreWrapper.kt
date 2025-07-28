@@ -8,11 +8,13 @@ import eu.codlab.lorcana.rph.sync.extensions.toSyncStore
 import eu.codlab.lorcana.rph.sync.store.Store
 
 internal class StoreWrapper :
-    AbstractWrapper<Store,
+    AbstractWrapper<
+            Store,
             Long,
             StoreFull,
             StoreFullRestLine,
-            Unit>() { // parent key is not known unfortunately
+            Unit
+            >() { // parent key is not known unfortunately
     private val stores = SyncDatabase.stores
 
     override fun getParentKey(model: Store) {
@@ -31,7 +33,7 @@ internal class StoreWrapper :
     override suspend fun update(copy: Store) = stores.update(copy)
 
     override suspend fun toSync(
-        fromApi:StoreFull,
+        fromApi: StoreFull,
         cached: Store?,
         foreignParent: StoreFullRestLine?
     ) = fromApi.toSyncStore(cached, foreignParent)

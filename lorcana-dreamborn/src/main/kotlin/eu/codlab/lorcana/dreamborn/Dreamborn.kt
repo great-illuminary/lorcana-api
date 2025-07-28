@@ -5,6 +5,7 @@ import eu.codlab.lorcana.dreamborn.database.LocalDatabase
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptor
 import eu.codlab.lorcana.dreamborn.decks.DeckDescriptorLight
 import eu.codlab.lorcana.dreamborn.utils.code
+import eu.codlab.lorcana.dreamborn.utils.trySentry
 import korlibs.time.DateFormat
 import korlibs.time.DateTime
 import kotlinx.coroutines.delay
@@ -69,11 +70,9 @@ class Dreamborn {
             .filter { it.tracking }
 
         creators.forEach { creator ->
-            try {
+            trySentry {
                 api.creator(creator.uuid)
                     .decks.forEach { checkRemoteDeck(it, false) }
-            } catch (err: Throwable) {
-                err.printStackTrace()
             }
         }
 
@@ -118,10 +117,9 @@ class Dreamborn {
                 lastTrendingAt = if (fromTrending) lastChecked else null,
                 isPrivate = isPrivate
             )
-            return
+        } else {
+            checkUpdateFromDeck(fromDatabase, actualDeck, lastChecked, fromTrending)
         }
-
-        checkUpdateFromDeck(fromDatabase, actualDeck, lastChecked, fromTrending)
     }
 
     private suspend fun checkUpdateFromDeck(

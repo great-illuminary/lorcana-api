@@ -34,6 +34,7 @@ fun EventMatch.toSync() = eu.codlab.lorcana.rph.sync.match.EventMatch(
     player2Order = player2Order(),
 )
 
+@Suppress("ComplexMethod")
 fun eu.codlab.lorcana.rph.sync.match.EventMatch.isEquals(other: EventMatch): Boolean {
     if (id != other.id) return false
     if (createdAt != other.createdAt) return false

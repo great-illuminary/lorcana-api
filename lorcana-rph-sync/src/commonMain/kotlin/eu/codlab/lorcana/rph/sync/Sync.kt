@@ -19,6 +19,10 @@ import kotlin.time.Duration.Companion.minutes
 class Sync(
     private val onError: (Throwable) -> Unit
 ) {
+    private val expectedItems = 25
+    private val expectedItemsInFastMode = 250
+    private val expectedPageInFastModeDivider = 10
+
     private val loader = LoadRPHCall()
 
     private val settings = Settings()
@@ -110,8 +114,12 @@ class Sync(
                 checkEvent(loader.event(it.id))
             }
             // TODO manage 404 in a new error
-            // {"code":"RESP002","detail":"The requested URL page returned a 404 HTTP Status Code. Please make sure this URL exists and retry your request.","instance":"/v1","status":404,"title":"Page not found (RESP002)","type":"https://docs.zenrows.com/api-error-codes#RESP002"}
-            // Exception in thread "main" java.lang.IllegalStateException: Couldn't load https://api.ravensburgerplay.com/api/v2/events/163408/
+            // {"code":"RESP002","detail":"The requested URL page returned a 404 HTTP Status Code.
+            //   Please make sure this URL exists and retry your request.","instance":"/v1",
+            //   "status":404,"title":"Page not found (RESP002)",
+            //   "type":"https://docs.zenrows.com/api-error-codes#RESP002"}
+            //   Exception in thread "main" java.lang.IllegalStateException: Couldn't load
+            //   https://api.ravensburgerplay.com/api/v2/events/163408/
         }
     }
 
@@ -122,7 +130,7 @@ class Sync(
         loader.stores(
             StoresQueryParameters(
                 page = it,
-                pageSize = 250
+                pageSize = expectedItemsInFastMode
             )
         )
     }
@@ -138,7 +146,7 @@ class Sync(
         loader.events(
             EventQueryParameters(
                 page = it,
-                pageSize = 250
+                pageSize = expectedItemsInFastMode
             )
         )
     }
@@ -148,14 +156,12 @@ class Sync(
         check: suspend (T) -> Unit,
         getObjects: suspend (Int) -> Page<T>
     ) {
-        (1..(settings.lastPage(pageType) / 10 + 1)).forEach { lastPage ->
+        (1..(settings.lastPage(pageType) / expectedPageInFastModeDivider + 1)).forEach { lastPage ->
             println("now rechecking quickly the page $lastPage")
-            try {
+            tryCatch {
                 val events = getObjects(lastPage)
 
                 events.results.forEach { check(it) }
-            } catch (err: Throwable) {
-                err.printStackTrace()
             }
         }
     }
@@ -164,13 +170,27 @@ class Sync(
         performSync(
             pageType = PageType.Events,
             check = { tryCatch { checkEvent(it) } },
-        ) { loader.events(EventQueryParameters(page = it)) }
+        ) {
+            loader.events(
+                EventQueryParameters(
+                    page = it,
+                    pageSize = expectedItems
+                )
+            )
+        }
 
     private suspend fun syncStores() =
         performSync(
             pageType = PageType.Stores,
             check = { tryCatch { checkStore(it) } },
-        ) { loader.stores(StoresQueryParameters(page = it)) }
+        ) {
+            loader.stores(
+                StoresQueryParameters(
+                    page = it,
+                    pageSize = expectedItems
+                )
+            )
+        }
 
     private suspend fun <T> performSync(
         pageType: PageType,
@@ -203,6 +223,12 @@ class Sync(
         storeWrapper.check(storeFullRestLine.store, storeFullRestLine)
     }
 
+    /**
+     * Perform a check for a given event.
+     *
+     * Note : technical debt here that will need to be managed soon
+     */
+    @Suppress("LongMethod", "NestedBlockDepth", "ComplexMethod")
     private suspend fun checkEvent(
         event: eu.codlab.lorcana.rph.event.Event,
         skipEquals: Boolean = false
@@ -269,7 +295,7 @@ class Sync(
         }
 
         val settings = when (val wrapper = settingsWrapper.check(event.settings)) {
-            is GeneratedModel -> wrapper.new ?: wrapper.previous
+            is GeneratedModel -> wrapper.new
             is PreviousModel -> wrapper.previous
         }
 
@@ -375,6 +401,7 @@ class Sync(
 
     private suspend fun checkUsersToFix() = userWrapper.fixUsersWithoutProperIdentifier()
 
+    @Suppress("TooGenericExceptionCaught")
     private suspend fun tryCatch(body: suspend () -> Unit) = try {
         body()
     } catch (err: Throwable) {

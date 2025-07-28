@@ -3,6 +3,7 @@ package eu.codlab.lorcana.rph.sync
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
+@Suppress("TooManyFunctions")
 internal sealed class AbstractWrapper<
         MODEL : ModelId<TYPE>,
         TYPE,

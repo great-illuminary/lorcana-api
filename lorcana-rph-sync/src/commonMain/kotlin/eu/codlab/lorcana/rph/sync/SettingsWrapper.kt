@@ -25,7 +25,7 @@ internal class SettingsWrapper :
         fromApi: eu.codlab.lorcana.rph.event.EventSettings,
         cached: EventSettings?,
         foreignParent: Unit?
-    ) = fromApi.toSync(cached)
+    ) = fromApi.toSync()
 
     override suspend fun isEquals(
         cached: EventSettings,
