@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.rph.sync
 
 import eu.codlab.lorcana.rph.LoadRPHCall
+import eu.codlab.lorcana.rph.event.Event
 import eu.codlab.lorcana.rph.event.EventQueryParameters
 import eu.codlab.lorcana.rph.registrations.EventRegistrationsQueryParameters
 import eu.codlab.lorcana.rph.rounds.matches.EventMatch
@@ -12,7 +13,10 @@ import eu.codlab.lorcana.rph.store.StoresQueryParameters
 import eu.codlab.lorcana.rph.sync.overrides.UserEventStatusParent
 import eu.codlab.lorcana.rph.sync.phases.TournamentPhase
 import eu.codlab.lorcana.rph.utils.Page
+import korlibs.time.DateFormat
 import korlibs.time.DateTime
+import korlibs.time.days
+import korlibs.time.months
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.minutes
 
@@ -91,7 +95,6 @@ class Sync(
 
         tryCatch {
             syncEvents()
-            fastSyncEvent()
         }
 
         val list = eventAccess.getCachedList()
@@ -135,24 +138,8 @@ class Sync(
         )
     }
 
-    private suspend fun fastSyncEvent() = fastSync(
-        PageType.Events,
-        {
-            tryCatch {
-                checkEvent(it, true)
-            }
-        },
-    ) {
-        loader.events(
-            EventQueryParameters(
-                page = it,
-                pageSize = expectedItemsInFastMode
-            )
-        )
-    }
-
     private suspend fun <T> fastSync(
-        pageType: PageType = PageType.Events,
+        pageType: PageType,
         check: suspend (T) -> Unit,
         getObjects: suspend (Int) -> Page<T>
     ) {
@@ -167,13 +154,14 @@ class Sync(
     }
 
     private suspend fun syncEvents() =
-        performSync(
-            pageType = PageType.Events,
+        performSyncEvents(
             check = { tryCatch { checkEvent(it) } },
-        ) {
+        ) { start, from, page ->
             loader.events(
                 EventQueryParameters(
-                    page = it,
+                    startDateAfter = start.format(DateFormat.FORMAT2),
+                    startDateBefore = from.format(DateFormat.FORMAT2),
+                    page = page,
                     pageSize = expectedItems
                 )
             )
@@ -191,6 +179,65 @@ class Sync(
                 )
             )
         }
+
+    /**
+     * There are actually code duplication from below method
+     *
+     * Note : need to refactor this in single reponsibility objects
+     */
+    private suspend fun <T> performSyncEvents(
+        check: suspend (T) -> Unit,
+        getObjects: suspend (DateTime, DateTime, Int) -> Page<T>,
+    ) {
+        var lastDatePerformed = DateTime.now().minus(7.days) // just in case
+
+        val in6Months = DateTime.now().add(6.months, 0.days)
+
+        do {
+            println(
+                "now performing the synchronization starting at date ${
+                    lastDatePerformed.format(
+                        DateFormat.FORMAT2
+                    )
+                }"
+            )
+
+            val nextDate = lastDatePerformed.add(0.months, 7.days)
+
+            performSyncEventsInInterval(lastDatePerformed, nextDate, check, getObjects)
+
+            lastDatePerformed = nextDate
+        } while (lastDatePerformed < in6Months)
+    }
+
+    /**
+     * There are actually code duplication from below method
+     *
+     * Note : need to refactor this in single reponsibility objects
+     */
+    private suspend fun <T> performSyncEventsInInterval(
+        from: DateTime,
+        to: DateTime,
+        check: suspend (T) -> Unit,
+        getObjects: suspend (DateTime, DateTime, Int) -> Page<T>,
+    ) {
+        var lastPage = 1
+        var synchronizationNeedsToContinue = true
+        do {
+            val events = getObjects(from, to, lastPage)
+
+            // checking the issue with some players
+            events.results.forEach { check(it) }
+
+            if (null == events.next) {
+                println("  synchronization done")
+                // nothing to do now... we finished
+                synchronizationNeedsToContinue = false
+            } else {
+                lastPage++
+            }
+        } while (synchronizationNeedsToContinue)
+    }
 
     private suspend fun <T> performSync(
         pageType: PageType,
@@ -230,7 +277,7 @@ class Sync(
      */
     @Suppress("LongMethod", "NestedBlockDepth", "ComplexMethod")
     private suspend fun checkEvent(
-        event: eu.codlab.lorcana.rph.event.Event,
+        event: Event,
         skipEquals: Boolean = false
     ) {
         val afterCheck = eventWrapper.check(event)

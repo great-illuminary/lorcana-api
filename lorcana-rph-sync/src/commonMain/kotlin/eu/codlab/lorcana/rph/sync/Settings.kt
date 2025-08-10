@@ -21,6 +21,5 @@ class Settings {
 }
 
 enum class PageType(val databaseName: String) {
-    Events("last_page"),
     Stores("last_page_store")
 }

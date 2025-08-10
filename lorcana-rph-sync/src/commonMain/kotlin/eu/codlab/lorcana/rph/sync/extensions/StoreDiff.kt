@@ -9,7 +9,7 @@ fun StoreFull.toSyncStore(
 ) = eu.codlab.lorcana.rph.sync.store.Store(
     id = id,
     name = name,
-    fullAddress = fullAddress,
+    fullAddress = fullAddress ?: "",
     administrativeAreaLevel1Short = original?.administrativeAreaLevel1Short,
     country = country ?: original?.country,
     website = website ?: original?.website,
