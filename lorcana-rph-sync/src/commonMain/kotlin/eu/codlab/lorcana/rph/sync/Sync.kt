@@ -377,7 +377,10 @@ class Sync(
 
                         pairings.forEach { match ->
                             eventMatchWrapper.check(match)
-                            // TODO force recheck the user event status ?
+
+                            match.playerMatchRelationships.forEach {
+                                userEventStatusWrapper.check(it.userEventStatus)
+                            }
                         }
                     }
 
