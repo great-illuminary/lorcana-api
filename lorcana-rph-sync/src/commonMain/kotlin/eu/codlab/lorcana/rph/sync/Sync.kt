@@ -297,53 +297,54 @@ class Sync(
             it.registrationStatus != "DROPPED"
         }
 
-        // note : this would be problematic for cases which are :
-        // user A joins, user B joins, user A leave
-        // resulting in not seeing that it changed but for now, we'll skip this completely
-        if (null != new) {
-            // TODO use the registered user list instead
-
-            val hasNewUsers = new.registeredUserCount != previous?.registeredUserCount ||
-                    new.registeredUserCount != known.size
-
-            if (hasNewUsers) {
-                val registrations: List<UserEventStatus> = loader.eventRegistrations(
-                    new.id,
-                    EventRegistrationsQueryParameters(pageSize = 40000)
-                ).results
-
-                println("  -> differences in the users and registrations is #${registrations.size}")
-
-                registrations.forEach { registration ->
-                    println("registration for ${registration.user}")
-                    registration.user?.let { nonNullUser ->
-                        userEventStatusWrapper.check(
-                            registration,
-                            UserEventStatusParent(
-                                eventId = eventFromDatabase.id,
-                                playerId = nonNullUser.id
-                            )
-                        )
-
-                        userWrapper.check(nonNullUser)
-                    }
-                }
-
-                // now check the dropped user
-                userEventStatusWrapper.getFromParent(eventFromDatabase.id).filter { fromDb ->
-                    // we want all the participants which are not in the tournament anymore
-                    null == registrations.find { it.id == fromDb.id }
-                }.forEach { fromDb ->
-                    println("changing the status for the participant ${fromDb.userId} to DROPPED")
-                    val dropped = fromDb.copy(registrationStatus = "DROPPED")
-                    userEventStatusWrapper.update(dropped)
-                }
-            }
-        }
-
         val settings = when (val wrapper = settingsWrapper.check(event.settings)) {
             is GeneratedModel -> wrapper.new
             is PreviousModel -> wrapper.previous
+        }
+
+        // note : this would be problematic for cases which are :
+        // user A joins, user B joins, user A leave
+        // resulting in not seeing that it changed but for now, we'll skip this completely
+        val shouldCheckUsersStatus = if (null != new) {
+            // TODO use the registered user list instead
+            new.registeredUserCount != previous?.registeredUserCount ||
+                    new.registeredUserCount != known.size
+        } else {
+            eventFromDatabase.shouldCommitFinalUpdate(settings)
+        }
+
+        if (shouldCheckUsersStatus) {
+            val registrations: List<UserEventStatus> = loader.eventRegistrations(
+                id = eventFromDatabase.id,
+                parameters = EventRegistrationsQueryParameters(pageSize = 40000)
+            ).results
+
+            println("  -> differences in the users and registrations is #${registrations.size}")
+
+            registrations.forEach { registration ->
+                println("registration for ${registration.user}")
+                registration.user?.let { nonNullUser ->
+                    userEventStatusWrapper.check(
+                        fromApi = registration,
+                        foreignParent = UserEventStatusParent(
+                            eventId = eventFromDatabase.id,
+                            playerId = nonNullUser.id
+                        )
+                    )
+
+                    userWrapper.check(nonNullUser)
+                }
+            }
+
+            // now check the dropped user
+            userEventStatusWrapper.getFromParent(eventFromDatabase.id).filter { fromDb ->
+                // we want all the participants which are not in the tournament anymore
+                null == registrations.find { it.id == fromDb.id }
+            }.forEach { fromDb ->
+                println("changing the status for the participant ${fromDb.userId} to DROPPED")
+                val dropped = fromDb.copy(registrationStatus = "DROPPED")
+                userEventStatusWrapper.update(dropped)
+            }
         }
 
         // TODO check the settings.event_lifecycle_status
@@ -413,8 +414,7 @@ class Sync(
                                     is PreviousModel -> statusChecked.previous
                                 }
 
-                                val player =
-                                    userAccess.getFromId(statusCheckedDatabase.userId)
+                                val player = userAccess.getFromId(statusCheckedDatabase.userId)
 
                                 // to "fix" an issue where the identifiers are not the same for
                                 // user info and their info in game, we are actually for now
@@ -435,7 +435,7 @@ class Sync(
             }
         }
 
-        eventFromDatabase.shouldCommitFinalUpdate(settings!!).let { commit ->
+        eventFromDatabase.shouldCommitFinalUpdate(settings).let { commit ->
             println("event ${event.id} should be closed ? $commit // ${settings.eventLifecycleStatus}")
             // now commit the event
             eventWrapper.setInternalDataPostTreatment(
