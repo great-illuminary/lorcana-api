@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.rph.sync.event
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import eu.codlab.lorcana.rph.sync.ModelId
@@ -11,6 +12,8 @@ data class EventSettings(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val decklistStatus: String,
+    @ColumnInfo(defaultValue = "false")
+    val decklistsOnSpicerack: Boolean,
     val eventLifecycleStatus: String,
     val showRegistrationButton: Boolean,
     val roundDurationInMinutes: Int,
@@ -20,7 +23,7 @@ data class EventSettings(
     val maximumNumberOfDrawsPerMatch: Int? = null,
     val checkinMethodsCommaSeparated: String,
     val stripePriceId: String?,
-    val maximumNumberOfPlayersInMatch: Int?
+    val maximumNumberOfPlayersInMatch: Int?,
 ) : ModelId<Long> {
     override fun modelId() = id
 }

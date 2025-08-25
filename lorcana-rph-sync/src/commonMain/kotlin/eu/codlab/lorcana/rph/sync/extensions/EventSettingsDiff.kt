@@ -15,7 +15,8 @@ fun EventSettings.toSync() =
         maximumNumberOfDrawsPerMatch = maximumNumberOfDrawsPerMatch,
         checkinMethodsCommaSeparated = checkinMethods.joinToString(","),
         stripePriceId = stripePriceId,
-        maximumNumberOfPlayersInMatch = maximumNumberOfPlayersInMatch
+        maximumNumberOfPlayersInMatch = maximumNumberOfPlayersInMatch,
+        decklistsOnSpicerack = decklistsOnSpicerack ?: false
     )
 
 fun eu.codlab.lorcana.rph.sync.event.EventSettings.isEquals(other: EventSettings): Boolean {

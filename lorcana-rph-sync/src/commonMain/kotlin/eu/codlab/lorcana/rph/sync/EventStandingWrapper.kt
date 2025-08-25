@@ -22,7 +22,7 @@ internal class EventStandingWrapper : AbstractWrapper<
     override fun id(
         fromApi: eu.codlab.lorcana.rph.rounds.standings.EventStanding,
         parent: Round?
-    ) = "${parent?.id}_${fromApi.player.id}"
+    ) = "${parent?.id}_${fromApi.player!!.id}"
 
     override suspend fun insert(copy: EventStanding) = stores.insert(copy)
 

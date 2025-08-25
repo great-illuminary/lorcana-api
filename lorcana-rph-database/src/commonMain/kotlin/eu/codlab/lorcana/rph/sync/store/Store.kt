@@ -14,6 +14,7 @@ data class Store(
     val name: String,
     val fullAddress: String,
     val administrativeAreaLevel1Short: String? = null,
+    val state: String? = null,
     val country: String? = null,
     val website: String? = null,
     val latitude: Double? = null,

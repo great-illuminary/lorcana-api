@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.rph.sync.standings
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import eu.codlab.lorcana.rph.sync.ModelId
 import kotlinx.serialization.Serializable
@@ -18,6 +19,8 @@ data class EventStanding(
     @Transient
     val roundId: Long = 0,
     val playerId: Long,
+    @ColumnInfo(defaultValue = "0")
+    val points: Int,
     // val userEventStatusId: Long? = null, -> not a foreign key
 ) : ModelId<String> {
     override fun modelId() = "${roundId}_$playerId"

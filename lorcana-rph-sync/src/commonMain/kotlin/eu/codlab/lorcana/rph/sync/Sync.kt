@@ -394,7 +394,7 @@ class Sync(
                             EventRegistrationsQueryParameters(pageSize = 4000)
                         ).results
 
-                        standings.forEach { eventStanding ->
+                        standings.filter { null != it.player }.forEach { eventStanding ->
                             val eventStandingChecked =
                                 eventStandingWrapper.check(eventStanding, next)
                             val checked = when (eventStandingChecked) {

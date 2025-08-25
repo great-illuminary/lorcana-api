@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.rph.sync.event
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -91,6 +92,13 @@ data class Event(
     @Transient
     val gameplayFormatId: String = "",
     // once the event is finished, we can rescan it
+    @ColumnInfo(defaultValue = "")
+    val createdAt: String,
+    @ColumnInfo(defaultValue = "")
+    val updatedAt: String,
+    val createdBy: Int?,
+    val updatedBy: Int?,
+    val gameRulesEnforcementLevel: String?,
     @Transient
     val updatedPostEvent: Boolean = false,
     val refreshedAtMilliseconds: Long? = null,

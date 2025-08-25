@@ -70,7 +70,12 @@ fun Event.toSyncEvent(
     settingsId = settings.id,
     storeId = store.id,
     gameplayFormatId = gameplayFormat.id,
-    updatedPostEvent = cached?.updatedPostEvent ?: false
+    updatedPostEvent = cached?.updatedPostEvent ?: false,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+    createdBy = createdBy,
+    updatedBy = updatedBy,
+    gameRulesEnforcementLevel = gameRulesEnforcementLevel
 )
 
 @Suppress("LongMethod", "ComplexMethod")
