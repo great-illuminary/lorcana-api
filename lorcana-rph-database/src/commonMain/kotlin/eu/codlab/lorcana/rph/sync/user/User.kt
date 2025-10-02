@@ -12,6 +12,7 @@ data class User(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val pronouns: String? = null,
+    val countryCode: String? = null,
     val bestIdentifier: String? = null,
     /**
      * Obtained inside UserEventStatus directly

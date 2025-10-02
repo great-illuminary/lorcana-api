@@ -75,7 +75,9 @@ fun Event.toSyncEvent(
     updatedAt = updatedAt,
     createdBy = createdBy,
     updatedBy = updatedBy,
-    gameRulesEnforcementLevel = gameRulesEnforcementLevel
+    gameRulesEnforcementLevel = gameRulesEnforcementLevel,
+    registrationPrerequisiteRequiresInvitation = registrationPrerequisiteRequiresInvitation,
+    // prizeManifest = prizeManifest
 )
 
 @Suppress("LongMethod", "ComplexMethod")
@@ -143,6 +145,7 @@ fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
     if (eventFactoryCreatedBy != other.eventFactoryCreatedBy) return false
     if (eventConfigurationTemplate != other.eventConfigurationTemplate) return false
     if (phaseTemplateGroupId != other.phaseTemplateGroupId) return false
+    if (registrationPrerequisiteRequiresInvitation != other.registrationPrerequisiteRequiresInvitation) return false
 
     return true
 }

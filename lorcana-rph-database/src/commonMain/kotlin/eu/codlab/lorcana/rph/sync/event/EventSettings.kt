@@ -24,6 +24,7 @@ data class EventSettings(
     val checkinMethodsCommaSeparated: String,
     val stripePriceId: String?,
     val maximumNumberOfPlayersInMatch: Int?,
+    val enableWaitlist: Boolean? = false,
 ) : ModelId<Long> {
     override fun modelId() = id
 }

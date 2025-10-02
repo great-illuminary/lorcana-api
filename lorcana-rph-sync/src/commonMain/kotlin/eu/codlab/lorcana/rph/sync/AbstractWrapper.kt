@@ -20,7 +20,12 @@ internal sealed class AbstractWrapper<
     final override fun getFromParent(id: FOREIGN_PARENT_TYPE) = parentMap[id] ?: emptyList()
 
     suspend fun initialize() {
+
         list().let { list ->
+            if(this is UserWrapper) {
+                println("UserWrapper initializing -> ${list.size}")
+            }
+
             cache.addAll(list)
             list.forEach {
                 cacheMap[it.modelId()] = it

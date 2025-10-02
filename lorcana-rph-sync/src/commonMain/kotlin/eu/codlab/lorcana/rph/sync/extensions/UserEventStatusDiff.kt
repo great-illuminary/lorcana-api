@@ -14,6 +14,7 @@ fun UserEventStatus.toSync(
     totalMatchPoints = cached?.totalMatchPoints ?: totalMatchPoints,
     registrationStatus = cached?.registrationStatus ?: registrationStatus,
     fullProfilePictureUrl = cached?.fullProfilePictureUrl ?: fullProfilePictureUrl,
+    // deckId = cached?.deckId ?: deckId,
     bestIdentifier = cached?.bestIdentifier ?: bestIdentifier,
     eventId = standing.eventId,
     userId = this.user?.id ?: standing.playerId,
@@ -34,6 +35,10 @@ fun eu.codlab.lorcana.rph.sync.standings.UserEventStatus.isEquals(other: UserEve
     if (bestIdentifier != other.bestIdentifier) return false
     // if (roundId != other.player.id) return false
     // if (userId != other.player.id) return false
+
+    other.deckId?.let {
+        // if (deckId != it) return false
+    }
 
     other.specialUserIdentifier?.let {
         if (specialUserIdentifier != it) return false

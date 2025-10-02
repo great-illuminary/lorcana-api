@@ -99,6 +99,9 @@ data class Event(
     val createdBy: Int?,
     val updatedBy: Int?,
     val gameRulesEnforcementLevel: String?,
+    @ColumnInfo(defaultValue = "false")
+    val registrationPrerequisiteRequiresInvitation: Boolean? = false,
+    // TODO prizeManifest once validated in the api first
     @Transient
     val updatedPostEvent: Boolean = false,
     val refreshedAtMilliseconds: Long? = null,

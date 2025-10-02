@@ -16,7 +16,8 @@ fun EventSettings.toSync() =
         checkinMethodsCommaSeparated = checkinMethods.joinToString(","),
         stripePriceId = stripePriceId,
         maximumNumberOfPlayersInMatch = maximumNumberOfPlayersInMatch,
-        decklistsOnSpicerack = decklistsOnSpicerack ?: false
+        decklistsOnSpicerack = decklistsOnSpicerack ?: false,
+        enableWaitlist = enableWaitlist ?: false,
     )
 
 fun eu.codlab.lorcana.rph.sync.event.EventSettings.isEquals(other: EventSettings): Boolean {
@@ -32,6 +33,8 @@ fun eu.codlab.lorcana.rph.sync.event.EventSettings.isEquals(other: EventSettings
     if (checkinMethodsCommaSeparated != other.checkinMethods.joinToString(",")) return false
     if (stripePriceId != other.stripePriceId) return false
     if (maximumNumberOfPlayersInMatch != other.maximumNumberOfPlayersInMatch) return false
+    if (decklistsOnSpicerack != other.decklistsOnSpicerack) return false
+    if (enableWaitlist != other.enableWaitlist) return false
 
     return true
 }

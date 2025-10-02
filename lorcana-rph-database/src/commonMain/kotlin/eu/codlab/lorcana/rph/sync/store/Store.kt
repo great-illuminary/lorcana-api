@@ -13,6 +13,7 @@ data class Store(
     val id: Long,
     val name: String,
     val fullAddress: String,
+    val city: String?,
     val administrativeAreaLevel1Short: String? = null,
     val state: String? = null,
     val country: String? = null,
@@ -25,6 +26,7 @@ data class Store(
     val phoneNumber: String? = null,
     val storeTypes: String? = null,
     val storeTypesPretty: String? = null,
+    val cardeStoreNumber: Int? = null,
     @ColumnInfo(
         defaultValue = ""
     )

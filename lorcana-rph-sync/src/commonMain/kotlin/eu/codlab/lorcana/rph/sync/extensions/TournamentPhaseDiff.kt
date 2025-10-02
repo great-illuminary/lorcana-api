@@ -12,7 +12,10 @@ fun TournamentPhase.toSync(event: Event) =
         numberOfRounds = numberOfRounds,
         roundType = roundType,
         rankRequiredToEnterPhase = rankRequiredToEnterPhase,
-        eventId = event.id
+        effectiveMaximumNumberOfGameWinsPerMatch = effectiveMaximumNumberOfGameWinsPerMatch,
+        eventId = event.id,
+        phaseName = phaseName,
+        phaseDescription = phaseDescription,
     )
 
 fun eu.codlab.lorcana.rph.sync.phases.TournamentPhase.isEquals(other: TournamentPhase): Boolean {
@@ -24,6 +27,9 @@ fun eu.codlab.lorcana.rph.sync.phases.TournamentPhase.isEquals(other: Tournament
     if (numberOfRounds != other.numberOfRounds) return false
     if (roundType != other.roundType) return false
     if (rankRequiredToEnterPhase != other.rankRequiredToEnterPhase) return false
+    if (effectiveMaximumNumberOfGameWinsPerMatch != other.effectiveMaximumNumberOfGameWinsPerMatch) return false
+    if (phaseName != other.phaseName) return false
+    if (phaseDescription != other.phaseDescription) return false
 
     return true
 }

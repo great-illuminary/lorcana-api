@@ -6,6 +6,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import eu.codlab.lorcana.rph.sync.app.RegisteredApp
+import eu.codlab.lorcana.rph.sync.app.RegisteredAppDao
 import eu.codlab.lorcana.rph.sync.event.Event
 import eu.codlab.lorcana.rph.sync.event.EventDao
 import eu.codlab.lorcana.rph.sync.event.EventSettings
@@ -43,8 +45,9 @@ import kotlinx.coroutines.Dispatchers
         EventStanding::class,
         UserEventStatus::class,
         EventMatch::class,
+        // RegisteredApp::class,
     ],
-    version = 7,
+    version = 10,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -52,6 +55,9 @@ import kotlinx.coroutines.Dispatchers
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6),
         AutoMigration(from = 6, to = 7),
+        AutoMigration(from = 7, to = 8),
+        AutoMigration(from = 8, to = 9),
+        AutoMigration(from = 9, to = 10),
     ]
 )
 @ConstructedBy(AppDatabaseConstructor::class)
@@ -77,6 +83,8 @@ internal abstract class AppDatabase : RoomDatabase() {
     abstract fun getUserEventStatus(): UserEventStatusDao
 
     abstract fun getSettingDao(): SettingDao
+
+    // abstract fun getRegisteredApp(): RegisteredAppDao
 }
 
 internal expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {

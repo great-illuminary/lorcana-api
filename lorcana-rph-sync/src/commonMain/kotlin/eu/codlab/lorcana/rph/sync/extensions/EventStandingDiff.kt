@@ -13,6 +13,7 @@ fun EventStanding.toSync(
     matchPoints = matchPoints,
     opponentMatchWinPercentage = opponentMatchWinPercentage,
     opponentGameWinPercentage = opponentGameWinPercentage,
+    gameWinPercentage = gameWinPercentage,
     roundId = round.id,
     playerId = player!!.id,
     points = points,
@@ -25,6 +26,7 @@ fun eu.codlab.lorcana.rph.sync.standings.EventStanding.isEquals(other: EventStan
     if (matchRecord != other.matchRecord) return false
     if (matchPoints != other.matchPoints) return false
     if (opponentMatchWinPercentage != other.opponentMatchWinPercentage) return false
+    if (gameWinPercentage != other.gameWinPercentage) return false
     if (opponentGameWinPercentage != other.opponentGameWinPercentage) return false
     if (playerId != other.player?.id) return false
     // if (userEventStatusId != other.userEventStatus?.id) return false

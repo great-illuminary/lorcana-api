@@ -18,6 +18,19 @@ class Settings {
             wrapped.update(lastPage.copy(value = page.toString()))
         }
     }
+
+    suspend fun needFullSync(): Boolean =
+        wrapped.get("full_sync")?.value?.toBooleanStrictOrNull()?.let { !it } ?: true
+
+    suspend fun commitFullSync() {
+        val fullSync = wrapped.get("full_sync")
+
+        if (null == fullSync) {
+            wrapped.insert(Setting(key = "fullSync", value = "true"))
+        } else {
+            wrapped.update(fullSync.copy(value = "true"))
+        }
+    }
 }
 
 enum class PageType(val databaseName: String) {

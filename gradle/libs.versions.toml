@@ -9,7 +9,7 @@ androidxRoom = "2.7.0"
 sqlite = "2.4.0"
 
 lorcana-data = "0.20.19"
-ravensburger-play-hub = "0.0.6"
+ravensburger-play-hub = "0.0.10"
 
 apache-httpclient = "5.0"
 

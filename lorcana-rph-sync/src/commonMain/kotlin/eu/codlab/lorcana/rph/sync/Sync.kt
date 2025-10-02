@@ -17,6 +17,7 @@ import korlibs.time.DateFormat
 import korlibs.time.DateTime
 import korlibs.time.days
 import korlibs.time.months
+import korlibs.time.years
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.minutes
 
@@ -153,10 +154,8 @@ class Sync(
         }
     }
 
-    private suspend fun syncEvents() =
-        performSyncEvents(
-            check = { tryCatch { checkEvent(it) } },
-        ) { start, from, page ->
+    private suspend fun syncEvents() {
+        val getObjects: suspend (DateTime, DateTime, Int) -> Page<Event> = { start, from, page ->
             loader.events(
                 EventQueryParameters(
                     startDateAfter = start.format(DateFormat.FORMAT2),
@@ -166,6 +165,23 @@ class Sync(
                 )
             )
         }
+        //TODO full sync first
+        if(settings.needFullSync()) {
+            println("now performing the synchronization (full sync)")
+            performSyncEvents(
+                check = { tryCatch { checkEvent(it) } },
+                lastDatePerformed = DateTime.now().minus(1.years),
+                maximumDateToPerform = DateTime.now(),
+                getObjects = getObjects
+            )
+            settings.commitFullSync()
+        }
+
+        performSyncEvents(
+            check = { tryCatch { checkEvent(it) } },
+            getObjects = getObjects
+        )
+    }
 
     private suspend fun syncStores() =
         performSync(
@@ -187,27 +203,28 @@ class Sync(
      */
     private suspend fun <T> performSyncEvents(
         check: suspend (T) -> Unit,
+        lastDatePerformed: DateTime = DateTime.now().minus(7.days), // default last week
+        maximumDateToPerform: DateTime = DateTime.now().add(6.months, 0.days),
         getObjects: suspend (DateTime, DateTime, Int) -> Page<T>,
-    ) {
-        var lastDatePerformed = DateTime.now().minus(7.days) // just in case
-
-        val in6Months = DateTime.now().add(6.months, 0.days)
-
+    ): DateTime {
+        var actualLastDatePerformed = lastDatePerformed
         do {
             println(
                 "now performing the synchronization starting at date ${
-                    lastDatePerformed.format(
+                    actualLastDatePerformed.format(
                         DateFormat.FORMAT2
                     )
                 }"
             )
 
-            val nextDate = lastDatePerformed.add(0.months, 7.days)
+            val nextDate = actualLastDatePerformed.add(0.months, 7.days)
 
-            performSyncEventsInInterval(lastDatePerformed, nextDate, check, getObjects)
+            performSyncEventsInInterval(actualLastDatePerformed, nextDate, check, getObjects)
 
-            lastDatePerformed = nextDate
-        } while (lastDatePerformed < in6Months)
+            actualLastDatePerformed = nextDate
+        } while (actualLastDatePerformed < maximumDateToPerform)
+
+        return actualLastDatePerformed
     }
 
     /**
@@ -379,7 +396,13 @@ class Sync(
                             eventMatchWrapper.check(match)
 
                             match.playerMatchRelationships.forEach {
-                                userEventStatusWrapper.check(it.userEventStatus)
+                                userEventStatusWrapper.check(
+                                    it.userEventStatus,
+                                    UserEventStatusParent(
+                                        eventId = eventFromDatabase.id,
+                                        playerId = it.player.id
+                                    )
+                                )
                             }
                         }
                     }

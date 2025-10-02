@@ -12,8 +12,10 @@ fun EventMatchPlayer.toSync(
     return eu.codlab.lorcana.rph.sync.user.User(
         id = id,
         pronouns = pronouns,
-        bestIdentifier = bestIdentifier,
-        bestIdentifierInGame = parent?.bestIdentifier ?: cached?.bestIdentifier,
+        bestIdentifier = bestIdentifier ?: cached?.bestIdentifier,
+        bestIdentifierInGame = parent?.bestIdentifier
+            ?: cached?.bestIdentifier, // cached as a fallback
+        countryCode = countryCode,
         gameUserProfilePictureUrl = gameUserProfilePictureUrl,
     )
 }
@@ -24,9 +26,15 @@ fun eu.codlab.lorcana.rph.sync.user.User.isEquals(
 ): Boolean {
     if (id != other.id) return false
     if (pronouns != other.pronouns) return false
+
+    other.bestIdentifier?.let { if (bestIdentifier != it) return false }
+
     parent?.let { nonNullParent ->
         if (bestIdentifierInGame != nonNullParent.bestIdentifier) return false
     }
+
+    if (countryCode != other.countryCode) return false
+
     // if (fullProfilePictureUrl != other.fullProfilePictureUrl) return false
 
     // not checking the in game one as it's not in this context

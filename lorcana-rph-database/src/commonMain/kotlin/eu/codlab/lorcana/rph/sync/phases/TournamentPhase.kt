@@ -19,6 +19,9 @@ data class TournamentPhase(
     val numberOfRounds: Int?,
     val roundType: String,
     val rankRequiredToEnterPhase: Int? = null,
+    val effectiveMaximumNumberOfGameWinsPerMatch: Int? = null,
+    val phaseName: String? = null,
+    val phaseDescription: String? = null,
     // val rounds: List<Round>
 ) : ModelId<Long> {
     override fun modelId() = id

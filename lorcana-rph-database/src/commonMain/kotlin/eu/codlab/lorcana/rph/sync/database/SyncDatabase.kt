@@ -36,4 +36,5 @@ object SyncDatabase {
     val userEventStatus: UserEventStatusController = UserEventStatusControllerImpl(database)
     val eventMatches: EventMatchController = EventMatchControllerImpl(database)
     val settings: SettingController = SettingControllerImpl(database)
+    // val registeredApps: RegisteredAppController = RegisteredAppControllerImpl(database)
 }

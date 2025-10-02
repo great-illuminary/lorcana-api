@@ -14,6 +14,8 @@ data class EventStanding(
     val matchRecord: String,
     val matchPoints: Int,
     val opponentMatchWinPercentage: Double,
+    @ColumnInfo(defaultValue = "0")
+    val gameWinPercentage: Double,
     val opponentGameWinPercentage: Double,
     // foreign keys
     @Transient

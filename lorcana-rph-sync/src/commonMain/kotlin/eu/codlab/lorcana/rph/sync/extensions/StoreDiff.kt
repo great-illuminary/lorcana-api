@@ -10,6 +10,7 @@ fun StoreFull.toSyncStore(
     id = id,
     name = name,
     fullAddress = fullAddress ?: "",
+    city = city ?: "",
     administrativeAreaLevel1Short = original?.administrativeAreaLevel1Short,
     country = country ?: original?.country,
     website = website ?: original?.website,
@@ -23,7 +24,8 @@ fun StoreFull.toSyncStore(
     phoneNumber = phoneNumber ?: original?.phoneNumber,
     storeTypes = storeTypes?.joinToString(",") ?: original?.storeTypes,
     storeTypesPretty = storeTypesPretty?.joinToString(",") ?: original?.storeTypesPretty,
-    uuid = foreignParent?.id ?: original?.uuid ?: ""
+    uuid = foreignParent?.id ?: original?.uuid ?: "",
+    cardeStoreNumber = cardeStoreNumber ?: original?.cardeStoreNumber
 )
 
 @Suppress("ComplexMethod")
@@ -34,6 +36,7 @@ fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(
     if (id != other.id) return false
     if (name != other.name) return false
     if (fullAddress != other.fullAddress) return false
+    if (city != other.city) return false
     if (administrativeAreaLevel1Short != other.administrativeAreaLevel1Short) return false
 
     // to help on the case where we have a store from the events list, we will skip checking
@@ -48,6 +51,7 @@ fun eu.codlab.lorcana.rph.sync.store.Store.isEquals(
     other.phoneNumber?.let { if (phoneNumber != it) return false }
     other.storeTypes?.let { if (storeTypes != it.joinToString(",")) return false }
     other.storeTypesPretty?.let { if (storeTypesPretty != it.joinToString(",")) return false }
+    other.cardeStoreNumber?.let { if (cardeStoreNumber != it) return false }
 
     foreignParent?.let { if (uuid != it.id) return false }
     return true
