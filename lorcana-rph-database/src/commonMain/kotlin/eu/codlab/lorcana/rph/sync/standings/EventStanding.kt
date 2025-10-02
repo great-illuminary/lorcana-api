@@ -23,6 +23,7 @@ data class EventStanding(
     val playerId: Long,
     @ColumnInfo(defaultValue = "0")
     val points: Int,
+    val roundNumber: Int? = null,
     // val userEventStatusId: Long? = null, -> not a foreign key
 ) : ModelId<String> {
     override fun modelId() = "${roundId}_$playerId"
