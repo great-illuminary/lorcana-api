@@ -2,7 +2,7 @@ package eu.codlab.lorcana.rph.sync.app
 
 import eu.codlab.lorcana.rph.sync.database.AppDatabase
 
-/*interface RegisteredAppController {
+interface RegisteredAppController {
     suspend fun getAll(): List<RegisteredApp>
 
     suspend fun getIdForToken(appToken: String): Long
@@ -17,7 +17,7 @@ import eu.codlab.lorcana.rph.sync.database.AppDatabase
 }
 
 internal class RegisteredAppControllerImpl(database: AppDatabase) : RegisteredAppController {
-    // private val dao = database.getRegisteredApp()
+    private val dao = database.getRegisteredApp()
 
     override suspend fun getAll() = dao.getAll()
 
@@ -31,4 +31,3 @@ internal class RegisteredAppControllerImpl(database: AppDatabase) : RegisteredAp
 
     override suspend fun deleteRegisteredApps() = dao.deleteRegisteredApps()
 }
-*/

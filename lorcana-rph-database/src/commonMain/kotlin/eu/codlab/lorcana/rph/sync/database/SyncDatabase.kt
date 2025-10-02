@@ -1,5 +1,7 @@
 package eu.codlab.lorcana.rph.sync.database
 
+import eu.codlab.lorcana.rph.sync.app.RegisteredAppController
+import eu.codlab.lorcana.rph.sync.app.RegisteredAppControllerImpl
 import eu.codlab.lorcana.rph.sync.event.EventController
 import eu.codlab.lorcana.rph.sync.event.EventControllerImpl
 import eu.codlab.lorcana.rph.sync.event.EventSettingsController
@@ -36,5 +38,5 @@ object SyncDatabase {
     val userEventStatus: UserEventStatusController = UserEventStatusControllerImpl(database)
     val eventMatches: EventMatchController = EventMatchControllerImpl(database)
     val settings: SettingController = SettingControllerImpl(database)
-    // val registeredApps: RegisteredAppController = RegisteredAppControllerImpl(database)
+    val registeredApps: RegisteredAppController = RegisteredAppControllerImpl(database)
 }

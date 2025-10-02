@@ -5,11 +5,11 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
-/*@Entity(
+@Entity(
     indices = [
         Index(value = ["appToken"]),
     ]
-)*/
+)
 @Serializable
 data class RegisteredApp(
     @PrimaryKey(autoGenerate = true)

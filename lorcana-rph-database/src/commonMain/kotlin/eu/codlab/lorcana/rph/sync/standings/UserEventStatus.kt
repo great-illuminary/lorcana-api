@@ -18,7 +18,7 @@ data class UserEventStatus(
     val registrationStatus: String? = null,
     @Transient
     val fullProfilePictureUrl: String? = null,
-    // val deckId: Long? = null,
+    val deckId: Long? = null,
     val bestIdentifier: String,
     // we also set few information which were "registration specific"
     val specialUserIdentifier: String? = null,
