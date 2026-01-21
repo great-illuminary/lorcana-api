@@ -39,6 +39,8 @@ data class Event(
     val description: String,
     // val tournamentPhases: List<TournamentPhase>, -> computed list
     val registeredUserCount: Int,
+    @ColumnInfo(defaultValue = "0")
+    val startingPlayerCount: Int,
     val fullAddress: String,
     val convention: String? = null,
     val displayStatus: String? = null,

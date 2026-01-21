@@ -118,7 +118,7 @@ fun Route.routeRPH(environment: Environment) {
 
                 response {
                     responseCode(HttpStatusCode.OK)
-                    responseType<List<Event>>()
+                    responseType<List<EventHolder>>()
                     description("List of events")
                 }
             }

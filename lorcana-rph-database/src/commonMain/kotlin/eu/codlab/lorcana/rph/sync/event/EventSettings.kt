@@ -15,10 +15,12 @@ data class EventSettings(
     @ColumnInfo(defaultValue = "false")
     val decklistsOnSpicerack: Boolean,
     val eventLifecycleStatus: String,
+    val refundStatus: String? = null,
     val showRegistrationButton: Boolean,
     val roundDurationInMinutes: Int,
     val paymentInStore: Boolean,
     val paymentOnSpicerack: Boolean,
+    val messageToRegisteredUsers: String? = null,
     val maximumNumberOfGameWinsPerMatch: Int,
     val maximumNumberOfDrawsPerMatch: Int? = null,
     val checkinMethodsCommaSeparated: String,

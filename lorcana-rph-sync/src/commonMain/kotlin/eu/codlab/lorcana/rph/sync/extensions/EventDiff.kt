@@ -21,6 +21,7 @@ fun Event.toSyncEvent(
     description = description,
 // tournamentPhases: List<TournamentPhase>, -> computed list
     registeredUserCount = registeredUserCount,
+    startingPlayerCount = startingPlayerCount,
     fullAddress = fullAddress,
     convention = convention,
     displayStatus = displayStatus?.name ?: cached?.displayStatus,
@@ -85,6 +86,7 @@ fun eu.codlab.lorcana.rph.sync.event.Event.isEquals(other: Event): Boolean {
     if (id != other.id) return false
     if (timerIsRunning != other.timerIsRunning) return false
     if (registeredUserCount != other.registeredUserCount) return false
+    if (startingPlayerCount != other.startingPlayerCount) return false
     if (pinnedByStore != other.pinnedByStore) return false
     if (useVerbatimName != other.useVerbatimName) return false
     if (eventIsOnline != other.eventIsOnline) return false
