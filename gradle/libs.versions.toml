@@ -8,8 +8,8 @@ ktor = "3.0.1"
 androidxRoom = "2.7.0"
 sqlite = "2.4.0"
 
-lorcana-data = "0.21.0"
-ravensburger-play-hub = "0.0.10"
+lorcana-data = "0.21.2"
+ravensburger-play-hub = "0.0.11"
 
 apache-httpclient = "5.0"
 
